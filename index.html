@@ -61,7 +61,7 @@ a{color:inherit}
 .chip.prov{background:var(--indigo)}
 .chip.final{background:#4a4a55}
 
-.stage{padding:34px 40px 90px;overflow-x:hidden}
+.stage{padding:34px 40px 90px;overflow-x:clip}
 .screen{display:none;animation:fade .28s ease}
 .screen.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -202,6 +202,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .rp-status.warn{color:#8a6400;background:#fbf6ee;border-color:#d98a0033}
 .rp-actions{display:flex;flex-direction:column;gap:9px}
 @media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
+.rp-facts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 26px;margin-top:14px;border-top:1px solid var(--line);padding-top:4px}
 
 /* field-agent earnings — money buckets + question-mark help */
 .kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
@@ -650,7 +651,8 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The candidate rule, in one sentence:</div>
-          <div class="summary-sentence">For <em>SPs</em>, when they <em>self-source a Fresh loan</em>, pay <em>0.35% of net disbursal</em> — <em>×0.5 for Low-LTV</em> — released <em>50% next month, 50% the month after</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
+          <div class="rp-facts rp-facts-row" id="rv-facts"></div>
         </div>
         <div class="panel">
           <h3>Backtest — candidate vs current rulebook</h3>
@@ -721,7 +723,8 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">staged</span><span class="readonly-flag">👁 Read-only — the maker's staged version</span></div>
-          <div class="summary-sentence">For <em>SPs</em>, when they <em>self-source a Fresh loan</em>, pay <em>0.35% of net disbursal</em> — <em>×0.5 for Low-LTV</em> — released <em>50% next month, 50% the month after</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
+          <div class="rp-facts rp-facts-row" id="ck-facts"></div>
         </div>
         <div class="panel">
           <h3>The simulation, attached <span class="readonly-flag" style="margin-left:8px">👁 checker's evidence</span></h3>
@@ -1218,6 +1221,23 @@ function buildSummary(){
   const mods=document.querySelectorAll('#mods .modrow').length;
   let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', released <em>'+sched+'</em>.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
+  // the same facts, on every rule view
+  const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
+  const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
+  const facts=[
+    ['Who gets paid', selectedActors().map(r=>ROLE_NAMES[r]).join(', ')],
+    ['Loan type', lo?lo.textContent.split(' (')[0]:'—'],
+    ['What they did', ev?ev.textContent.split(' → ')[0]:'—'],
+    ['Category', EVENT_CAT[event]||'—'],
+    ['Rule type', flash?'Flash · short-time bonus':'Normal'],
+    ['On what amount', document.getElementById('f-basis').value],
+    ['How much', payShort()],
+    ['Extra conditions', mods? mods+' added':'None'],
+    ['When paid', document.getElementById('f-sched').value],
+    ['Starts from', fmtDate(document.getElementById('f-start').value)]
+  ];
+  const fhtml=facts.map(f=>'<div class="rp-fact"><span>'+f[0]+'</span><b>'+f[1]+'</b></div>').join('');
+  ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
 
 /* ---- live preview panel on the create screen ---- */
