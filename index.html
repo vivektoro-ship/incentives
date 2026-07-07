@@ -202,6 +202,24 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .rp-actions{display:flex;flex-direction:column;gap:9px}
 @media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
 
+/* field-agent earnings — money buckets + question-mark help */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px 11px;cursor:pointer;transition:.13s}
+.kpi:active{transform:scale(.99)}
+.kpi .kl{font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);font-weight:700;line-height:1.2}
+.kpi .kv{font-family:var(--font-mono);font-size:17px;color:var(--ink);margin-top:7px;font-feature-settings:"tnum";letter-spacing:-.01em}
+.kpi .kd{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.25}
+.kpi.earned{background:linear-gradient(160deg,#fff,#f1f1ff);border-color:var(--indigo-line)}
+.kpi.earned .kv{color:var(--indigo-2)}
+.kpi.paid .kv{color:var(--ok)}
+.kpi.pending .kv{color:var(--amber)}
+.qmark{width:27px;height:27px;border-radius:50%;border:1px solid var(--line-2);background:#fff;color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;display:grid;place-items:center;flex:none;padding:0;line-height:1}
+.qmark:hover{border-color:var(--indigo);color:var(--indigo)}
+.li-status{font-size:9.5px;letter-spacing:.03em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:99px;margin-top:5px;display:inline-block}
+.li-status.paid{color:var(--ok);background:#16880412}
+.li-status.pending{color:var(--amber);background:#d98a0016}
+.li-status.accr{color:var(--indigo-2);background:var(--indigo-soft)}
+
 .sticky-foot{position:sticky;bottom:0;margin-top:16px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 18px;box-shadow:0 -8px 24px rgba(3,4,5,.35)}
 .sticky-foot .spacer{flex:1}
 .sticky-foot .status{font-size:12.5px;color:var(--ok)}
@@ -436,12 +454,12 @@ textarea{resize:vertical;min-height:88px}
           <table class="rule-table">
             <thead><tr><th>Rule name</th><th>Type</th><th>Who gets paid</th><th>Status</th><th>Starts from</th><th>Pays</th><th></th></tr></thead>
             <tbody>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Sales Partner — new loans</td><td class="rule-cat">Finding customers</td><td>Sales Partner</td><td><span class="pill live">working</span></td><td class="mono">01 Jun 2026</td><td class="rate-sum">0.35% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Associate Partner — renewals</td><td class="rule-cat">Convincing</td><td>Associate Partner</td><td><span class="pill live">working</span></td><td class="mono">12 May 2026</td><td class="rate-sum">0.20% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Sales Partner — fresh loans</td><td class="rule-cat">Finding customers</td><td>Sales Partner</td><td><span class="pill live">working</span></td><td class="mono">01 Jun 2026</td><td class="rate-sum">0.35% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Associate Partner — takeovers</td><td class="rule-cat">Convincing</td><td>Associate Partner</td><td><span class="pill live">working</span></td><td class="mono">12 May 2026</td><td class="rate-sum">0.20% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
               <tr class="rule-row" data-goto="a-review"><td class="rule-name">City Lead — extra bonus</td><td class="rule-cat">Bonus</td><td>City Lead</td><td><span class="pill live">working</span></td><td class="mono">01 Apr 2026</td><td class="rate-sum">every 3 months</td><td><button class="row-edit" data-stop>View</button></td></tr>
               <tr class="rule-row" data-goto="a-staged"><td class="rule-name">New customers — by levels</td><td class="rule-cat">New customers</td><td>Caller</td><td><span class="pill staged">waiting for approval</span></td><td class="mono">01 Jul 2026</td><td class="rate-sum">by level</td><td><button class="row-edit" data-stop data-rule='{"name":"New customers — by levels","roles":["Caller"],"loan":"fresh","event":"funnel-a2nu","mode":"slab","start":"2026-07-01"}'>Edit</button></td></tr>
               <tr class="rule-row" data-goto="a-form"><td class="rule-name">Special push to close loans</td><td class="rule-cat">Collections <span class="pill flash" style="margin-left:6px">limited-time</span></td><td>Collection Partner</td><td><span class="pill draft">draft</span></td><td class="mono">—</td><td class="rate-sum">0.50% of loan</td><td><button class="row-edit" data-stop data-rule='{"name":"Special push to close loans","roles":["Collection Partner"],"loan":"others","event":"closure-bucket","mode":"flat","rate":0.50,"flash":true,"end":"2026-08-31","start":"2026-07-14"}'>Edit</button></td></tr>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Digital Manager — new loans</td><td class="rule-cat">Finding customers</td><td>Digital Manager</td><td><span class="pill expired">ended</span></td><td class="mono">31 Mar 2026</td><td class="rate-sum">0.15% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Digital Manager — fresh loans</td><td class="rule-cat">Finding customers</td><td>Digital Manager</td><td><span class="pill expired">ended</span></td><td class="mono">31 Mar 2026</td><td class="rate-sum">0.15% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
             </tbody>
           </table>
         </div>
@@ -598,7 +616,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">Here's your rule in one plain sentence:</div>
-          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a new loan</em>, pay <em>0.35% of the loan amount</em> — but only <em>half of that for higher-risk loans</em> — and give it as <em>half this month and half next month</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a fresh gold loan</em>, pay <em>0.35% of the loan amount</em> — and give it as <em>half this month and half next month</em>.</div>
         </div>
         <div class="panel">
           <h3>What will it cost?</h3>
@@ -667,7 +685,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — this is what the creator sent</span></div>
-          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a new loan</em>, pay <em>0.35% of the loan amount</em> — but only <em>half of that for higher-risk loans</em> — and give it as <em>half this month and half next month</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a fresh gold loan</em>, pay <em>0.35% of the loan amount</em> — and give it as <em>half this month and half next month</em>.</div>
         </div>
         <div class="panel">
           <h3>The creator's cost check <span class="readonly-flag" style="margin-left:8px">👁 view only</span></h3>
@@ -729,36 +747,38 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings</h2><div class="sub">This month's running total is at the top, your confirmed loans below it, and past months at the bottom. Your numbers are always right here — you never have to dig for them.</div></div></div>
+      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings</h2><div class="sub">Three numbers, up front: what you've <b>earned</b> this month, what you'll <b>get</b> in the next payout, and what's already been <b>paid</b> to you. Tap any loan to see its own breakdown, or the <b>?</b> to see how a number was worked out.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><h3>My earnings</h3><div class="period" onclick="toast('Pick a month — this month or an earlier one')">This month ▾</div></div>
+          <div class="appbar"><h3>My earnings</h3><div class="period" style="margin-left:auto" onclick="toast('Pick a month — this month or an earlier one')">This month ▾</div><button class="qmark" style="margin-left:8px" title="How was this worked out?" data-goto="b-explain">?</button></div>
           <div class="appbody">
-            <div class="acard hero" data-goto="b-prov">
-              <div class="top"><span class="state-label prov">This month · still adding up</span><span class="arrow">›</span></div>
-              <div class="big-num"><span class="cur">₹</span>42,300</div>
-              <div class="sub-num">A live estimate — it grows as you do more loans</div>
-              <div class="slab">
+            <div class="kpi-row">
+              <div class="kpi earned" data-goto="b-prov"><div class="kl">Earned this month</div><div class="kv">₹42,300</div><div class="kd">still adding up ›</div></div>
+              <div class="kpi pending" data-goto="b-firm"><div class="kl">You'll get next</div><div class="kv">₹31,900</div><div class="kd">payout 05 Aug ›</div></div>
+              <div class="kpi paid"><div class="kl">Paid to date</div><div class="kv">₹1,10,100</div><div class="kd">received</div></div>
+            </div>
+
+            <div class="acard" data-goto="b-prov" style="padding:14px 16px">
+              <div class="slab" style="margin:0">
                 <div class="track"><div class="fill" style="width:68%"></div></div>
-                <div class="cap"><span><b>41 loans done</b></span><span>19 more to earn a higher rate</span></div>
+                <div class="cap"><span><b>41 loans done</b></span><span>19 more to reach the 0.50% rate</span></div>
               </div>
             </div>
 
-            <div class="section-label">Confirmed — locked when the loan was given</div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Federal Bank · new loan</div><div class="li-meta">Loan OMGL30784773 · given 28 Jun 2026</div></div><div class="li-amt">₹1,750</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">HDFC · new loan</div><div class="li-meta">Loan OMGL30784120 · given 24 Jun 2026</div></div><div class="li-amt">₹2,240</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Axis · renewal</div><div class="li-meta">Loan OMGL30783998 · given 21 Jun 2026</div></div><div class="li-amt">₹980</div></div>
+            <div class="section-label">This month's loans</div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000482 · 28 Jun 2026</div><span class="li-status pending">half paid · half due 05 Aug</span></div><div class="li-amt">₹1,750</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000471 · 24 Jun 2026</div><span class="li-status pending">due next payout</span></div><div class="li-amt">₹2,240</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000455 · 22 Jun 2026</div><span class="li-status accr">counted this month</span></div><div class="li-amt">₹1,410</div></div>
 
-            <div class="section-label">Past months — final totals</div>
-            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">June 2026</div><div class="li-meta">closed 30 Jun 2026 · 62 loans</div></div><div class="li-amt">₹58,900</div></div>
-            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">May 2026</div><div class="li-meta">closed 31 May 2026 · 54 loans</div></div><div class="li-amt">₹51,200</div></div>
+            <div class="section-label">Paid out — past months</div>
+            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">June 2026 payout</div><div class="li-meta">62 loans · paid 05 Jul 2026</div><span class="li-status paid">paid</span></div><div class="li-amt">₹58,900</div></div>
+            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">May 2026 payout</div><div class="li-meta">54 loans · paid 05 Jun 2026</div><span class="li-status paid">paid</span></div><div class="li-amt">₹51,200</div></div>
           </div>
-          <div class="appfoot"><button class="prim-app" data-goto="b-explain">How was this worked out?</button></div>
         </div></div>
 
         <div class="note-block" style="max-width:320px;margin-top:0">
-          <b>Why show everything at once?</b> Seeing your confirmed pay and your growing total together keeps it motivating. And a changing number always comes with "how close you are to the next level" — so it feels like <b>progress, not a glitch</b>.
+          <b>Built around three questions.</b> An agent only really asks: <b>how much have I earned, how much will I get, and how much has reached me?</b> Those are the three tiles up top — everything below just shows the loans behind them. "How it was worked out" is a quiet <b>?</b>, not a loud button.
         </div>
       </div>
     </section>
@@ -768,20 +788,22 @@ textarea{resize:vertical;min-height:88px}
       <div class="screen-head"><span class="id">App · 2</span><div><h2>A confirmed loan</h2><div class="sub">This was set the moment the loan was given — nothing about this month can change it.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Confirmed loan</h3></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Fresh gold loan</h3><button class="qmark" style="margin-left:auto" title="How was this worked out?" data-goto="b-explain">?</button></div>
         <div class="appbody">
           <div class="detail-hero">
-            <span class="state-label firm">Confirmed · locked</span>
-            <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>1,750</div>
-            <div class="sub-num">Set when the loan was given · can't change</div>
+            <div class="li-title" style="font-size:16px;font-weight:700">Fresh gold loan</div>
+            <div class="li-meta mono" style="margin-top:3px">OML000482 · given 28 Jun 2026</div>
+            <div class="big-num" style="margin-top:12px"><span class="cur">₹</span>1,750</div>
+            <div class="sub-num">Total you earned on this loan</div>
           </div>
           <div class="detail-hero" style="padding-top:6px">
-            <div class="kv"><span class="k">Loan number</span><span class="v mono">OMGL30784773</span></div>
-            <div class="kv"><span class="k">Loan given on</span><span class="v">28 Jun 2026</span></div>
-            <div class="kv"><span class="k">What it's for</span><span class="v">Finding a customer · new loan</span></div>
-            <div class="kv"><span class="k">When you'll be paid</span><span class="v">Half now, half next month</span></div>
+            <div class="kv"><span class="k">Paid to you</span><span class="v" style="color:var(--ok)">₹875 · on 05 Jul 2026</span></div>
+            <div class="kv"><span class="k">Still to come</span><span class="v" style="color:var(--amber)">₹875 · on 05 Aug 2026</span></div>
+            <div class="kv"><span class="k">Loan type</span><span class="v">Fresh gold loan</span></div>
+            <div class="kv"><span class="k">How you earned it</span><span class="v">Found the customer · 0.35%</span></div>
+            <div class="kv"><span class="k">Payout plan</span><span class="v">Half now, half next month</span></div>
           </div>
-          <button class="ghost-app" data-goto="b-explain">See how this was worked out →</button>
+          <div class="info-note"><span class="i">≡</span> This was set the moment the loan was given — the amount can't change. Tap <b>?</b> above to see the exact working.</div>
         </div>
       </div></div>
     </section>
@@ -792,7 +814,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>This month so far</h3></div>
+          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Earned this month</h3><button class="qmark" style="margin-left:auto" title="How was this worked out?" data-goto="b-explain">?</button></div>
           <div class="appbody">
             <div class="detail-hero">
               <span class="state-label prov">This month · still adding up</span>
@@ -802,14 +824,13 @@ textarea{resize:vertical;min-height:88px}
                 <div class="cap"><span><b>41 loans done</b></span><span>19 more to reach the 0.50% rate</span></div>
               </div>
             </div>
-            <div class="info-note"><span class="i">✦</span> We always show how close you are to the next level. Without it, a changing number could look broken — with it, it's clearly progress.</div>
+            <div class="info-note"><span class="i">✦</span> This grows as you book more loans. We always show how close you are to the next rate, so a rising number reads as progress — not a glitch.</div>
             <div class="section-label">Loans counted so far</div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Federal Bank · new loan</div><div class="li-meta">OMGL30784773 · 28 Jun</div></div><div class="li-amt">₹1,750</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">HDFC · new loan</div><div class="li-meta">OMGL30784120 · 24 Jun</div></div><div class="li-amt">₹2,240</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">ICICI · new loan</div><div class="li-meta">OMGL30784051 · 22 Jun</div></div><div class="li-amt">₹1,410</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Axis · renewal</div><div class="li-meta">OMGL30783998 · 21 Jun</div></div><div class="li-amt">₹980</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000482 · 28 Jun</div></div><div class="li-amt">₹1,750</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000471 · 24 Jun</div></div><div class="li-amt">₹2,240</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000455 · 22 Jun</div></div><div class="li-amt">₹1,410</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000448 · 21 Jun</div></div><div class="li-amt">₹980</div></div>
           </div>
-          <div class="appfoot"><button class="prim-app" data-goto="b-explain">See how this was worked out →</button></div>
         </div></div>
       </div>
     </section>
@@ -819,20 +840,19 @@ textarea{resize:vertical;min-height:88px}
       <div class="screen-head"><span class="id">App · 4</span><div><h2>A past month</h2><div class="sub">This month is closed. It only changes if a correction is added — and we always show corrections.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026</h3></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026 · paid</h3><button class="qmark" style="margin-left:auto" title="How was this worked out?" data-goto="b-explain">?</button></div>
         <div class="appbody">
           <div class="detail-hero">
-            <span class="state-label final">Final · closed</span>
+            <span class="state-label final">Paid · closed</span>
             <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>58,900</div>
-            <div class="sub-num">Closed 30 Jun 2026 · 62 loans</div>
+            <div class="sub-num">Paid to you 05 Jul 2026 · 62 loans</div>
           </div>
           <div class="section-label">What made up this total</div>
-          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Finding customers · 44 new loans</div><div class="li-meta">0.35% of loan · rule version 2</div></div><div class="li-amt">₹41,300</div></div>
-          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Convincing · 12 renewals</div><div class="li-meta">0.20% of loan · rule version 2</div></div><div class="li-amt">₹14,200</div></div>
+          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Fresh gold loans · 44</div><div class="li-meta">0.35% of loan · rule version 2</div></div><div class="li-amt">₹41,300</div></div>
+          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Takeover gold loans · 12</div><div class="li-meta">0.20% of loan · rule version 2</div></div><div class="li-amt">₹14,200</div></div>
           <div class="line-item adj" data-goto="b-explain"><div class="li-main"><div class="li-title">Added later — one more loan counted <span class="li-badge adj">correction</span></div><div class="li-meta">a problem report was accepted · 06 Jul</div></div><div class="li-amt">+₹3,400</div></div>
         </div>
         <div class="appfoot">
-          <button class="prim-app" data-goto="b-explain">See how this was worked out →</button>
           <button class="ghost-app" data-goto="b-dispute">Something looks wrong</button>
         </div>
       </div></div>
@@ -846,11 +866,11 @@ textarea{resize:vertical;min-height:88px}
         <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>How it was worked out</h3><span class="right" data-goto="b-home">Done</span></div>
         <div class="appbody">
           <div class="info-note"><span class="i">≡</span> Straight from the records — which loan, which rule was used, how much, and why.</div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Federal Bank · OMGL30784773</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,750</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">HDFC · OMGL30784120</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹2,240</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Axis · OMGL30783998</div><div class="li-meta">rule v2 · 0.20% of loan · renewal</div></div><div class="li-amt">₹980</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Fresh gold loan · OML000482</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,750</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Takeover gold loan · OML000471</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹2,240</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Takeover gold loan · OML000448</div><div class="li-meta">rule v2 · 0.20% of loan · takeover</div></div><div class="li-amt">₹980</div></div>
           <div class="line-item adj" data-goto="b-dispute"><div class="li-main"><div class="li-title">A correction — this loan was counted twice <span class="li-badge adj">correction</span></div><div class="li-meta">shown here on purpose · never hidden</div></div><div class="li-amt">−₹410</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">ICICI · OMGL30784051</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,410</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Fresh gold loan · OML000455</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,410</div></div>
         </div>
         <div class="appfoot"><button class="ghost-app" data-goto="b-dispute">Report a problem with a line</button></div>
       </div></div>
@@ -865,7 +885,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="appbody">
           <div class="field-app">
             <label>Which line</label>
-            <div class="line-item" style="cursor:default;margin:0"><div class="li-main"><div class="li-title">Axis · OMGL30783998</div><div class="li-meta">rule v2 · 0.20% of loan · renewal</div></div><div class="li-amt">₹980</div></div>
+            <div class="line-item" style="cursor:default;margin:0"><div class="li-main"><div class="li-title">Takeover gold loan · OML000448</div><div class="li-meta">rule v2 · 0.20% of loan · takeover</div></div><div class="li-amt">₹980</div></div>
             <div class="fhint">Already filled in from the line you tapped.</div>
           </div>
           <div class="field-app">
@@ -896,7 +916,7 @@ textarea{resize:vertical;min-height:88px}
           <p style="color:var(--muted);font-size:13.5px;margin:8px 24px 22px">Nothing changes until someone reviews it. If they agree, the fix is added to next month — a closed month is never re-opened.</p>
           <div style="width:100%;padding:0 4px">
             <div class="kv"><span class="k">Report number</span><span class="v mono">DSP-2026-0338</span></div>
-            <div class="kv"><span class="k">About loan</span><span class="v mono">OMGL30783998</span></div>
+            <div class="kv"><span class="k">About loan</span><span class="v mono">OML000448</span></div>
             <div class="kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
           </div>
         </div>
@@ -914,9 +934,9 @@ textarea{resize:vertical;min-height:88px}
         <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
         <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>My reports</h3></div>
         <div class="appbody">
-          <div class="dispute-status" onclick="toast('Still being reviewed by the office')"><div class="li-main"><div class="li-title mono">DSP-2026-0338</div><div class="li-meta">About loan OMGL30783998 · 03 Jul 2026</div></div><span class="pill staged">being reviewed</span></div>
-          <div class="dispute-status" onclick="toast('Accepted — a fix of +₹3,400 was added to next month')"><div class="li-main"><div class="li-title mono">DSP-2026-0310</div><div class="li-meta">About loan OMGL30712004 · 18 Jun 2026</div></div><span class="pill live">accepted</span></div>
-          <div class="dispute-status" onclick="toast('Turned down — the pay matched the rule when the loan was given')"><div class="li-main"><div class="li-title mono">DSP-2026-0287</div><div class="li-meta">About loan OMGL30655890 · 02 Jun 2026</div></div><span class="pill draft" style="color:var(--red);background:#94214310">turned down</span></div>
+          <div class="dispute-status" onclick="toast('Still being reviewed by the office')"><div class="li-main"><div class="li-title mono">DSP-2026-0338</div><div class="li-meta">About loan OML000448 · 03 Jul 2026</div></div><span class="pill staged">being reviewed</span></div>
+          <div class="dispute-status" onclick="toast('Accepted — a fix of +₹3,400 was added to next month')"><div class="li-main"><div class="li-title mono">DSP-2026-0310</div><div class="li-meta">About loan OML000391 · 18 Jun 2026</div></div><span class="pill live">accepted</span></div>
+          <div class="dispute-status" onclick="toast('Turned down — the pay matched the rule when the loan was given')"><div class="li-main"><div class="li-title mono">DSP-2026-0287</div><div class="li-meta">About loan OML000305 · 02 Jun 2026</div></div><span class="pill draft" style="color:var(--red);background:#94214310">turned down</span></div>
         </div>
       </div></div>
     </section>
@@ -1113,7 +1133,7 @@ function applyAutofill(){
 
 /* ---- plain-english summary for the review + approver screens ---- */
 const EVENT_TEXT={'self-source':'find a customer','convincing':'convince a customer','new-customer':'bring a brand-new customer','funnel-a2nu':'bring new customers (counted by level)','closure-bucket':'reach a loan-closing target'};
-const LOAN_TEXT={'fresh':'a fresh loan','takeover':'a takeover','others':'other loans'};
+const LOAN_TEXT={'fresh':'a fresh gold loan','takeover':'a takeover gold loan','others':'other loans'};
 function roleList(plural){
   const names=selectedActors().map(a=> plural?ROLE_PLURAL[a]:ROLE_NAMES[a]);
   if(names.length<=1) return names[0]||'—';
