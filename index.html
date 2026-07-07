@@ -449,6 +449,7 @@ textarea{resize:vertical;min-height:88px}
 
     <div class="grp">Actor view — real-time accrual</div>
     <button class="navitem" data-goto="b-home"><span class="no">1</span> My earnings</button>
+    <button class="navitem" data-goto="b-rates"><span class="no">★</span> My rate card · live</button>
     <button class="navitem" data-goto="b-firm"><span class="no">2</span> A firm accrual</button>
     <button class="navitem" data-goto="b-prov"><span class="no">3</span> Provisional · this period</button>
     <button class="navitem" data-goto="b-final"><span class="no">4</span> Final · a closed period</button>
@@ -878,6 +879,12 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
             </div>
 
+            <div class="px-card" data-goto="b-rates" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
+              <span style="width:36px;height:36px;border-radius:50%;background:#fff8eb;display:grid;place-items:center;font-size:16px;flex:none">★</span>
+              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My rate card</div><div style="font-size:11.5px;font-weight:500;color:#585858;margin-top:1px">What you earn today — updates the moment a rule changes</div></div>
+              <span style="color:#909090;font-size:18px">›</span>
+            </div>
+
             <div class="px-card">
               <div class="px-label">This month's loans</div>
               <hr class="px-div">
@@ -900,6 +907,27 @@ textarea{resize:vertical;min-height:88px}
 
         <div class="note-block" style="max-width:320px;margin-top:0">
           <b>Why this works.</b> Earlier, this number arrived <b>about 20 days</b> after month end, calculated by hand. Now it shows up the moment a loan is given. A growing number always shows <b>how close you are to the next level</b> — and every rupee has one line on the record saying exactly why it exists.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APP 1b · MY RATE CARD ===== -->
+    <section class="screen" id="b-rates">
+      <div class="screen-head"><span class="id">Actor · ★</span><div><h2>My rate card — always current</h2><div class="sub">Rules are dynamic — so the partner never reads "the rulebook". The app shows <b>their own rate card</b>, built live from the rules in force for their role. A change announces itself here before it lands, and it never touches money already earned.</div></div></div>
+      <div class="phone-stage">
+        <div class="phone"><div class="notch"></div><div class="screenview">
+          <div class="px-head">
+            <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+            <div class="px-topline">
+              <button class="px-back" data-goto="b-home">‹</button>
+              <div style="flex:1"><div class="px-id">My rate card</div><div class="px-sub">Sales Partner · live rules</div></div>
+            </div>
+          </div>
+          <div class="px-banner amber" id="rc-flashbanner" style="display:none"></div>
+          <div class="px-body" id="rc-body"></div>
+        </div></div>
+        <div class="note-block" style="max-width:320px;margin-top:0">
+          <b>How a dynamic rule reaches a partner.</b> This card is a live read of the rulebook, filtered to <b>this partner's role</b>. Publish a change in the config side and it appears here instantly — as an <b>upcoming</b> entry until its start date. And because every loan pays the rate on <b>its own date</b>, a change never rewrites what was already earned. Try it: approve a new SP rule in the config flow, then come back here.
         </div>
       </div>
     </section>
@@ -1144,6 +1172,7 @@ function show(id){
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); }
   if(id==='a-staged'||id==='a-published') fillConfirmation();
+  if(id==='b-rates') renderRateCard();
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelector('.stage').scrollTop=0;
 }
@@ -1570,6 +1599,7 @@ function publishRule(){
   renderRulesTable();
   show('a-published');
   setFact('live-version',r.ver);   // after show() so fillConfirmation can't overwrite it
+  if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
 }
 function roleCurrentRate(role){ const r=RULES.find(x=>!x.flash&&x.status==='working'&&x.roles.includes(role)&&typeof x.rate==='number'); return r?r.rate:0; }
 /* Backtest: canonical current-rulebook baseline by category (₹ lakh, from the spec's D14 illustration).
@@ -1652,6 +1682,51 @@ function toggleReject(){
 function checkDispute(){
   const v=document.getElementById('dispute-reason').value.trim();
   document.getElementById('submit-dispute').disabled = v.length<3;
+}
+
+/* ---- partner rate card: a live, role-scoped read of the rulebook ---- */
+const RC_TODAY='2026-07-15', RC_ROLE='SP';
+const RC_EVENT={'self-source':'you find the customer','convincing':'you convince the customer','funnel-a2nu':'you bring new customers','closure-bucket':'you get the loan repaid','net-conversion':'your channel performs'};
+const RC_LOAN={'fresh':'Fresh gold loan','takeover':'Takeover gold loan','continuation':'Continuation','attached':'Attached','additional':'Additional'};
+function rcRow(r,chip,chipCls,extra){
+  return '<div class="px-row"><div class="main"><div class="t">'+(RC_LOAN[r.loan]||'Loan')+' — '+(RC_EVENT[r.event]||'')+'</div>'+
+    '<div class="m">'+r.pay+' · '+(r.sched||'')+(extra?' · '+extra:'')+'</div>'+
+    '<span class="px-chip '+chipCls+'">'+chip+'</span></div></div>';
+}
+function renderRateCard(){
+  const body=document.getElementById('rc-body'); if(!body) return;
+  const mine=RULES.filter(r=>r.roles.includes(RC_ROLE));
+  const flash=mine.filter(r=>r.flash&&r.status==='working'&&(!r.end||r.end>=RC_TODAY));
+  const upcoming=mine.filter(r=>!r.flash&&r.status==='working'&&r.start>RC_TODAY);
+  const live=mine.filter(r=>!r.flash&&r.status==='working'&&r.start<=RC_TODAY);
+  // if a category only has an upcoming rule, keep showing its superseded predecessor as "until" the switch
+  const bridge=[];
+  upcoming.forEach(u=>{
+    if(!live.some(l=>l.cat===u.cat)){
+      const prev=mine.filter(x=>x.status==='ended'&&x.cat===u.cat).sort((a,b)=>(b.ver||'').localeCompare(a.ver||''))[0];
+      if(prev) bridge.push({rule:prev,until:u.start});
+    }
+  });
+  let html='<div class="px-card"><div class="px-label">What you earn today</div><hr class="px-div">';
+  if(!live.length&&!bridge.length) html+='<div class="px-note12" style="padding:6px 0">No live rules for your role right now.</div>';
+  live.forEach(r=>{ html+=rcRow(r,'live · '+(r.ver||''),'green'); });
+  bridge.forEach(b=>{ html+=rcRow(b.rule,'until '+fmtDate(b.until),'grey'); });
+  html+='</div>';
+  if(flash.length){
+    html+='<div class="px-card" style="border-color:#f5a70055;background:linear-gradient(150deg,#fff8eb,#fff)"><div class="px-label" style="color:#b97b00">Limited-time boost</div><hr class="px-div">';
+    flash.forEach(r=>{ html+=rcRow(r,'ends '+fmtDate(r.end),'amber','on top of normal pay'); });
+    html+='</div>';
+  }
+  if(upcoming.length){
+    html+='<div class="px-card"><div class="px-label">Changing soon</div><hr class="px-div">';
+    upcoming.forEach(r=>{ html+=rcRow(r,'from '+fmtDate(r.start),'blue'); });
+    html+='<div class="px-note12" style="margin-top:8px">Until then, your current rate applies.</div></div>';
+  }
+  html+='<div class="px-note12" style="padding:0 4px">A rate change <b>never touches what you already earned</b> — every loan pays the rate that was live on its own date.</div>';
+  body.innerHTML=html;
+  const fb=document.getElementById('rc-flashbanner');
+  if(flash.length){ fb.style.display='flex'; fb.textContent='★ '+(flash[0].name||'Boost')+' — extra pay till '+fmtDate(flash[0].end); }
+  else fb.style.display='none';
 }
 
 ['change','input'].forEach(ev=>document.getElementById('a-form').addEventListener(ev, updatePreview));
