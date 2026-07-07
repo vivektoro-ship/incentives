@@ -439,8 +439,8 @@ textarea{resize:vertical;min-height:88px}
               <tr class="rule-row" data-goto="a-review"><td class="rule-name">Sales Partner — new loans</td><td class="rule-cat">Finding customers</td><td>Sales Partner</td><td><span class="pill live">working</span></td><td class="mono">01 Jun 2026</td><td class="rate-sum">0.35% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
               <tr class="rule-row" data-goto="a-review"><td class="rule-name">Associate Partner — renewals</td><td class="rule-cat">Convincing</td><td>Associate Partner</td><td><span class="pill live">working</span></td><td class="mono">12 May 2026</td><td class="rate-sum">0.20% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
               <tr class="rule-row" data-goto="a-review"><td class="rule-name">City Lead — extra bonus</td><td class="rule-cat">Bonus</td><td>City Lead</td><td><span class="pill live">working</span></td><td class="mono">01 Apr 2026</td><td class="rate-sum">every 3 months</td><td><button class="row-edit" data-stop>View</button></td></tr>
-              <tr class="rule-row" data-goto="a-staged"><td class="rule-name">New customers — by levels</td><td class="rule-cat">New customers</td><td>Caller</td><td><span class="pill staged">waiting for approval</span></td><td class="mono">01 Jul 2026</td><td class="rate-sum">by level</td><td><button class="row-edit" data-stop data-goto="a-form">Edit</button></td></tr>
-              <tr class="rule-row" data-goto="a-form"><td class="rule-name">Special push to close loans</td><td class="rule-cat">Collections <span class="pill flash" style="margin-left:6px">limited-time</span></td><td>Collection Partner</td><td><span class="pill draft">draft</span></td><td class="mono">—</td><td class="rate-sum">0.50% of loan</td><td><button class="row-edit" data-stop data-goto="a-form">Edit</button></td></tr>
+              <tr class="rule-row" data-goto="a-staged"><td class="rule-name">New customers — by levels</td><td class="rule-cat">New customers</td><td>Caller</td><td><span class="pill staged">waiting for approval</span></td><td class="mono">01 Jul 2026</td><td class="rate-sum">by level</td><td><button class="row-edit" data-stop data-rule='{"name":"New customers — by levels","roles":["Caller"],"loan":"fresh","event":"funnel-a2nu","mode":"slab","start":"2026-07-01"}'>Edit</button></td></tr>
+              <tr class="rule-row" data-goto="a-form"><td class="rule-name">Special push to close loans</td><td class="rule-cat">Collections <span class="pill flash" style="margin-left:6px">limited-time</span></td><td>Collection Partner</td><td><span class="pill draft">draft</span></td><td class="mono">—</td><td class="rate-sum">0.50% of loan</td><td><button class="row-edit" data-stop data-rule='{"name":"Special push to close loans","roles":["Collection Partner"],"loan":"others","event":"closure-bucket","mode":"flat","rate":0.50,"flash":true,"end":"2026-08-31","start":"2026-07-14"}'>Edit</button></td></tr>
               <tr class="rule-row" data-goto="a-review"><td class="rule-name">Digital Manager — new loans</td><td class="rule-cat">Finding customers</td><td>Digital Manager</td><td><span class="pill expired">ended</span></td><td class="mono">31 Mar 2026</td><td class="rate-sum">0.15% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
             </tbody>
           </table>
@@ -459,6 +459,9 @@ textarea{resize:vertical;min-height:88px}
         <div class="fsection done" id="secA">
           <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid &amp; what they did</h4><div class="hint">The people this is for, and what they need to do. You fill this in.</div></div></div>
           <div class="fsec-body">
+            <div class="field"><label>Rule name</label>
+              <input type="text" id="f-name" placeholder="e.g. Sales Partner — fresh loan sourcing" maxlength="60">
+            </div>
             <div class="field"><label>Who gets paid <span class="desc">— pick one or more roles</span></label>
               <div class="chipselect" id="f-actor">
                 <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner</button>
@@ -496,6 +499,9 @@ textarea{resize:vertical;min-height:88px}
                 <div class="field" style="margin:0"><label>Ends on <span class="auto-tag">limited-time</span></label><input type="date" id="flash-date" value="2026-07-31"></div>
               </div>
               <div class="note"><span class="i">✦</span> A limited-time rule adds extra pay on top of the normal pay, and stops on its own once the end date passes.</div>
+            </div>
+            <div class="field"><label>Starts from</label>
+              <input type="date" id="f-start" value="2026-07-14">
             </div>
           </div>
         </div>
@@ -643,7 +649,8 @@ textarea{resize:vertical;min-height:88px}
           <div class="meta-row">
             <span class="meta-chip"><b>status</b> waiting</span>
             <span class="meta-chip"><b>approver</b> Pragadeesh</span>
-            <span class="meta-chip"><b>rule no.</b> RUL-2026-0714</span>
+            <span class="meta-chip"><b>starts</b> <span id="staged-starts">14 Jul 2026</span></span>
+            <span class="meta-chip"><b>rule no.</b> <span id="staged-ruleno">RUL-2026-0714</span></span>
           </div>
           <div class="actions">
             <button class="btn ghost-light" data-goto="a-form">Edit it</button>
@@ -706,12 +713,12 @@ textarea{resize:vertical;min-height:88px}
         <div class="confirm">
           <div class="seal ok">✓</div>
           <h3>This rule is now live</h3>
-          <p>Working from 14 July 2026. From now on, everyone this rule matches will be paid this way.</p>
+          <p>Working from <span id="live-startdate">14 Jul 2026</span>. From now on, everyone this rule matches will be paid this way.</p>
           <div class="meta-row">
-            <span class="meta-chip"><b>version</b> 3</span>
+            <span class="meta-chip"><b>version</b> <span id="live-version">1</span></span>
             <span class="meta-chip"><b>status</b> working</span>
-            <span class="meta-chip"><b>starts</b> 14 Jul 2026</span>
-            <span class="meta-chip"><b>rule no.</b> RUL-2026-0714</span>
+            <span class="meta-chip"><b>starts</b> <span id="live-starts">14 Jul 2026</span></span>
+            <span class="meta-chip"><b>rule no.</b> <span id="live-ruleno">RUL-2026-0714</span></span>
           </div>
           <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
         </div>
@@ -926,10 +933,13 @@ function show(id){
   const tab = id==='home'?'home':(id.startsWith('a-')?'a-list':'b-home');
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
   if(id==='a-review'||id==='a-checker') buildSummary();
+  if(id==='a-staged'||id==='a-published') fillConfirmation();
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelector('.stage').scrollTop=0;
 }
 document.addEventListener('click',e=>{
+  const ruleBtn = e.target.closest('[data-rule]');
+  if(ruleBtn){ e.stopPropagation(); try{ loadRule(JSON.parse(ruleBtn.dataset.rule)); }catch(_){}; show('a-form'); return; }
   const stop = e.target.closest('[data-stop]');
   const t = e.target.closest('[data-goto]');
   if(stop && stop.dataset.goto){ e.stopPropagation(); if(stop.dataset.fresh) resetForm(); show(stop.dataset.goto); return; }
@@ -1036,7 +1046,9 @@ function renderRoleRates(){
     if(roles.length===1){
       const k=roles[0]; html=rateRow('Rate for '+ROLE_NAMES[k], k, rateStore[k]??ROLE_RATE[k]);
     } else {
-      html=rateRow('Rate for every role','ALL', rateStore.ALL??0.35);
+      // carry the first role's rate into the shared value instead of resetting to a default
+      const shared = rateStore[roles[0]] ?? rateStore.ALL ?? ROLE_RATE[roles[0]] ?? 0.35;
+      html=rateRow('Rate for every role','ALL', shared);
     }
   } else {
     roles.forEach(r=>{ html+=rateRow('Rate for '+ROLE_NAMES[r], r, rateStore[r]??ROLE_RATE[r]); });
@@ -1049,6 +1061,12 @@ function ratePreview(){
   const prev=document.getElementById('rate-prev');
   if(!inputs.length){ prev.innerHTML=''; return; }
   document.getElementById('f-rate').value=inputs[0].value;
+  const basis=document.getElementById('f-basis').value;
+  if(basis!=='The loan amount'){
+    const what = basis==='Number of new customers' ? 'the number of new customers' : 'the finance target';
+    prev.innerHTML='This rate applies to <b>'+what+'</b>, not the loan amount'+(basis==='A finance target'?' — confirm the figure with the finance team.':'.');
+    return;
+  }
   if(inputs.length===1){
     const r=parseFloat(inputs[0].value||0), amt=Math.round(50000*r/100);
     prev.innerHTML='For example — on a ₹50,000 loan, this pays <b>₹'+amt.toLocaleString('en-IN')+'</b>';
@@ -1075,6 +1093,11 @@ function applyAutofill(){
   if(event==='funnel-a2nu'){ basis.value='Number of new customers'; basisAuto=true; slab=true; ensureGate(); }
   else if(actors.includes('City Lead')){ basis.value='A finance target'; basisAuto=true; showFinanceNote=true; sched.value='Every 3 months'; schedAuto=true; }
   else if(actors.length && actors.every(a=>['SP','AP','Internal DB'].includes(a))){ basis.value='The loan amount'; basisAuto=true; if(actors.includes('Internal DB')) slab=true; }
+
+  if(event!=='funnel-a2nu'){                       // drop any auto-added condition when it no longer applies
+    document.querySelectorAll('#mods .auto-mod').forEach(r=>r.remove());
+    if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex';
+  }
 
   setAuto('fw-basis','basis-auto',basisAuto);
   setAuto('fw-sched','sched-auto',schedAuto);
@@ -1149,13 +1172,92 @@ function updatePreview(){
   setFact('pv-pay', payShort());
   setFact('pv-extra', mods? (mods+(mods>1?' rules':' rule')+' added') : 'None');
   setFact('pv-when', sched);
+  runValidation();
 }
 
-function ensureGate(){ if(!document.querySelector('#mods .modrow')) addMod('gate',true); }
-function addMod(kind,silent){
+/* ---- validation: block or warn before "Check the cost" ---- */
+function validate(){
+  const errs=[], warns=[];
+  if(!document.getElementById('f-name').value.trim()) errs.push('Give the rule a name');
+  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  if(slabOn){
+    const rows=[...document.querySelectorAll('#slab-body .slab-r')];
+    let prevTo=0;
+    rows.forEach((r,i)=>{
+      const from=parseInt(r.querySelector('.s-from').value);
+      const toRaw=r.querySelector('.s-to').value.trim();
+      const to=toRaw===''?null:parseInt(toRaw);
+      if(isNaN(from)) errs.push('Level '+(i+1)+' needs a “From” value');
+      if(i===0 && from!==1) errs.push('The first level should start at 1 loan');
+      if(to!==null && to<from) errs.push('Level '+(i+1)+': “Up to” is less than “From”');
+      if(i>0 && from!==prevTo+1) errs.push('Levels must be continuous — no gaps or overlaps');
+      if(to===null && i!==rows.length-1) errs.push('Only the last level can be left as “and above”');
+      prevTo = (to===null? from : to);
+      r.querySelectorAll('.s-pay').forEach(p=>{ if(!(parseFloat(p.value)>0)) errs.push('Every level needs a rate above 0%'); });
+    });
+  } else {
+    [...document.querySelectorAll('#role-rates .role-rate')].forEach(i=>{
+      const v=parseFloat(i.value);
+      if(!(v>0)) errs.push('The rate must be more than 0%');
+      else if(v>10) warns.push('A rate above 10% looks high — double-check it');
+    });
+  }
+  if(document.querySelector('#f-ruletype button.on').dataset.rt==='flash'){
+    const s=document.getElementById('f-start').value, e=document.getElementById('flash-date').value;
+    if(s&&e&&e<=s) errs.push('The limited-time end date must be after the start date');
+  }
+  document.querySelectorAll('#mods .modrow').forEach(row=>{
+    const sel=row.querySelector('select'), num=row.querySelector('input[type=number]');
+    if(sel && num && sel.value.startsWith('At least') && !(parseInt(num.value)>0)) warns.push('A “must meet” condition needs a number above 0');
+  });
+  return {errs:[...new Set(errs)], warns:[...new Set(warns)]};
+}
+function runValidation(){
+  const v=validate();
+  const st=document.getElementById('resolve-status');
+  const btn=document.getElementById('to-review');
+  if(!st||!btn) return;
+  if(v.errs.length){ st.className='rp-status warn'; st.innerHTML='<span>⚠</span> '+v.errs[0]; btn.disabled=true; }
+  else if(v.warns.length){ st.className='rp-status warn'; st.innerHTML='<span>⚠</span> '+v.warns[0]; btn.disabled=false; }
+  else { st.className='rp-status'; st.innerHTML='<span>✓</span> Ready to check the cost'; btn.disabled=false; }
+}
+
+/* ---- dynamic rule number, dates, and confirmation screens ---- */
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtDate(iso){ if(!iso) return '—'; const p=iso.split('-'); if(p.length!==3) return iso; return p[2]+' '+MON[(+p[1])-1]+' '+p[0]; }
+function ruleNoFor(){
+  const nm=document.getElementById('f-name').value||'rule';
+  let h=0; for(const c of nm) h=(h*31+c.charCodeAt(0))%9000;
+  return 'RUL-2026-'+String(1000+h).slice(0,4);
+}
+function fillConfirmation(){
+  const rn=ruleNoFor(), sd=fmtDate(document.getElementById('f-start').value);
+  ['staged-ruleno','live-ruleno'].forEach(id=>setFact(id,rn));
+  ['staged-starts','live-starts','live-startdate'].forEach(id=>setFact(id,sd));
+  setFact('live-version','1');
+}
+
+/* ---- Edit: load an existing rule into the form ---- */
+function loadRule(o){
+  resetForm();
+  document.getElementById('f-name').value=o.name||'';
+  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on',(o.roles||['SP']).includes(b.dataset.val)));
+  if(o.loan) document.getElementById('f-loan').value=o.loan;
+  if(o.event) document.getElementById('f-event').value=o.event;
+  if(o.start) document.getElementById('f-start').value=o.start;
+  setRuleType(o.flash?'flash':'standard');
+  if(o.flash && o.end) document.getElementById('flash-date').value=o.end;
+  applyAutofill();
+  if(o.mode) setRateMode(o.mode);
+  if(o.mode!=='slab' && o.rate!=null){ const inp=document.querySelector('#role-rates .role-rate'); if(inp){ inp.value=o.rate; ratePreview(); } }
+  updatePreview();
+}
+
+function ensureGate(){ if(!document.querySelector('#mods .modrow')) addMod('gate',true,true); }
+function addMod(kind,silent,auto){
   const wrap=document.getElementById('mods');
   document.getElementById('mods-empty').style.display='none';
-  const row=document.createElement('div');row.className='modrow';
+  const row=document.createElement('div');row.className='modrow'+(auto?' auto-mod':'');
   if(kind==='gate'){
     row.innerHTML='<span class="mtype">Must meet</span> <select style="width:auto;padding:6px 10px"><option>At least this many loans</option><option>A certain mix of loans</option><option>Passes a fraud check</option></select><input type="number" placeholder="number" style="width:90px;padding:6px 10px"><button class="x" onclick="rmMod(this)">✕</button>';
   }else{
@@ -1168,6 +1270,8 @@ function addMod(kind,silent){
 function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex'; updatePreview(); }
 
 function resetForm(){
+  document.getElementById('f-name').value='';
+  document.getElementById('f-start').value='2026-07-14';
   document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='SP'));
   document.getElementById('f-loan').value='fresh';
   document.getElementById('f-event').value='self-source';
