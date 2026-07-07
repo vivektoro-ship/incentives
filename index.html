@@ -623,7 +623,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="field"><label>Rule name</label>
               <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35% ND" maxlength="60">
             </div>
-            <div class="field"><label>Who gets paid</label>
+            <div class="field"><label>Who gets paid <span class="desc">— one role per rule</span></label>
               <div class="chipselect" id="f-actor">
                 <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner (SP)</button>
                 <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Associate Partner (AP)</button>
@@ -640,10 +640,16 @@ textarea{resize:vertical;min-height:88px}
             <div class="field"><label>Loan type</label>
               <select id="f-loan" onchange="applyAutofill()">
                 <option value="fresh">Fresh</option>
-                <option value="takeover">Takeover</option>
                 <option value="continuation">Continuation (renewal · top-up · part-release · merge)</option>
+                <option value="takeover">Takeover</option>
                 <option value="attached">Attached</option>
-                <option value="additional">Additional</option>
+              </select>
+              <div class="minihint">Sub-types come from reference data, not typed here. Facts like LTV band or new-vs-existing customer are conditions (slot 4), not loan types.</div>
+            </div>
+            <div class="field"><label>Product</label>
+              <select id="f-prod">
+                <option>Gold loan (GL)</option>
+                <option>Personal loan (PL)</option>
               </select>
             </div>
             <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
@@ -676,7 +682,15 @@ textarea{resize:vertical;min-height:88px}
           <div class="fsec-head" onclick="accOpen('secB')"><span class="fsec-tag">2</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>On what amount <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Basis</span></h4><div class="hint">The amount the percentage is taken on.</div></div><span class="fsec-sum" id="sum-B"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div class="field autofilled" id="fw-basis"><label>Basis <span class="auto-tag" id="basis-auto">pre-filled</span></label>
-              <select id="f-basis"><option>The loan amount (net disbursal)</option><option>New customers this month (A2NU %)</option><option>Company profit numbers (finance — later)</option></select>
+              <select id="f-basis">
+                <option>The loan amount (net disbursal)</option>
+                <option>Loan count — this month</option>
+                <option>Customer count — this month</option>
+                <option>A2NU % — period aggregate</option>
+                <option>Net conversions — period aggregate</option>
+                <option disabled>Company profit (finance — after v1)</option>
+              </select>
+              <div class="minihint">Reads from the maintained list of allowed facts — if a basis isn't on the list, the rule can't be written. Period aggregates are computed inside this engine only.</div>
               <div class="note" id="basis-note" style="display:none"><span class="i">⚠</span> Pay based on company profit (City Lead's PAT / EBITDA parts) comes a little later — it is not in the first version.</div>
             </div>
           </div>
@@ -829,7 +843,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="meta-row">
             <span class="meta-chip"><b>status</b> staged</span>
             <span class="meta-chip"><b>maker</b> you</span>
-            <span class="meta-chip"><b>checker</b> Yash</span>
+            <span class="meta-chip"><b>checker</b> approver seat · assigned via access control</span>
             <span class="meta-chip"><b>effective</b> <span id="staged-starts">01 Aug 2026</span></span>
             <span class="meta-chip"><b>rule</b> <span id="staged-ruleno">RUL-2026-0714</span></span>
           </div>
@@ -975,6 +989,7 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000482 · you found the customer</div><span class="px-chip amber">half paid · half 05 Aug</span></div><div class="amt">₹1,750</div></div>
               <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000471 · 0.35% + July bonus</div><span class="px-chip blue">comes next payout</span></div><div class="amt">₹2,240</div></div>
               <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000455 · half rate (low value)</div><span class="px-chip blue">counted this month</span></div><div class="amt">₹1,410</div></div>
+              <div class="px-row" onclick="toast('This rule has a gate: at least 5 fresh loans in the month. The earning exists from day one and shows as pending — when loan 5 lands, all of them firm up together. Never blank until the gate.')" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000488 · gate: 5 fresh loans in the month</div><span class="px-chip amber">₹175 pending · 3 more to unlock</span></div><div class="amt" style="color:#94A3B8">₹175</div></div>
               <div class="px-row" onclick="toast('Ravi did two jobs on this loan — found the customer AND convinced them. Both pay, separately.')" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan · 2 payments</div><div class="m">OML000463 · finding ₹1,750 + convincing ₹600</div><span class="px-chip green">both jobs pay</span></div><div class="amt">₹2,350</div></div>
               <div class="px-row" onclick="toast('The customer closed this loan within 60 days, so the pay was taken back. Both lines stay visible — nothing is hidden.')" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000459 · closed within 60 days</div><span class="px-chip red">money taken back</span></div><div class="amt red">−₹1,120</div></div>
               <div class="px-more">+ 37 more loans this month</div>
@@ -1270,7 +1285,7 @@ function show(id){
 }
 document.addEventListener('click',e=>{
   const openEl = e.target.closest('[data-open]');
-  if(openEl){ e.stopPropagation(); openRule(openEl.dataset.open); return; }
+  if(openEl){ e.stopPropagation(); openRule(openEl.dataset.open, openEl.tagName==='BUTTON'); return; }
   const ruleBtn = e.target.closest('[data-rule]');
   if(ruleBtn){ e.stopPropagation(); try{ loadRule(JSON.parse(ruleBtn.dataset.rule)); }catch(_){}; show('a-form'); return; }
   const stop = e.target.closest('[data-stop]');
@@ -1373,13 +1388,12 @@ let rateStore={};
 
 function selectedActors(){ return [...document.querySelectorAll('#f-actor .pchip.on')].map(b=>b.dataset.val); }
 function toggleActor(btn){
-  if(btn.classList.contains('on') && selectedActors().length===1){ toast('Pick at least one role'); return; }
-  btn.classList.toggle('on');
+  /* One rule = one role (Sreekesh, Q1). Two people earning on a loan = two rules fired. */
+  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b===btn));
   applyAutofill();
 }
 function updateActorHint(){
-  const n=selectedActors().length;
-  document.getElementById('actor-hint').textContent = n+' payee type'+(n>1?'s':'')+' selected'+(n>1?' — each can carry its own rate in slot 3':'');
+  document.getElementById('actor-hint').textContent = 'One rule pays one role — if two people earn on a loan, that\'s two rules firing.';
 }
 function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
@@ -1414,8 +1428,7 @@ function ratePreview(){
   document.getElementById('f-rate').value=inputs[0].value;
   const basis=document.getElementById('f-basis').value;
   if(!basis.startsWith('The loan amount')){
-    const what = basis.startsWith('New customers') ? 'the count of new customers this month' : 'company profit numbers — coming later';
-    prev.innerHTML='This rate applies to <b>'+what+'</b>, not the loan amount.';
+    prev.innerHTML='This rate reads <b>'+basis.toLowerCase()+'</b> — a period aggregate computed inside this engine, not the loan amount.';
     return;
   }
   if(inputs.length===1){
@@ -1444,10 +1457,10 @@ function applyAutofill(){
   /* Defaults from the Oro Incentive Structure:
      SP/AP self-source → 0.35%/0.20% ND, 50/50 schedule; A2NU → A2NU% slab + min-10 gate, same month;
      CP → closure bucket; City Lead → quarterly (finance basis = fast-follow); Internal DB → GL-slab, 100% next month. */
-  if(event==='funnel-a2nu'){ basis.value='New customers this month (A2NU %)'; basisAuto=true; slab=true; sched.value='Same month'; schedAuto=true; ensureGate(); }
+  if(event==='funnel-a2nu'){ basis.value='A2NU % — period aggregate'; basisAuto=true; slab=true; sched.value='Same month'; schedAuto=true; ensureGate(); }
   else if(event==='closure-bucket'){ basis.value='The loan amount (net disbursal)'; basisAuto=true; slab=true; sched.value='When the loan closes'; schedAuto=true; }
   else if(event==='net-conversion'){ basis.value='The loan amount (net disbursal)'; basisAuto=true; slab=true; sched.value=actors.includes('City Lead')?'Every 3 months':'Full amount next month'; schedAuto=true; if(actors.includes('City Lead')) showFinanceNote=true; }
-  else if(actors.includes('City Lead')){ basis.value='Company profit numbers (finance — later)'; basisAuto=true; showFinanceNote=true; sched.value='Every 3 months'; schedAuto=true; }
+  else if(actors.includes('City Lead')){ basis.value='Net conversions — period aggregate'; basisAuto=true; showFinanceNote=true; sched.value='Every 3 months'; schedAuto=true; }
   else if(actors.length && actors.every(a=>['SP','AP','Internal DB','Business Partner'].includes(a))){
     basis.value='The loan amount (net disbursal)'; basisAuto=true;
     sched.value=actors.includes('Internal DB')||actors.includes('Business Partner')?'Full amount next month':'Half next month + half the month after'; schedAuto=true;
@@ -1473,7 +1486,7 @@ function applyAutofill(){
 
 /* ---- plain-english summary for the simulate + checker screens ---- */
 const EVENT_TEXT={'self-source':'find the customer themselves for','convincing':'convince the customer on','funnel-a2nu':'bring new customers via','closure-bucket':'get repayment on','net-conversion':'hit their numbers on'};
-const LOAN_TEXT={'fresh':'a Fresh loan','takeover':'a Takeover loan','continuation':'a Continuation (renewal · top-up · part-release · merge)','attached':'an Attached loan','additional':'an Additional loan'};
+const LOAN_TEXT={'fresh':'a Fresh loan','takeover':'a Takeover loan','continuation':'a Continuation loan','attached':'an Attached loan'};
 function roleList(plural){
   const names=selectedActors().map(a=> plural?ROLE_PLURAL[a]:ROLE_NAMES[a]);
   if(names.length<=1) return names[0]||'—';
@@ -1484,7 +1497,7 @@ function payText(){
   const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
   const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   const basis=document.getElementById('f-basis').value;
-  const on = basis.startsWith('New customers') ? 'by the new-customer slab' : basis.startsWith('Company profit') ? 'on the profit metric' : 'of the loan amount';
+  const on = basis.includes('A2NU') ? 'by A2NU% slab' : basis.includes('count')||basis.includes('conversions') ? 'on '+basis.toLowerCase() : basis.startsWith('Company profit') ? 'on the profit metric' : 'of the loan amount';
   if(slabOn){
     if(selectedActors().length>1) return 'a slab rate '+on+', set per payee type';
     const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value||0)).filter(n=>!isNaN(n));
@@ -1571,6 +1584,7 @@ function updatePreview(){
 function validate(){
   const errs=[], warns=[];
   if(!document.getElementById('f-name').value.trim()) errs.push('Give the rule a name');
+  if(!document.getElementById('f-start').value) errs.push('A start date is required — "immediately" means today\'s date, stated');
   const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   if(slabOn){
     const rows=[...document.querySelectorAll('#slab-body .slab-r')];
@@ -1653,7 +1667,7 @@ let RULES=[
   {id:'RUL-CL-QTR',name:'City Lead quarterly · city scope',cat:'scope-bonus',ver:'v2',roles:['City Lead'],loan:'fresh',event:'net-conversion',status:'working',start:'2026-04-01',pay:'every 3 months · profit part later',mode:'flat',rate:0.10,sched:'Every 3 months'},
   {id:'RUL-IDB',name:'Internal DB · GL-slab',cat:'sourcing',ver:'v6',roles:['Internal DB'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'slab table',mode:'slab',sched:'Full amount next month'},
   {id:'RUL-BP',name:'Business Partner · month-1 + trail',cat:'sourcing',ver:'v1',roles:['Business Partner'],loan:'fresh',event:'self-source',status:'staged',start:'2026-08-01',pay:'0.50% month 1 · 0.10% months 2–6',mode:'flat',rate:0.50,sched:'Full amount next month'},
-  {id:'RUL-FLASH',name:'July fresh-loan push · flash',cat:'sourcing',ver:'v1',roles:['SP','AP'],loan:'fresh',event:'self-source',status:'working',start:'2026-07-01',pay:'+0.10% bonus on top',mode:'flat',rate:0.10,flash:true,end:'2026-07-31',sched:'Same month'},
+  {id:'RUL-FLASH',name:'July fresh-loan push · SP · flash',cat:'sourcing',ver:'v1',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-07-01',pay:'+0.10% bonus on top',mode:'flat',rate:0.10,flash:true,end:'2026-07-31',sched:'Same month'},
   {id:'RUL-SP-OLD',name:'SP self-source · Fresh',cat:'sourcing',ver:'v6',roles:['SP'],loan:'fresh',event:'self-source',status:'ended',start:'2026-04-01',pay:'0.30% of loan',mode:'flat',rate:0.30,sched:'Half next month + half the month after'}
 ];
 function rolesText(roles){ return roles.map(r=>ROLE_NAMES[r]||r).join(', '); }
@@ -1666,7 +1680,7 @@ function renderRulesTable(){
   body.innerHTML = rows.length ? rows.map(r=>{
     const sp=STATUS_PILL[r.status]||['draft',r.status];
     const flash=r.flash?' <span class="pill flash" style="margin-left:6px">flash · additive</span>':'';
-    const label=(r.status==='draft'||r.status==='staged')?'Edit':'View';
+    const label=(r.status==='draft'||r.status==='staged')?'Edit':'New version';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
       '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
@@ -1676,10 +1690,12 @@ function renderRulesTable(){
       '<td><button class="row-edit" data-open="'+r.id+'" data-stop>'+label+'</button></td></tr>';
   }).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
 }
-function openRule(id){
+function openRule(id,btn){
   const r=RULES.find(x=>x.id===id); if(!r) return;
   loadRule(r);
-  if(r.status==='draft'||r.status==='staged') show('a-form'); else show('a-review');
+  if(r.status==='draft'||r.status==='staged'){ show('a-form'); return; }
+  if(btn){ show('a-form'); toast('Cloned into a draft — a published rule is never edited; approving creates a new version with its own start date'); }
+  else show('a-review');
 }
 function nextVersion(r){
   const prev=RULES.filter(x=>x.cat===r.cat&&x.event===r.event&&x.roles.some(role=>r.roles.includes(role))&&x.ver);
@@ -1809,7 +1825,7 @@ function agentDraft(){
   if(t.trim().length<8){ toast('Describe the incentive in a sentence first'); return; }
   const roleMap=[['business partner','Business Partner'],['associate','AP'],['sales partner','SP'],['sp ','SP'],[' ap','AP'],['caller','Caller'],['collection','Collection Partner'],['city lead','City Lead'],['digital','Digital Manager'],['internal','Internal DB'],['tpf','TPF']];
   let roles=[]; roleMap.forEach(([k,v])=>{ if(t.includes(k)&&!roles.includes(v)) roles.push(v); });
-  if(!roles.length) roles=['SP'];
+  roles=roles.length?[roles[0]]:['SP'];   // one rule = one role
   document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on',roles.includes(b.dataset.val)));
   const loan=t.includes('takeover')?'takeover':(t.includes('renewal')||t.includes('top-up')||t.includes('continuation'))?'continuation':t.includes('attached')?'attached':t.includes('additional')?'additional':'fresh';
   document.getElementById('f-loan').value=loan;
