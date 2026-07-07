@@ -483,6 +483,7 @@ textarea{resize:vertical;min-height:88px}
     <button class="navitem" data-goto="a-staged"><span class="no">4</span> Staged version</button>
     <button class="navitem" data-goto="a-checker"><span class="no">5</span> Checker review</button>
     <button class="navitem" data-goto="a-published"><span class="no">6</span> Versioned publish</button>
+    <button class="navitem" data-goto="a-disputes"><span class="no">7</span> Resolve disputes</button>
 
     <div class="grp">Actor view — real-time accrual</div>
     <button class="navitem" data-goto="b-home"><span class="no">1</span> My earnings</button>
@@ -562,6 +563,7 @@ textarea{resize:vertical;min-height:88px}
                 <option value="Digital Manager">Digital Manager · scope</option>
                 <option value="Internal DB">Internal DB</option>
                 <option value="Business Partner">Business Partner</option>
+                <option value="TPF">TPF</option>
               </select>
               <select class="fsel" id="flt-cat" onchange="renderRulesTable()">
                 <option value="all">Category · all</option>
@@ -596,6 +598,17 @@ textarea{resize:vertical;min-height:88px}
 
       <div class="create-grid">
       <div class="wizard">
+        <!-- Config agent · D13 -->
+        <div class="fsection" style="border-color:var(--indigo-line);background:linear-gradient(150deg,#f4f7ff,#fff)">
+          <div class="fsec-head"><span class="fsec-tag" style="background:var(--indigo)">✦</span><div><h4>Or just describe it <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the config agent — maker only, never the checker</span></h4><div class="hint">Type the incentive in plain words. The agent fills the five slots below — a human checker still approves before anything goes live.</div></div></div>
+          <div class="fsec-body">
+            <div style="display:flex;gap:10px">
+              <input type="text" id="agent-text" placeholder='e.g. "pay associate partners 0.25% on takeover loans, half next month" or "flash 0.1% bonus for SPs on fresh loans"' style="flex:1">
+              <button class="btn primary" style="flex:none" onclick="agentDraft()">Draft it</button>
+            </div>
+            <div class="note" id="agent-read" style="display:none;margin-top:10px"></div>
+          </div>
+        </div>
         <!-- Step 1 -->
         <div class="fsection done" id="secA">
           <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Condition slot</span></h4><div class="hint">Pick the people, the loan type, and what they must do — e.g. a Sales Partner who finds the customer for a Fresh loan.</div></div></div>
@@ -613,6 +626,7 @@ textarea{resize:vertical;min-height:88px}
                 <button type="button" class="pchip" data-val="Digital Manager" onclick="toggleActor(this)">Digital Manager</button>
                 <button type="button" class="pchip" data-val="Internal DB" onclick="toggleActor(this)">Internal DB</button>
                 <button type="button" class="pchip" data-val="Business Partner" onclick="toggleActor(this)">Business Partner</button>
+                <button type="button" class="pchip" data-val="TPF" onclick="toggleActor(this)">TPF</button>
               </div>
               <div class="minihint" id="actor-hint">1 payee type selected</div>
             </div>
@@ -756,6 +770,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="p-sub" style="margin-bottom:12px">The candidate rule, in one sentence:</div>
           <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
           <div class="rp-facts rp-facts-row" id="rv-facts"></div>
+          <div id="rv-history" style="margin-top:14px"></div>
         </div>
         <div class="panel">
           <h3>Backtest — candidate vs current rulebook</h3>
@@ -887,6 +902,28 @@ textarea{resize:vertical;min-height:88px}
       </div>
     </section>
 
+    <!-- ===== CONFIG 7 · RESOLVE DISPUTES ===== -->
+    <section class="screen" id="a-disputes">
+      <div class="screen-head"><span class="id">Config · 7</span><div><h2>Resolve disputes — the outcome is an append</h2><div class="sub">An admin reviews each complaint under maker-checker. Upheld → an adjusting accrual corrects <b>forward</b> into the next period, tagged as a prior-period correction. Rejected → a rejected-with-reason line. The closed period is never reopened; nothing is ever hidden.</div></div></div>
+      <div class="console">
+        <div class="panel">
+          <div class="toolbar" style="margin-bottom:8px">
+            <h3 style="flex:1">Open &amp; resolved disputes</h3>
+            <button class="btn ghost" onclick="toggleBulk()">⬆ Bulk file (CSV)</button>
+          </div>
+          <div id="bulk-panel" style="display:none;border:1px dashed var(--indigo-line);border-radius:12px;padding:14px;margin-bottom:14px;background:var(--indigo-soft)">
+            <b style="font-size:13.5px">migration-recon-july.csv — 42 rows parsed</b>
+            <div class="p-sub" style="margin:4px 0 10px">Each row lands as its <b>own dispute append</b> with its own evidence. The checker reviews them <b>as a set</b> — accept most, reject the bad rows. Never a single blind all-or-nothing approval.</div>
+            <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 1 · OML000391 · rate should be 0.35%</span><span class="v" style="color:var(--ok)">looks right</span></div>
+            <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 2 · OML000305 · loan counted twice</span><span class="v" style="color:var(--ok)">looks right</span></div>
+            <div class="kv"><span class="k mono">row 7 · OML000512 · duplicate of row 2</span><span class="v" style="color:var(--red)">reject · duplicate</span></div>
+            <div style="margin-top:12px"><button class="btn primary" onclick="toast('Set resolved: 40 upheld as adjusting accruals, 2 rejected with reason — each outcome its own append'); toggleBulk()">Resolve the set — 40 uphold · 2 reject</button></div>
+          </div>
+          <div id="disp-list"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= FIELD APP ================= -->
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
@@ -936,6 +973,12 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-more">+ 37 more loans this month</div>
             </div>
 
+            <div class="px-card" onclick="toast('The take-back on OML000459 was bigger than what was left to pay you, so −₹240 carries forward and nets against your next earnings. It is never written off silently.')" style="cursor:pointer">
+              <div class="px-label">Carry-forward</div>
+              <hr class="px-div">
+              <div class="px-row"><div class="main"><div class="t">Balance to recover</div><div class="m">take-back was more than the unpaid part · nets against next payout</div><span class="px-chip red">carries forward</span></div><div class="amt red">−₹240</div></div>
+            </div>
+
             <div class="px-card">
               <div class="px-label">Past months — closed &amp; paid</div>
               <hr class="px-div">
@@ -981,7 +1024,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">OML000482</div><div class="px-sub">Fresh gold loan · 28 Jun 2026</div></div>
-            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner green">✓ Locked — set when the loan was given. Won't change.</div>
@@ -1022,7 +1065,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">July 2026</div><div class="px-sub">Still adding up</div></div>
-            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner blue">● Grows as you work — locks when the month closes.</div>
@@ -1058,7 +1101,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">June 2026</div><div class="px-sub">Closed · paid</div></div>
-            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner green">✓ Month closed — this total will not change.</div>
@@ -1075,6 +1118,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Finding customers · 44 fresh loans</div><div class="m">0.35% of loan · rule v7</div></div><div class="amt">₹41,300</div></div>
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Convincing customers · 12 loans</div><div class="m">0.20% of loan · rule v4 · pays along with finding</div></div><div class="amt">₹14,200</div></div>
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Added later — complaint accepted</div><div class="m">added to next month · 06 Jul</div><span class="px-chip amber">correction · shown</span></div><div class="amt" style="color:#d98a00">+₹3,400</div></div>
+            <div class="px-row"><div class="main"><div class="t" style="color:#64748B">Month closed</div><div class="m">30 Jun · dated &amp; signed · the total above = sum of every line before this one</div><span class="px-chip grey">close line · ₹0</span></div><div class="amt" style="color:#94A3B8">₹0</div></div>
           </div>
         </div>
         <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Something looks wrong</button></div>
@@ -1213,6 +1257,7 @@ function show(id){
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); }
   if(id==='a-staged'||id==='a-published') fillConfirmation();
   if(id==='b-rates') renderRateCard();
+  if(id==='a-disputes') renderDisputes();
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelector('.stage').scrollTop=0;
 }
@@ -1296,9 +1341,9 @@ function rmSlab(btn){
 }
 
 /* ---- payee types + per-payee rates (from the Oro Incentive Structure) ---- */
-const ROLE_NAMES={SP:'Sales Partner',AP:'Associate Partner','Caller':'Caller','City Lead':'City Lead','Digital Manager':'Digital Manager','Collection Partner':'Collection Partner','Internal DB':'Internal DB','Business Partner':'Business Partner'};
-const ROLE_PLURAL={SP:'Sales Partners',AP:'Associate Partners','Caller':'Callers','City Lead':'City Leads','Digital Manager':'Digital Managers','Collection Partner':'Collection Partners','Internal DB':'the Internal DB team','Business Partner':'Business Partners'};
-const ROLE_RATE={SP:0.35,AP:0.20,'Caller':0.25,'City Lead':0.10,'Digital Manager':0.15,'Collection Partner':0.50,'Internal DB':0.10,'Business Partner':0.50};
+const ROLE_NAMES={SP:'Sales Partner',AP:'Associate Partner','Caller':'Caller','City Lead':'City Lead','Digital Manager':'Digital Manager','Collection Partner':'Collection Partner','Internal DB':'Internal DB','Business Partner':'Business Partner',TPF:'TPF'};
+const ROLE_PLURAL={SP:'Sales Partners',AP:'Associate Partners','Caller':'Callers','City Lead':'City Leads','Digital Manager':'Digital Managers','Collection Partner':'Collection Partners','Internal DB':'the Internal DB team','Business Partner':'Business Partners',TPF:'TPF partners'};
+const ROLE_RATE={SP:0.35,AP:0.20,'Caller':0.25,'City Lead':0.10,'Digital Manager':0.15,'Collection Partner':0.50,'Internal DB':0.10,'Business Partner':0.50,TPF:0.25};
 let rateStore={};
 
 function selectedActors(){ return [...document.querySelectorAll('#f-actor .pchip.on')].map(b=>b.dataset.val); }
@@ -1448,6 +1493,14 @@ function buildSummary(){
   ];
   const fhtml=facts.map(f=>'<div class="rp-fact"><span>'+f[0]+'</span><b>'+f[1]+'</b></div>').join('');
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
+  // version history (D9): this rule's category+payee over time — versioned publishes, never edits
+  const hv=document.getElementById('rv-history');
+  if(hv){
+    const cat=EVENT_CAT[event], acts=selectedActors();
+    const hist=RULES.filter(x=>x.cat===cat&&x.roles.some(r=>acts.includes(r))&&!x.flash).sort((a,b)=>(b.ver||'').localeCompare(a.ver||'v0',undefined,{numeric:true}));
+    hv.innerHTML = hist.length ? '<div class="p-sub" style="margin-bottom:8px"><b>Version history</b> — a change is a new version with its own effective date; old accruals keep the version they were computed under.</div>'+
+      hist.map(x=>'<div class="kv" style="border-bottom:1px solid var(--line)"><span class="k"><b class="mono">'+(x.ver||'v1')+'</b> · '+x.pay+'</span><span class="v" style="font-weight:500">'+(x.status==='working'?'<span class="pill live">live</span>':x.status==='staged'?'<span class="pill staged">staged</span>':'<span class="pill expired">superseded</span>')+' · effective '+(x.start?fmtDate(x.start):'—')+'</span></div>').join('') : '';
+  }
 }
 
 /* ---- live preview panel on the create screen ---- */
@@ -1723,6 +1776,65 @@ function checkDispute(){
   const v=document.getElementById('dispute-reason').value.trim();
   document.getElementById('submit-dispute').disabled = v.length<3;
 }
+
+/* ---- config agent (D13): plain language in, a slot-fill out. Maker only. ---- */
+function agentDraft(){
+  const t=(document.getElementById('agent-text').value||'').toLowerCase();
+  if(t.trim().length<8){ toast('Describe the incentive in a sentence first'); return; }
+  const roleMap=[['business partner','Business Partner'],['associate','AP'],['sales partner','SP'],['sp ','SP'],[' ap','AP'],['caller','Caller'],['collection','Collection Partner'],['city lead','City Lead'],['digital','Digital Manager'],['internal','Internal DB'],['tpf','TPF']];
+  let roles=[]; roleMap.forEach(([k,v])=>{ if(t.includes(k)&&!roles.includes(v)) roles.push(v); });
+  if(!roles.length) roles=['SP'];
+  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on',roles.includes(b.dataset.val)));
+  const loan=t.includes('takeover')?'takeover':(t.includes('renewal')||t.includes('top-up')||t.includes('continuation'))?'continuation':t.includes('attached')?'attached':t.includes('additional')?'additional':'fresh';
+  document.getElementById('f-loan').value=loan;
+  const ev=t.includes('convin')?'convincing':(t.includes('new customer')||t.includes('a2nu'))?'funnel-a2nu':(t.includes('repay')||t.includes('closure')||t.includes('collect'))?'closure-bucket':(t.includes('channel')||t.includes('conversion'))?'net-conversion':'self-source';
+  document.getElementById('f-event').value=ev;
+  const flash=t.includes('flash')||t.includes('bonus')||t.includes('push')||t.includes('limited');
+  setRuleType(flash?'flash':'standard');
+  applyAutofill();
+  const m=t.match(/(\d+(?:\.\d+)?)\s*%/);
+  if(m){ const r=document.querySelector('#role-rates .role-rate'); if(r){ r.value=m[1]; ratePreview(); } }
+  if(t.includes('slab')||t.includes('level')) setRateMode('slab');
+  const sch=document.getElementById('f-sched');
+  if(t.includes('same month')) sch.value='Same month';
+  else if(t.includes('quarter')) sch.value='Every 3 months';
+  else if(t.includes('half')) sch.value='Half next month + half the month after';
+  else if(t.includes('next month')) sch.value='Full amount next month';
+  const nm=document.getElementById('f-name');
+  if(!nm.value.trim()) nm.value=(ROLE_NAMES[roles[0]]||roles[0])+' · '+loan.charAt(0).toUpperCase()+loan.slice(1)+(m?' · '+m[1]+'%':'')+(flash?' · flash':'');
+  updatePreview();
+  const rd=document.getElementById('agent-read');
+  rd.innerHTML='<span class="i">✦</span> Understood: <b>'+roles.map(r=>ROLE_NAMES[r]).join(', ')+'</b> · '+loan+' · '+(EVENT_CAT[ev]||ev)+(m?' · <b>'+m[1]+'%</b>':'')+(flash?' · <b>flash</b>':'')+' — check the slots below, then simulate. The agent proposes; it never publishes.';
+  rd.style.display='block';
+  toast('Draft filled — you are still the checker');
+}
+
+/* ---- admin dispute resolution (D16): every outcome is an append ---- */
+let DISPUTES=[
+  {id:'DSP-2026-0338',loan:'OML000448',by:'Ravi K · Sales Partner',filed:'03 Jul 2026',reason:'I found this customer myself — this should be 0.35%, not 0.20%',status:'open',adj:'+₹770'},
+  {id:'DSP-2026-0310',loan:'OML000391',by:'Ravi K · Sales Partner',filed:'18 Jun 2026',reason:'One loan missing from my June total',status:'upheld',adj:'+₹3,400'},
+  {id:'DSP-2026-0287',loan:'OML000305',by:'Meena S · Caller',filed:'02 Jun 2026',reason:'Rate looks low on this loan',status:'rejected',why:'The accrual matched rule v7 as of the loan date.'}
+];
+function renderDisputes(){
+  const el=document.getElementById('disp-list'); if(!el) return;
+  el.innerHTML=DISPUTES.map((d,i)=>{
+    const pill=d.status==='open'?'<span class="pill staged">open</span>':d.status==='upheld'?'<span class="pill live">upheld · '+d.adj+' corrected forward</span>':'<span class="pill draft" style="color:var(--red);background:#94214310">rejected · with reason</span>';
+    let actions='';
+    if(d.status==='open'){
+      actions=d.rejecting
+        ? '<div style="margin-top:10px"><textarea id="drr-'+i+'" placeholder="Reason — it goes on the record" style="min-height:60px"></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn danger" onclick="rejectD('+i+')">Confirm rejection</button><button class="btn ghost" onclick="DISPUTES['+i+'].rejecting=false;renderDisputes()">Back</button></div></div>'
+        : '<div style="display:flex;gap:8px;margin-top:10px"><button class="btn primary" onclick="upholdD('+i+')">Uphold — append '+d.adj+' forward</button><button class="btn danger" onclick="DISPUTES['+i+'].rejecting=true;renderDisputes()">Reject</button></div>';
+    }
+    if(d.status==='rejected'&&d.why) actions='<div class="note" style="margin-top:8px"><span class="i">≡</span> '+d.why+' The reasoning is on the actor\'s record.</div>';
+    return '<div style="border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px">'+
+      '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b class="mono" style="font-size:13px">'+d.id+'</b>'+pill+'<span style="margin-left:auto;font-size:12px;color:var(--muted)">'+d.filed+'</span></div>'+
+      '<div style="font-size:13px;color:var(--ink-2);margin-top:8px"><b>'+d.by+'</b> · about <span class="mono">'+d.loan+'</span></div>'+
+      '<div style="font-size:13.5px;color:var(--ink);margin-top:4px">“'+d.reason+'”</div>'+actions+'</div>';
+  }).join('');
+}
+function upholdD(i){ DISPUTES[i].status='upheld'; renderDisputes(); toast('Adjusting accrual '+DISPUTES[i].adj+' appended — corrects forward into the next period, tagged prior-period correction. The closed period is never reopened.'); }
+function rejectD(i){ const r=(document.getElementById('drr-'+i).value||'').trim(); if(!r){ toast('A rejection needs a reason — it goes on the record'); return; } DISPUTES[i].status='rejected'; DISPUTES[i].why=r; renderDisputes(); toast('Rejected with reason — the original line stands, the reasoning is on the record'); }
+function toggleBulk(){ const b=document.getElementById('bulk-panel'); b.style.display=b.style.display==='none'?'block':'none'; }
 
 /* ---- partner rate card: a live, role-scoped read of the rulebook ---- */
 const RC_TODAY='2026-07-15', RC_ROLE='SP';
