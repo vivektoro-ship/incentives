@@ -788,12 +788,12 @@ textarea{resize:vertical;min-height:88px}
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><h3>My earnings</h3><div class="period" style="margin-left:auto" onclick="toast('Pick a period — this month or a closed one')">July ▾</div><button class="qmark" style="margin-left:8px" title="Explain my payout" data-goto="b-explain">?</button></div>
+          <div class="appbar"><h3>My earnings</h3><div class="period" style="margin-left:auto" onclick="toast('Pick a period — this month or a closed one')">July ▾</div><button class="qmark" aria-label="Explain my payout" style="margin-left:8px" title="Explain my payout" data-goto="b-explain">?</button></div>
           <div class="appbody">
             <div class="kpi-row">
               <div class="kpi earned" data-goto="b-prov"><div class="kl">Earned · this period</div><div class="kv">₹42,300</div><div class="kd">firm + provisional ›</div></div>
               <div class="kpi pending" data-goto="b-firm"><div class="kl">Payable next</div><div class="kv">₹31,900</div><div class="kd">tranches due 05 Aug ›</div></div>
-              <div class="kpi paid"><div class="kl">Paid to date</div><div class="kv">₹1,10,100</div><div class="kd">downstream payout</div></div>
+              <div class="kpi paid" onclick="toast('Paid lives downstream — the payout action reads the ledger and books the entry. The engine stops at payable.')"><div class="kl">Paid to date</div><div class="kv">₹1,10,100</div><div class="kd">downstream payout</div></div>
             </div>
 
             <div class="acard" data-goto="b-prov" style="padding:14px 16px">
@@ -828,7 +828,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="screen-head"><span class="id">Actor · 2</span><div><h2>A firm accrual</h2><div class="sub">Per-loan grain — firm the instant the loan disburses. Everything it needs is on the loan. The tranches release on the schedule; the engine marks them payable, a downstream action pays.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Fresh gold loan</h3><button class="qmark" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Fresh gold loan</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
         <div class="appbody">
           <div class="detail-hero">
             <span class="state-label firm">Firm · locked at disbursal</span>
@@ -856,7 +856,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Provisional · July</h3><button class="qmark" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
+          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Provisional · July</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
           <div class="appbody">
             <div class="detail-hero">
               <span class="state-label prov">Provisional · recomputes as the period fills</span>
@@ -872,7 +872,8 @@ textarea{resize:vertical;min-height:88px}
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000482 · v7 · self-source new</div></div><div class="li-amt">₹1,750</div></div>
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000471 · v7 + flash · self-source new</div></div><div class="li-amt">₹2,240</div></div>
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000455 · v7 · ×0.5 Low-LTV</div></div><div class="li-amt">₹1,410</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000448 · v7 · convincing</div></div><div class="li-amt">₹980</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000448 · v4 · convincing</div></div><div class="li-amt">₹980</div></div>
+            <div class="minihint" style="text-align:center;padding:4px 0 8px">+ 37 more lines this period — every one on the ledger</div>
           </div>
         </div></div>
       </div>
@@ -883,7 +884,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="screen-head"><span class="id">Actor · 4</span><div><h2>Final — a closed period</h2><div class="sub">Period close is itself a ledger line: dated, authored, carrying no money. The settled basis is a pure read — the sum of lines up to the close marker. Late events append forward; a settled period is never reopened.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026 · final</h3><button class="qmark" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026 · final</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
         <div class="appbody">
           <div class="detail-hero">
             <span class="state-label final">Final · frozen at period close</span>
@@ -914,6 +915,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000448 · firm</div><div class="li-meta mono">SP · Ravi K · v4 · +0.20% ND · convincing</div></div><div class="li-amt">₹980</div></div>
           <div class="line-item adj" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000459 · reversal <span class="li-badge adj">reversing append</span></div><div class="li-meta mono">SP · Ravi K · v7 · −0.35% ND · release ≤ 60d</div></div><div class="li-amt">−₹1,120</div></div>
           <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000455 · firm</div><div class="li-meta mono">SP · Ravi K · v7 · +0.175% ND · ×0.5 Low-LTV</div></div><div class="li-amt">₹1,410</div></div>
+          <div class="minihint" style="text-align:center;padding:4px 0 8px">+ 37 more lines this period · balance = Σ lines</div>
         </div>
         <div class="appfoot"><button class="ghost-app" data-goto="b-dispute">Dispute a line</button></div>
       </div></div>
@@ -1050,7 +1052,7 @@ function renderSlabs(){
   const roles=selectedActors();
   const single=roles.length<=1;
   const cols=single?['ALL']:roles;
-  let head='<tr><th>From (loans)</th><th>Up to</th>';
+  let head='<tr><th>From (count)</th><th>Up to</th>';
   cols.forEach(c=>head+='<th>'+(single?'Pays %':ROLE_NAMES[c]+' %')+'</th>');
   head+='<th></th></tr>';
   document.getElementById('slab-head').innerHTML=head;
@@ -1070,11 +1072,11 @@ function addSlab(){
   captureSlabs();
   const lastTo=slabState.length?parseInt(slabState[slabState.length-1].to||0):0;
   slabState.push({from:lastTo?lastTo+1:1,to:'',pay:0.20,pays:{}});
-  renderSlabs(); toast('Level added');
+  renderSlabs(); toast('Slab row added');
 }
 function rmSlab(btn){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
-  if(rows.length<=1){ toast('Keep at least one level'); return; }
+  if(rows.length<=1){ toast('A slab table needs at least one row'); return; }
   const idx=rows.indexOf(btn.closest('.slab-r'));
   captureSlabs(); slabState.splice(idx,1); renderSlabs();
 }
@@ -1093,7 +1095,7 @@ function toggleActor(btn){
 }
 function updateActorHint(){
   const n=selectedActors().length;
-  document.getElementById('actor-hint').textContent = n+' role'+(n>1?'s':'')+' selected'+(n>1?' — set a different rate for each below':'');
+  document.getElementById('actor-hint').textContent = n+' payee type'+(n>1?'s':'')+' selected'+(n>1?' — each can carry its own rate in slot 3':'');
 }
 function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
@@ -1185,7 +1187,7 @@ function applyAutofill(){
   updatePreview();
 }
 
-/* ---- plain-english summary for the review + approver screens ---- */
+/* ---- plain-english summary for the simulate + checker screens ---- */
 const EVENT_TEXT={'self-source':'self-source','convincing':'convince the customer on','funnel-a2nu':'bring new customers (A2NU) via','closure-bucket':'drive repayment on','net-conversion':'net-convert on scope for'};
 const LOAN_TEXT={'fresh':'a Fresh loan','takeover':'a Takeover loan','continuation':'a Continuation (renewal · top-up · part-release · merge)','attached':'an Attached loan','additional':'an Additional loan'};
 function roleList(plural){
@@ -1267,29 +1269,25 @@ function validate(){
       const from=parseInt(r.querySelector('.s-from').value);
       const toRaw=r.querySelector('.s-to').value.trim();
       const to=toRaw===''?null:parseInt(toRaw);
-      if(isNaN(from)) errs.push('Level '+(i+1)+' needs a “From” value');
-      if(i===0 && from!==1) errs.push('The first level should start at 1 loan');
-      if(to!==null && to<from) errs.push('Level '+(i+1)+': “Up to” is less than “From”');
-      if(i>0 && from!==prevTo+1) errs.push('Levels must be continuous — no gaps or overlaps');
-      if(to===null && i!==rows.length-1) errs.push('Only the last level can be left as “and above”');
+      if(isNaN(from)) errs.push('Slab row '+(i+1)+' needs a “From” value');
+      if(i===0 && from!==1) errs.push('The first slab row must start at 1');
+      if(to!==null && to<from) errs.push('Slab row '+(i+1)+': “Up to” is less than “From”');
+      if(i>0 && from!==prevTo+1) errs.push('Slab rows must be continuous — no gaps or overlaps');
+      if(to===null && i!==rows.length-1) errs.push('Only the last slab row can be “and above”');
       prevTo = (to===null? from : to);
-      r.querySelectorAll('.s-pay').forEach(p=>{ if(!(parseFloat(p.value)>0)) errs.push('Every level needs a rate above 0%'); });
+      r.querySelectorAll('.s-pay').forEach(p=>{ if(!(parseFloat(p.value)>0)) errs.push('Every slab row needs a rate above 0%'); });
     });
   } else {
     [...document.querySelectorAll('#role-rates .role-rate')].forEach(i=>{
       const v=parseFloat(i.value);
       if(!(v>0)) errs.push('The rate must be more than 0%');
-      else if(v>10) warns.push('A rate above 10% looks high — double-check it');
+      else if(v>2) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
     });
   }
   if(document.querySelector('#f-ruletype button.on').dataset.rt==='flash'){
     const s=document.getElementById('f-start').value, e=document.getElementById('flash-date').value;
-    if(s&&e&&e<=s) errs.push('The limited-time end date must be after the start date');
+    if(s&&e&&e<=s) errs.push('A flash expiry must be after the effective-from date');
   }
-  document.querySelectorAll('#mods .modrow').forEach(row=>{
-    const sel=row.querySelector('select'), num=row.querySelector('input[type=number]');
-    if(sel && num && sel.value.startsWith('At least') && !(parseInt(num.value)>0)) warns.push('A “must meet” condition needs a number above 0');
-  });
   return {errs:[...new Set(errs)], warns:[...new Set(warns)]};
 }
 function runValidation(){
@@ -1423,7 +1421,11 @@ function computeCost(){
   let ratePct;
   if(mode==='slab'){ const p=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)||0); ratePct=p.length?(Math.min(...p)+Math.max(...p))/2:0.3; }
   else { const rs=[...document.querySelectorAll('#role-rates .role-rate')].map(i=>parseFloat(i.value)||0); ratePct=rs.length?rs.reduce((a,b)=>a+b,0)/rs.length:0.3; }
-  const curRate=Math.max(0.05,roles.length?roles.reduce((a,r)=>a+roleCurrentRate(r),0)/roles.length:0.3);
+  /* Baseline current rate: the live flat rule for these payees if one exists,
+     else the category's typical rate — keeps slab-based payees (no flat rate) from inflating the delta. */
+  const CAT_RATE={'sourcing':0.35,'convincing':0.20,'funnel/A2NU':0.35,'collection':0.50,'scope-bonus':0.15};
+  const flatCur=roles.map(r=>roleCurrentRate(r)).filter(x=>x>0);
+  const curRate=flatCur.length? flatCur.reduce((a,b)=>a+b,0)/flatCur.length : (CAT_RATE[cat]||0.35);
   const cats=['sourcing','convincing','funnel/A2NU','collection'];
   const cand={}; let curTotal=0, candTotal=0;
   cats.forEach(c=>{ const base=BT_BASE[c]; cand[c]= c===cat ? +(base*ratePct/curRate).toFixed(1) : base; curTotal+=base; candTotal+=cand[c]; });
@@ -1447,12 +1449,12 @@ function addMod(kind,silent,auto){
   document.getElementById('mods-empty').style.display='none';
   const row=document.createElement('div');row.className='modrow'+(auto?' auto-mod':'');
   if(kind==='gate'){
-    row.innerHTML='<span class="mtype">Gate</span> <select style="width:auto;padding:6px 10px"><option>Min 10 new customers in the period</option><option>Min 5 loans in the month</option><option>&gt;90% of the month\'s customers are new</option><option>Anti-fraud · not booked in a family member\'s name (L4 relative-link)</option></select><input type="number" placeholder="n" style="width:70px;padding:6px 10px"><button class="x" onclick="rmMod(this)">✕</button>';
+    row.innerHTML='<span class="mtype">Gate</span> <select style="flex:1;min-width:0;padding:6px 10px"><option>Min 10 new customers in the period</option><option>Min 5 loans in the month</option><option>&gt;90% of the month\'s customers are new</option><option>Anti-fraud · not booked in a family member\'s name (L4 relative-link)</option></select><button class="x" onclick="rmMod(this)" title="Remove this gate">✕</button>';
   }else{
-    row.innerHTML='<span class="mtype">Scale</span> <select style="width:auto;padding:6px 10px"><option>LTV multiplier · ×1.0 High / ×0.7 Mid / ×0.5 Low</option><option>Tenure variant</option></select><button class="x" onclick="rmMod(this)">✕</button>';
+    row.innerHTML='<span class="mtype">Scale</span> <select style="flex:1;min-width:0;padding:6px 10px"><option>LTV multiplier · ×1.0 High / ×0.7 Mid / ×0.5 Low</option><option>Tenure variant</option></select><button class="x" onclick="rmMod(this)" title="Remove this scaler">✕</button>';
   }
   wrap.appendChild(row);
-  if(!silent) toast(kind==='gate'?'Condition added':'Pay adjuster added');
+  if(!silent) toast(kind==='gate'?'Gate added — it switches the rule on or off, never the amount':'Scaler added — it multiplies the computed payout');
   updatePreview();
 }
 function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex'; updatePreview(); }
@@ -1475,13 +1477,13 @@ function toggleReject(){
   const box=document.getElementById('reject-box');
   const btn=document.getElementById('reject-btn');
   if(box.style.display==='none'||!box.style.display){
-    box.style.display='block'; btn.textContent='Confirm — say no';
+    box.style.display='block'; btn.textContent='Confirm rejection';
     document.getElementById('reject-reason').focus();
   } else {
     const r=document.getElementById('reject-reason').value.trim();
-    if(!r){ toast('Please add a reason before saying no'); return; }
-    toast('Sent back to the creator with your reason'); show('a-list');
-    box.style.display='none'; btn.textContent='Say no'; document.getElementById('reject-reason').value='';
+    if(!r){ toast('A rejection needs a reason — it goes on the record'); return; }
+    toast('Rejected with reason — the maker can amend and restage'); show('a-list');
+    box.style.display='none'; btn.textContent='Reject'; document.getElementById('reject-reason').value='';
   }
 }
 
