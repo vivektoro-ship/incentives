@@ -495,7 +495,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="wizard">
         <!-- Step 1 -->
         <div class="fsection done" id="secA">
-          <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Condition slot</span></h4><div class="hint">Pick the people, the loan type, and what they did — e.g. a Sales Partner who found the customer for a Fresh loan.</div></div></div>
+          <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Condition slot</span></h4><div class="hint">Pick the people, the loan type, and what they must do — e.g. a Sales Partner who finds the customer for a Fresh loan.</div></div></div>
           <div class="fsec-body">
             <div class="field"><label>Rule name</label>
               <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35% ND" maxlength="60">
@@ -522,13 +522,13 @@ textarea{resize:vertical;min-height:88px}
                 <option value="additional">Additional</option>
               </select>
             </div>
-            <div class="field"><label>What they did <span class="desc">— this decides the category of pay</span></label>
+            <div class="field"><label>If they do this <span class="desc">— the action that earns the pay; it decides the category</span></label>
               <select id="f-event" onchange="applyAutofill()">
-                <option value="self-source">Found the customer themselves → sourcing</option>
-                <option value="convincing">Convinced the customer → convincing</option>
-                <option value="funnel-a2nu">Brought new customers this month (A2NU) → funnel/A2NU</option>
-                <option value="closure-bucket">Got the loan repaid → collection</option>
-                <option value="net-conversion">Their city or channel performed → scope-bonus</option>
+                <option value="self-source">Find the customer themselves → sourcing</option>
+                <option value="convincing">Convince the customer → convincing</option>
+                <option value="funnel-a2nu">Bring new customers this month (A2NU) → funnel/A2NU</option>
+                <option value="closure-bucket">Get the loan repaid → collection</option>
+                <option value="net-conversion">Their city or channel performs → scope-bonus</option>
               </select>
             </div>
             <div class="field"><label>Rule type</label>
@@ -627,7 +627,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="rp-facts">
           <div class="rp-fact"><span>Payee type</span><b id="pv-who">—</b></div>
           <div class="rp-fact"><span>Loan type</span><b id="pv-loan">—</b></div>
-          <div class="rp-fact"><span>Event</span><b id="pv-did">—</b></div>
+          <div class="rp-fact"><span>If they do</span><b id="pv-did">—</b></div>
           <div class="rp-fact"><span>Category</span><b id="pv-cat">—</b></div>
           <div class="rp-fact"><span>Rule type</span><b id="pv-kind">—</b></div>
           <div class="rp-fact"><span>Basis</span><b id="pv-basis">—</b></div>
@@ -1227,7 +1227,7 @@ function buildSummary(){
   const facts=[
     ['Who gets paid', selectedActors().map(r=>ROLE_NAMES[r]).join(', ')],
     ['Loan type', lo?lo.textContent.split(' (')[0]:'—'],
-    ['What they did', ev?ev.textContent.split(' → ')[0]:'—'],
+    ['If they do', ev?ev.textContent.split(' → ')[0]:'—'],
     ['Category', EVENT_CAT[event]||'—'],
     ['Rule type', flash?'Flash · short-time bonus':'Normal'],
     ['On what amount', document.getElementById('f-basis').value],
