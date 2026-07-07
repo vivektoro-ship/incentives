@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Fragment+Mono&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#030405; --bg-2:#010204; --navy:#021c2e; --navy-2:#064e7e;
-  --indigo:#4f4ff1; --indigo-2:#3939b8; --indigo-soft:#4f4ff11a; --indigo-line:#4f4ff14d;
-  --blue:#007be3; --cyan:#95d7e4;
+  --bg:#05070C; --bg-2:#02040A; --navy:#0A1B33; --navy-2:#12408F;
+  --indigo:#2F6BFF; --indigo-2:#1D4FD7; --indigo-soft:#2F6BFF1a; --indigo-line:#2F6BFF4d;
+  --blue:#3B82F6; --cyan:#8AB8FF;
   --card:#ffffff; --card-2:#f7f7f7; --ink:#0e0b0e; --ink-2:#252525;
   --muted:#6a6a76; --muted-2:#9a9aa5; --line:#ebebeb; --line-2:#e2e2e6;
   --ok:#168804; --warn:#b8860b; --amber:#d98a00; --red:#942143;
@@ -356,67 +356,80 @@ textarea{resize:vertical;min-height:88px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ===== Oro Px app design system (from Figma: c-meal--admin / Echo) ===== */
-.screenview{background:#f5f5f5;font-family:"Manrope",-apple-system,sans-serif;color:#101010}
-.px-head{background:#101010;color:#fff;padding:0 16px 16px;position:relative}
+/* Blue/black theme — patterns from Groww/CRED (dark hero header), Google Pay (soft chips), Zerodha (clean rows) */
+.screenview{background:#EEF2F7;font-family:"Manrope",-apple-system,sans-serif;color:#0B1220}
+.px-head{background:linear-gradient(180deg,#0B1220,#0E1830);color:#fff;padding:0 16px 18px;position:relative}
 .px-head .statusbar{color:#fff;padding:0 4px 6px;height:40px}
 .px-topline{display:flex;align-items:center;gap:12px;margin-top:6px}
-.px-back{border:none;background:none;color:#fff;font-size:22px;line-height:1;cursor:pointer;padding:0 4px 2px 0}
+.px-back{border:none;background:rgba(255,255,255,.08);border-radius:50%;width:32px;height:32px;color:#fff;font-size:18px;line-height:1;cursor:pointer;flex:none}
 .px-id{font-weight:800;font-size:20px;letter-spacing:.01em}
-.px-sub{font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#f5a700;margin-top:3px}
-.px-headrow{display:flex;align-items:center;gap:12px;margin-top:14px}
-.px-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ffc83a,#f5a700);display:grid;place-items:center;font-weight:800;font-size:15px;color:#101010;flex:none}
-.px-headrow .nm{font-weight:700;font-size:14px}
-.px-headrow .ph{font-weight:500;font-size:12px;color:#c6c6c6;margin-top:1px}
-.px-hbtn{width:40px;height:40px;border-radius:50%;background:#fff;border:none;display:grid;place-items:center;font-size:17px;cursor:pointer;flex:none;color:#101010}
+.px-sub{font-weight:800;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#7FA8FF;margin-top:3px}
+.px-headrow{display:flex;align-items:center;gap:12px;margin-top:8px}
+.px-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#4C8DFF,#2563EB);display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex:none}
+.px-headrow .nm{font-weight:700;font-size:14.5px}
+.px-headrow .ph{font-weight:500;font-size:11.5px;color:#8FA6C9;margin-top:1px}
+.px-hbtn{height:34px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;font-size:12.5px;font-weight:700;color:#fff;cursor:pointer;flex:none;padding:0 14px;font-family:inherit}
+.px-hero{margin-top:20px}
+.px-hero .hl{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#8FA6C9}
+.px-hero .hn{font-size:36px;font-weight:800;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+.px-hero .hn .ru{font-size:22px;color:#8FA6C9;font-weight:700;margin-right:2px}
+.px-hero .hs{font-size:11.5px;font-weight:600;color:#8FA6C9;margin-top:5px}
+.px-minis{display:flex;gap:8px;margin-top:16px}
+.px-mini{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:11px 12px;cursor:pointer}
+.px-mini .ml{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8FA6C9}
+.px-mini .mn{font-size:15.5px;font-weight:800;margin-top:5px;font-variant-numeric:tabular-nums;color:#fff}
+.px-mini .md{font-size:10px;font-weight:600;color:#8FA6C9;margin-top:3px}
+.px-mini .mn.green{color:#5BD08F}
 .px-banner{padding:10px 16px;font-size:12px;font-weight:700;color:#fff;display:flex;gap:8px;align-items:center}
-.px-banner.amber{background:#f5a700}.px-banner.blue{background:#2f6fed}.px-banner.green{background:#1f9d55}
+.px-banner.amber{background:#D97706}.px-banner.blue{background:#2563EB}.px-banner.green{background:#15803D}
 .px-body{flex:1;overflow-y:auto;padding:16px 16px 20px;display:flex;flex-direction:column;gap:12px}
 .px-body::-webkit-scrollbar{width:0}
-.px-card{background:#fff;border:.5px solid #ececec;border-radius:12px;padding:16px;box-shadow:0 12px 20px rgba(0,0,0,.04)}
-.px-label{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#909090}
-.px-div{height:1px;background:#ececec;margin:10px 0;border:none}
-.px-big{font-weight:800;font-size:28px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.px-big .ru{font-size:18px;color:#909090;font-weight:700;margin-right:2px}
-.px-note12{font-size:12px;font-weight:500;color:#585858;line-height:1.45}
+.px-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(13,26,64,.06)}
+.px-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#64748B}
+.px-div{height:1px;background:#EEF1F6;margin:10px 0;border:none}
+.px-big{font-weight:800;font-size:30px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:#0B1220}
+.px-big .ru{font-size:19px;color:#94A3B8;font-weight:700;margin-right:2px}
+.px-note12{font-size:12px;font-weight:500;color:#5B6472;line-height:1.5}
 .px-kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.px-kpi{background:#fff;border:.5px solid #ececec;border-radius:12px;padding:12px;cursor:pointer}
+.px-kpi{background:#fff;border-radius:14px;padding:12px;cursor:pointer;box-shadow:0 6px 18px rgba(13,26,64,.05)}
 .px-kpi .n{font-weight:800;font-size:16px;margin-top:6px;font-variant-numeric:tabular-nums}
-.px-kpi .d{font-size:10.5px;font-weight:600;color:#909090;margin-top:3px;line-height:1.3}
-.px-kpi.gold{background:linear-gradient(150deg,#fff8eb,#fff);border-color:#f5a70044}
-.px-kpi.gold .n{color:#b97b00}
-.px-kpi.green .n{color:#1f9d55}.px-kpi.amber .n{color:#d98a00}
-.px-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #f0f0f0}
+.px-kpi .d{font-size:10.5px;font-weight:600;color:#94A3B8;margin-top:3px;line-height:1.3}
+.px-kpi.gold{background:linear-gradient(150deg,#E8F0FF,#fff)}
+.px-kpi.gold .n{color:#1D4ED8}
+.px-kpi.green .n{color:#15803D}.px-kpi.amber .n{color:#B45309}
+.px-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #F0F3F8}
 .px-row:last-child{border-bottom:none;padding-bottom:2px}
 .px-row:first-of-type{padding-top:2px}
-.px-row .t{font-weight:700;font-size:14px;color:#101010}
-.px-row .m{font-size:11.5px;font-weight:500;color:#585858;margin-top:2px}
+.px-row .t{font-weight:700;font-size:14px;color:#0B1220}
+.px-row .m{font-size:11.5px;font-weight:500;color:#5B6472;margin-top:2px}
 .px-row .amt{margin-left:auto;font-weight:800;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.px-row .amt.red{color:#c0392b}
+.px-row .amt.red{color:#C0392B}
 .px-row .main{flex:1;min-width:0}
-.px-chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-radius:99px;padding:3px 8px;margin-top:6px}
-.px-chip.amber{background:#f5a700}.px-chip.blue{background:#2f6fed}.px-chip.green{background:#1f9d55}.px-chip.red{background:#c0392b}.px-chip.grey{background:#909090}
-.px-track{height:8px;border-radius:99px;background:#ececec;overflow:hidden;margin-top:12px}
-.px-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#ffc83a,#f5a700)}
-.px-caps{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#585858;margin-top:8px}
-.px-caps b{color:#101010;font-weight:800}
-.px-kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.px-chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:3px 9px;margin-top:6px}
+.px-chip.amber{background:#FFF4E0;color:#B45309}.px-chip.blue{background:#E8F0FF;color:#1D4ED8}.px-chip.green{background:#E7F6EE;color:#15803D}.px-chip.red{background:#FDECEC;color:#B91C1C}.px-chip.grey{background:#EEF1F4;color:#64748B}
+.px-track{height:8px;border-radius:99px;background:#E4EAF4;overflow:hidden;margin-top:12px}
+.px-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4C8DFF,#2563EB)}
+.px-caps{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#5B6472;margin-top:8px}
+.px-caps b{color:#0B1220;font-weight:800}
+.px-kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0F3F8;font-size:13px}
 .px-kv:last-child{border-bottom:none}
-.px-kv .k{color:#909090;font-weight:600}
-.px-kv .v{font-weight:700;text-align:right;color:#101010}
-.px-kv .v.green{color:#1f9d55}.px-kv .v.amber{color:#d98a00}
-.px-foot{background:#fff;border-top:1px solid #ececec;padding:12px 16px 18px}
-.px-cta{width:100%;background:#101010;color:#fff;border:none;border-radius:99px;padding:15px;font-family:inherit;font-weight:800;font-size:14.5px;cursor:pointer}
-.px-cta:disabled{background:#c4c4c4;cursor:not-allowed}
-.px-cta2{width:100%;background:#fff;color:#101010;border:1px solid #ececec;border-radius:99px;padding:13px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;margin-top:8px}
-.px-qm{width:32px;height:32px;border-radius:50%;background:#fff8eb;border:none;color:#b97b00;font-weight:800;font-size:14px;cursor:pointer;display:grid;place-items:center;flex:none}
-.px-seal{width:72px;height:72px;border-radius:50%;background:#e7f6ee;color:#1f9d55;display:grid;place-items:center;font-size:30px;margin:26px auto 14px}
+.px-kv .k{color:#64748B;font-weight:600}
+.px-kv .v{font-weight:700;text-align:right;color:#0B1220}
+.px-kv .v.green{color:#15803D}.px-kv .v.amber{color:#B45309}
+.px-foot{background:#fff;border-top:1px solid #EEF1F6;padding:12px 16px 18px}
+.px-cta{width:100%;background:#2563EB;color:#fff;border:none;border-radius:14px;padding:15px;font-family:inherit;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 8px 20px #2563EB33}
+.px-cta:hover{background:#1D4FD7}
+.px-cta:disabled{background:#C3CEDF;box-shadow:none;cursor:not-allowed}
+.px-cta2{width:100%;background:#EEF2F8;color:#1D4ED8;border:none;border-radius:14px;padding:13px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;margin-top:8px}
+.px-qm{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:14px;cursor:pointer;display:grid;place-items:center;flex:none}
+.px-seal{width:72px;height:72px;border-radius:50%;background:#E7F6EE;color:#15803D;display:grid;place-items:center;font-size:30px;margin:26px auto 14px}
 .px-center{text-align:center;padding:0 20px}
 .px-center h4{font-size:17px;font-weight:800;margin:0 0 6px}
 .px-field{margin-bottom:14px}
-.px-field label{display:block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#909090;margin-bottom:7px}
-.px-field textarea{width:100%;border:1px solid #ececec;border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;background:#fff;min-height:92px}
-.px-field textarea:focus{outline:none;border-color:#f5a700;box-shadow:0 0 0 3px #f5a70022}
-.px-attach{border:1.5px dashed #dcdcdc;border-radius:12px;background:#fff;padding:16px;text-align:center;font-size:12.5px;font-weight:600;color:#909090;cursor:pointer}
+.px-field label{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#64748B;margin-bottom:7px}
+.px-field textarea{width:100%;border:1px solid #E4EAF4;border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;background:#fff;min-height:92px}
+.px-field textarea:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px #2563EB22}
+.px-attach{border:1.5px dashed #C9D5E8;border-radius:12px;background:#fff;padding:16px;text-align:center;font-size:12.5px;font-weight:600;color:#64748B;cursor:pointer}
 .px-more{text-align:center;font-size:11px;font-weight:600;color:#909090;padding:2px 0 6px}
 
 </style>
@@ -854,35 +867,38 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">Actor · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K, a Sales Partner in Chennai. The moment a loan is given, his money shows up. Three boxes answer his three questions: what have I <b>earned</b>, what is <b>coming next</b>, and what is <b>already paid</b>.</div></div></div>
+      <div class="screen-head"><span class="id">Actor · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K, a Sales Partner in Chennai. The moment a loan is given, his money shows up. The header answers his three questions at a glance: <b>earned</b>, <b>coming</b>, <b>paid</b>.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="px-head">
             <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-            <div class="px-headrow" style="margin-top:4px">
+            <div class="px-headrow" style="margin-top:2px">
               <span class="px-avatar">RK</span>
               <div style="flex:1"><div class="nm">Ravi Krishnan</div><div class="ph">Sales Partner · Chennai</div></div>
-              <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')" style="width:auto;border-radius:99px;padding:0 14px;font-weight:700;font-size:12.5px;font-family:inherit">July ▾</button>
-              <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
+              <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')">July ▾</button>
+              <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
+            </div>
+            <div class="px-hero">
+              <div class="hl">Earned this month</div>
+              <div class="hn"><span class="ru">₹</span>42,300</div>
+              <div class="hs">still growing · locks when July closes</div>
+            </div>
+            <div class="px-minis">
+              <div class="px-mini" data-goto="b-firm"><div class="ml">Coming to you</div><div class="mn">₹31,900</div><div class="md">due 05 Aug ›</div></div>
+              <div class="px-mini" onclick="toast('This money has already reached your account.')"><div class="ml">Already paid</div><div class="mn green">₹1,10,100</div><div class="md">till date</div></div>
             </div>
           </div>
           <div class="px-body">
-            <div class="px-kpis">
-              <div class="px-kpi gold" data-goto="b-prov"><div class="px-label">Earned this month</div><div class="n">₹42,300</div><div class="d">still growing ›</div></div>
-              <div class="px-kpi amber" data-goto="b-firm"><div class="px-label">Coming to you</div><div class="n">₹31,900</div><div class="d">due 05 Aug ›</div></div>
-              <div class="px-kpi green" onclick="toast('This money has already reached your account.')"><div class="px-label">Already paid</div><div class="n">₹1,10,100</div><div class="d">till date</div></div>
+            <div class="px-card" data-goto="b-rates" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
+              <span style="width:36px;height:36px;border-radius:50%;background:#E8F0FF;color:#1D4ED8;display:grid;place-items:center;font-size:15px;flex:none">★</span>
+              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My rate card</div><div style="font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px">What you earn today — updates the moment a rule changes</div></div>
+              <span style="color:#94A3B8;font-size:18px">›</span>
             </div>
 
             <div class="px-card" data-goto="b-prov" style="cursor:pointer">
               <div class="px-label">New customers this month</div>
               <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
               <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
-            </div>
-
-            <div class="px-card" data-goto="b-rates" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
-              <span style="width:36px;height:36px;border-radius:50%;background:#fff8eb;display:grid;place-items:center;font-size:16px;flex:none">★</span>
-              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My rate card</div><div style="font-size:11.5px;font-weight:500;color:#585858;margin-top:1px">What you earn today — updates the moment a rule changes</div></div>
-              <span style="color:#909090;font-size:18px">›</span>
             </div>
 
             <div class="px-card">
@@ -941,7 +957,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">OML000482</div><div class="px-sub">Fresh gold loan · 28 Jun 2026</div></div>
-            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner green">✓ Locked — set when the loan was given. Won't change.</div>
@@ -982,7 +998,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">July 2026</div><div class="px-sub">Still adding up</div></div>
-            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner blue">● Grows as you work — locks when the month closes.</div>
@@ -1018,7 +1034,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
             <div style="flex:1"><div class="px-id">June 2026</div><div class="px-sub">Closed · paid</div></div>
-            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
+            <button class="px-qm"  aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
         <div class="px-banner green">✓ Month closed — this total will not change.</div>
@@ -1713,7 +1729,7 @@ function renderRateCard(){
   bridge.forEach(b=>{ html+=rcRow(b.rule,'until '+fmtDate(b.until),'grey'); });
   html+='</div>';
   if(flash.length){
-    html+='<div class="px-card" style="border-color:#f5a70055;background:linear-gradient(150deg,#fff8eb,#fff)"><div class="px-label" style="color:#b97b00">Limited-time boost</div><hr class="px-div">';
+    html+='<div class="px-card" style="background:linear-gradient(150deg,#FFF7E8,#fff)"><div class="px-label" style="color:#B45309">Limited-time boost</div><hr class="px-div">';
     flash.forEach(r=>{ html+=rcRow(r,'ends '+fmtDate(r.end),'amber','on top of normal pay'); });
     html+='</div>';
   }
