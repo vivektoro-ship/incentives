@@ -355,6 +355,30 @@ textarea{resize:vertical;min-height:88px}
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;box-shadow:var(--shadow-pop);opacity:0;pointer-events:none;transition:.3s;z-index:100;max-width:340px;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ---- shared-link mobile pass: the demo itself must work on a phone ---- */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .rail{display:none}
+  .stage{padding:18px 14px 70px}
+  .topbar{padding:10px 12px;gap:8px;flex-wrap:nowrap;overflow-x:auto}
+  .topbar .ver{display:none}
+  .brand small{display:none}
+  .brand{font-size:13px;white-space:nowrap}
+  .tab{padding:6px 11px;font-size:12px;white-space:nowrap}
+  .hero{padding:26px 20px}
+  .hero h1{font-size:27px}
+  .screen-head h2{font-size:21px}
+  .screen-head .sub{font-size:13px}
+  .panel{padding:18px 14px;overflow-x:auto}
+  .rule-table{min-width:720px}
+  .phone{width:100%;max-width:392px;margin:0 auto}
+  .phone-stage{gap:16px;justify-content:center}
+  .screenview{height:720px}
+  .sticky-foot{flex-wrap:wrap}
+  .rp-facts-row{grid-template-columns:1fr}
+}
+
+
 /* ===== Oro Px app design system (from Figma: c-meal--admin / Echo) ===== */
 /* Blue/black theme — patterns from Groww/CRED (dark hero header), Google Pay (soft chips), Zerodha (clean rows) */
 .screenview{background:#EEF2F7;font-family:"Manrope",-apple-system,sans-serif;color:#0B1220}
