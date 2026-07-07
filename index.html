@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rewards & Payouts · Simple Flow Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030405; --bg-2:#010204; --navy:#021c2e; --navy-2:#064e7e;
+  --indigo:#4f4ff1; --indigo-2:#3939b8; --indigo-soft:#4f4ff11a; --indigo-line:#4f4ff14d;
+  --blue:#007be3; --cyan:#95d7e4;
+  --card:#ffffff; --card-2:#f7f7f7; --ink:#0e0b0e; --ink-2:#252525;
+  --muted:#6a6a76; --muted-2:#9a9aa5; --line:#ebebeb; --line-2:#e2e2e6;
+  --ok:#168804; --warn:#b8860b; --amber:#d98a00; --red:#942143;
+  --shell-line:rgba(255,255,255,.09); --shell-line-2:rgba(255,255,255,.06);
+  --shell-ink:#f4f4f7; --shell-muted:#8a8a99;
+  --font-display:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-ui:"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:"Fragment Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:26px;
+  --shadow-card:0 1px 2px rgba(0,0,0,.05),0 12px 30px rgba(3,4,5,.10);
+  --shadow-pop:0 20px 60px rgba(3,4,5,.45);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--shell-ink);font-family:var(--font-ui);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4,h5{font-family:var(--font-display);margin:0;line-height:1.2;letter-spacing:-.01em}
+.mono{font-family:var(--font-mono);font-feature-settings:"tnum"}
+button{font-family:inherit}
+a{color:inherit}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;padding:14px 26px;background:linear-gradient(180deg,rgba(3,4,5,.96),rgba(3,4,5,.86));backdrop-filter:blur(10px);border-bottom:1px solid var(--shell-line)}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--font-display);font-weight:700;letter-spacing:.02em}
+.brand .dot{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--indigo),var(--blue));box-shadow:0 0 0 4px var(--indigo-soft)}
+.brand small{display:block;font-family:var(--font-mono);font-weight:400;font-size:10.5px;letter-spacing:.14em;color:var(--shell-muted);text-transform:uppercase}
+.topbar .tabs{display:flex;gap:4px;margin-left:8px}
+.tab{padding:7px 15px;border-radius:99px;border:1px solid transparent;background:transparent;color:var(--shell-muted);font-size:13.5px;font-weight:500;cursor:pointer;transition:.15s}
+.tab:hover{color:var(--shell-ink);background:rgba(255,255,255,.04)}
+.tab.active{color:#fff;background:var(--indigo);border-color:var(--indigo-2);box-shadow:0 6px 18px var(--indigo-line)}
+.topbar .spacer{flex:1}
+.topbar .ver{font-family:var(--font-mono);font-size:11px;color:var(--shell-muted);letter-spacing:.06em}
+
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 57px)}
+.rail{border-right:1px solid var(--shell-line);padding:22px 16px 60px;position:sticky;top:57px;align-self:start;height:calc(100vh - 57px);overflow-y:auto}
+.rail::-webkit-scrollbar{width:8px}
+.rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
+.rail .grp{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--shell-muted);margin:20px 10px 8px}
+.rail .grp:first-child{margin-top:0}
+.navitem{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 11px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--shell-muted);font-size:13px;cursor:pointer;transition:.13s;margin-bottom:1px}
+.navitem:hover{background:rgba(255,255,255,.045);color:var(--shell-ink)}
+.navitem.active{background:rgba(79,79,241,.14);color:#fff;border-color:var(--indigo-line)}
+.navitem .no{font-family:var(--font-mono);font-size:11px;color:var(--shell-muted);min-width:22px}
+.navitem.active .no{color:var(--cyan)}
+.legend{margin:22px 10px 0;padding-top:18px;border-top:1px solid var(--shell-line)}
+.legend .lrow{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--shell-muted);margin:11px 0;line-height:1.4}
+.chip{width:11px;height:11px;border-radius:4px;flex:none;margin-top:3px}
+.chip.firm{background:var(--navy-2)}
+.chip.prov{background:var(--indigo)}
+.chip.final{background:#4a4a55}
+
+.stage{padding:34px 40px 90px;overflow-x:hidden}
+.screen{display:none;animation:fade .28s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.screen-head{display:flex;align-items:flex-end;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.screen-head .id{font-family:var(--font-mono);font-size:12px;color:var(--cyan);letter-spacing:.06em;padding:4px 9px;border:1px solid var(--shell-line);border-radius:7px}
+.screen-head h2{font-size:26px;font-weight:700;color:#fff}
+.screen-head .sub{color:var(--shell-muted);font-size:14px;margin-top:5px;max-width:660px}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--shell-muted);margin-bottom:18px;flex-wrap:wrap}
+.breadcrumb b{color:var(--cyan);font-weight:600}
+.breadcrumb .sep{opacity:.4}
+
+.console{max-width:1040px}
+.panel{background:var(--card);color:var(--ink);border-radius:var(--r-xl);box-shadow:var(--shadow-card);padding:26px 28px;border:1px solid var(--line)}
+.panel + .panel{margin-top:18px}
+.panel h3{font-size:18px;color:var(--ink);font-weight:700}
+.panel .p-sub{color:var(--muted);font-size:13.5px;margin-top:4px}
+
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.filter{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid var(--line-2);border-radius:99px;background:var(--card);color:var(--ink-2);font-size:12.5px;cursor:pointer;transition:.13s}
+.filter:hover{border-color:var(--indigo);color:var(--indigo)}
+.filter b{color:var(--muted);font-weight:400}
+.filter.on{background:var(--indigo-soft);border-color:var(--indigo);color:var(--indigo-2)}
+
+.rule-table{width:100%;border-collapse:collapse}
+.rule-table th{text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:6px 12px;border-bottom:1px solid var(--line)}
+.rule-table td{padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+.rule-table tr:last-child td{border-bottom:none}
+.rule-row{cursor:pointer;transition:.12s}
+.rule-row:hover td{background:var(--card-2)}
+.rule-name{font-weight:600;color:var(--ink)}
+.rule-cat{font-size:12.5px;color:var(--muted)}
+.rate-sum{font-size:13px;color:var(--indigo-2);font-weight:500}
+.row-edit{opacity:0;font-size:12px;color:var(--indigo);border:1px solid var(--indigo-line);background:var(--indigo-soft);padding:5px 11px;border-radius:8px;cursor:pointer;transition:.13s;white-space:nowrap}
+.rule-row:hover .row-edit{opacity:1}
+
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:600;font-family:var(--font-ui);white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.pill.live{color:var(--ok);background:#16880412}
+.pill.staged{color:var(--amber);background:#d98a0014}
+.pill.draft{color:var(--muted);background:#00000008}
+.pill.expired{color:var(--muted-2);background:#00000006}
+.pill.flash{color:var(--indigo-2);background:var(--indigo-soft)}
+.pill.flash::before{background:var(--indigo)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:11px;font-size:14px;font-weight:600;border:1px solid transparent;cursor:pointer;transition:.15s;font-family:var(--font-ui)}
+.btn.primary{background:var(--indigo);color:#fff;box-shadow:0 8px 22px var(--indigo-line)}
+.btn.primary:hover{background:var(--indigo-2)}
+.btn.ghost{background:transparent;color:var(--ink-2);border-color:var(--line-2)}
+.btn.ghost:hover{border-color:var(--ink-2)}
+.btn.ghost-light{background:transparent;color:var(--shell-ink);border-color:var(--shell-line)}
+.btn.danger{background:transparent;color:var(--red);border-color:#94214340}
+.btn.danger:hover{background:#94214310}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn.full{width:100%}
+
+.wizard{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.fsection{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-card);overflow:hidden;transition:.2s}
+.fsection.locked{opacity:.5;filter:grayscale(.3);pointer-events:none}
+.fsection.done{border-color:#1688041f}
+.fsec-head{display:flex;align-items:center;gap:12px;padding:16px 20px}
+.fsec-tag{font-family:var(--font-mono);font-size:11px;color:#fff;background:var(--ink);width:24px;height:24px;border-radius:7px;display:grid;place-items:center}
+.fsection.done .fsec-tag{background:var(--ok)}
+.fsec-head h4{font-size:15.5px;color:var(--ink);font-weight:700}
+.fsec-head .hint{color:var(--muted);font-size:12px;margin-top:1px}
+.fsec-body{padding:2px 20px 20px}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);font-weight:600;margin-bottom:6px}
+.field .desc{font-weight:400;color:var(--muted);font-size:12px}
+.auto-tag{font-family:var(--font-ui);font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--indigo-2);background:var(--indigo-soft);border:1px solid var(--indigo-line);padding:2px 7px;border-radius:99px}
+select,input[type=text],input[type=date],input[type=number],textarea{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;font-size:14px;font-family:var(--font-ui);color:var(--ink);background:var(--card);transition:.13s}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.field.autofilled input,.field.autofilled select{background:var(--indigo-soft);border-color:var(--indigo-line)}
+.seg{display:inline-flex;background:var(--card-2);border:1px solid var(--line-2);border-radius:10px;padding:3px}
+.seg button{border:none;background:transparent;padding:8px 16px;border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;font-weight:500}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.note{display:flex;gap:9px;align-items:flex-start;background:var(--card-2);border:1px dashed var(--line-2);border-radius:10px;padding:11px 13px;font-size:12.5px;color:var(--muted);margin-top:12px}
+.note .i{color:var(--indigo);flex:none}
+.note.empty{border-style:solid;color:var(--muted-2);font-style:italic}
+.modrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:13px}
+.modrow .mtype{font-weight:600;color:var(--ink)}
+.modrow .x{margin-left:auto;color:var(--muted);cursor:pointer;border:none;background:none;font-size:16px}
+.add-row{font-size:13px;color:var(--indigo);border:1px dashed var(--indigo-line);background:var(--indigo-soft);padding:9px 13px;border-radius:10px;cursor:pointer;width:100%;text-align:left}
+.rate-preview{font-size:13.5px;color:var(--ink-2);background:var(--card-2);border-radius:9px;padding:11px 13px;margin-top:10px}
+.rate-preview b{color:var(--indigo-2);font-family:var(--font-mono)}
+.slab-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+.slab-table th,.slab-table td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+.slab-table th{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* multi-select roles */
+.chipselect{display:flex;flex-wrap:wrap;gap:8px}
+.pchip{border:1px solid var(--line-2);background:var(--card);color:var(--ink-2);padding:8px 14px;border-radius:99px;font-size:13px;cursor:pointer;transition:.13s;font-weight:500;display:inline-flex;align-items:center;gap:7px}
+.pchip:hover{border-color:var(--indigo);color:var(--indigo-2)}
+.pchip.on{background:var(--indigo-soft);border-color:var(--indigo);color:var(--indigo-2);font-weight:600}
+.pchip.on::before{content:"✓";font-size:11px;font-weight:800}
+.minihint{font-size:11.5px;color:var(--muted);margin-top:9px}
+/* per-role rates */
+.role-rate-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.role-rate-row:last-child{border-bottom:none}
+.role-rate-row .rname{font-size:13.5px;color:var(--ink);font-weight:600}
+.role-rate-row .rin{width:118px;flex:none;margin-left:auto;position:relative}
+.role-rate-row .rin input{padding-right:28px;text-align:right}
+.role-rate-row .rin .pct{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+.sameall{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2);font-weight:500;margin-bottom:14px;cursor:pointer}
+.sameall input{width:auto}
+/* editable slab table */
+.slab-table td{vertical-align:middle}
+.slab-table input{width:100%;padding:7px 9px;font-size:13px}
+.slab-table td.pcell{white-space:nowrap}
+.slab-table td.pcell .pwrap{display:inline-flex;align-items:center;gap:5px}
+.slab-table td.act{width:36px;text-align:center;padding:6px}
+.slab-table .x{border:none;background:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:4px}
+.slab-table .x:hover{color:var(--red)}
+
+/* create-a-rule builder layout */
+.create-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;align-items:start;max-width:1120px}
+.create-grid .wizard{max-width:none;gap:16px}
+.fsection{transition:box-shadow .2s,border-color .2s}
+.fsection:focus-within{border-color:var(--indigo-line);box-shadow:0 0 0 3px var(--indigo-soft),var(--shadow-card)}
+.fsec-head{align-items:flex-start;padding:18px 20px 4px}
+.fsec-tag{border-radius:50%;width:26px;height:26px;font-size:12px;flex:none;margin-top:1px}
+.fsec-head h4{font-size:16px}
+.fsec-body{padding-top:12px}
+/* live preview */
+.rule-preview{position:sticky;top:74px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:18px}
+.rp-head{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:13px}
+.rp-dot{width:8px;height:8px;border-radius:50%;background:var(--indigo);box-shadow:0 0 0 4px var(--indigo-soft)}
+.rp-sentence{font-family:var(--font-display);font-size:14px;line-height:1.55;color:var(--ink);font-weight:500;background:var(--card-2);border-left:3px solid var(--indigo);border-radius:0 10px 10px 0;padding:13px 15px;margin-bottom:15px}
+.rp-sentence em{color:var(--indigo-2);font-style:normal;font-weight:700}
+.rp-facts{display:flex;flex-direction:column;margin-bottom:15px}
+.rp-fact{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;line-height:1.35}
+.rp-fact:last-child{border-bottom:none}
+.rp-fact>span{color:var(--muted);flex:none}
+.rp-fact>b{color:var(--ink);font-weight:600;text-align:right}
+.rp-status{font-size:12px;color:var(--ok);background:#16880410;border:1px solid #16880426;border-radius:9px;padding:9px 12px;margin-bottom:12px;display:flex;gap:7px;align-items:center}
+.rp-status.warn{color:#8a6400;background:#fbf6ee;border-color:#d98a0033}
+.rp-actions{display:flex;flex-direction:column;gap:9px}
+@media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
+
+.sticky-foot{position:sticky;bottom:0;margin-top:16px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 18px;box-shadow:0 -8px 24px rgba(3,4,5,.35)}
+.sticky-foot .spacer{flex:1}
+.sticky-foot .status{font-size:12.5px;color:var(--ok)}
+
+.summary-sentence{font-family:var(--font-display);font-size:19px;line-height:1.6;color:var(--ink);font-weight:500;background:var(--card-2);border-left:3px solid var(--indigo);border-radius:0 12px 12px 0;padding:18px 22px}
+.summary-sentence em{color:var(--indigo-2);font-style:normal;font-weight:700}
+
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:820px){.sim-grid{grid-template-columns:1fr}}
+.sim-card{border:1px solid var(--line);border-radius:14px;padding:18px}
+.sim-card h5{font-size:14px;color:var(--ink);font-weight:700;margin-bottom:3px}
+.sim-card .cap{font-size:12px;color:var(--muted);margin-bottom:16px}
+.bars{display:flex;align-items:flex-end;gap:18px;height:150px;padding:0 6px}
+.barpair{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%}
+.barpair .cols{display:flex;gap:6px;align-items:flex-end;height:100%;width:100%;justify-content:center}
+.bar{width:26px;border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(.2,.8,.2,1)}
+.bar.cur{background:linear-gradient(180deg,#cfcfe6,#b6b6cf)}
+.bar.new{background:linear-gradient(180deg,var(--indigo),var(--indigo-2))}
+.barpair .lbl{font-size:11px;color:var(--muted);text-align:center}
+.delta-line{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px}
+.delta-line .val{font-family:var(--font-mono);font-weight:400;font-size:16px;color:var(--red)}
+.legend-mini{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px}
+.legend-mini span{display:inline-flex;align-items:center;gap:6px}
+.legend-mini i{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+.confirm{max-width:560px;text-align:center;margin:30px auto}
+.confirm .seal{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;margin:0 auto 22px;font-size:34px}
+.confirm .seal.ok{background:#16880418;color:var(--ok)}
+.confirm .seal.stage{background:#d98a0018;color:var(--amber)}
+.confirm h3{font-size:22px;color:#fff}
+.confirm p{color:var(--shell-muted);margin:10px 0 26px}
+.meta-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.meta-chip{font-size:12.5px;color:var(--shell-ink);border:1px solid var(--shell-line);padding:7px 12px;border-radius:9px}
+.meta-chip b{color:var(--cyan);font-weight:400;font-family:var(--font-mono);font-size:11px;text-transform:uppercase;margin-right:5px}
+.confirm .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.readonly-flag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);border:1px solid var(--line);padding:4px 9px;border-radius:7px}
+
+.phone-stage{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap}
+.phone{width:390px;flex:none;background:#0b0b12;border-radius:44px;padding:12px;box-shadow:var(--shadow-pop),0 0 0 1px rgba(255,255,255,.06);position:relative}
+.phone .notch{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#000;border-radius:99px;z-index:5}
+.screenview{background:#f4f5f7;color:var(--ink);border-radius:34px;overflow:hidden;height:788px;display:flex;flex-direction:column;position:relative}
+.statusbar{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 6px;font-family:var(--font-mono);font-size:12px;color:var(--ink)}
+.appbar{display:flex;align-items:center;gap:12px;padding:8px 18px 14px;background:#fff;border-bottom:1px solid var(--line)}
+.appbar .back{border:none;background:none;font-size:22px;cursor:pointer;color:var(--ink);padding:2px 6px 2px 0}
+.appbar h3{font-size:17px;color:var(--ink);font-weight:700}
+.appbar .right{margin-left:auto;font-size:13px;color:var(--indigo);cursor:pointer;font-weight:600}
+.appbar .period{margin-left:auto;font-size:12.5px;color:var(--ink-2);border:1px solid var(--line-2);border-radius:99px;padding:6px 12px;cursor:pointer}
+.appbody{flex:1;overflow-y:auto;padding:16px 16px 20px;-webkit-overflow-scrolling:touch}
+.appbody::-webkit-scrollbar{width:0}
+.appfoot{padding:12px 16px 20px;background:linear-gradient(180deg,rgba(244,245,247,0),#f4f5f7 30%);border-top:1px solid var(--line)}
+
+.state-label{font-size:11px;letter-spacing:.02em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;font-weight:700}
+.state-label::before{content:"";width:8px;height:8px;border-radius:50%}
+.state-label.prov{color:var(--indigo-2)}.state-label.prov::before{background:var(--indigo)}
+.state-label.firm{color:var(--navy-2)}.state-label.firm::before{background:var(--navy-2)}
+.state-label.final{color:#4a4a55}.state-label.final::before{background:#4a4a55}
+
+.acard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;cursor:pointer;transition:.14s;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.acard:active{transform:scale(.99)}
+.acard.hero{background:linear-gradient(160deg,#ffffff,#f3f3ff);border-color:var(--indigo-line);box-shadow:0 14px 34px rgba(79,79,241,.12)}
+.acard .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.big-num{font-family:var(--font-mono);font-size:34px;font-weight:400;color:var(--ink);letter-spacing:-.02em;font-feature-settings:"tnum"}
+.big-num .cur{font-size:20px;color:var(--muted);margin-right:2px}
+.sub-num{font-size:12.5px;color:var(--muted);margin-top:2px}
+.arrow{color:var(--muted-2);font-size:18px}
+.slab{margin-top:16px}
+.slab .track{height:9px;border-radius:99px;background:#e7e7ef;overflow:hidden}
+.slab .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--indigo),var(--blue))}
+.slab .cap{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:8px}
+.slab .cap b{color:var(--indigo-2);font-weight:700}
+
+.section-label{font-size:11.5px;letter-spacing:.01em;text-transform:uppercase;color:var(--muted-2);font-weight:700;margin:20px 2px 10px}
+.line-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;cursor:pointer;transition:.13s}
+.line-item:hover{border-color:var(--indigo-line)}
+.line-item .li-main{flex:1;min-width:0}
+.line-item .li-title{font-size:14px;color:var(--ink);font-weight:500}
+.line-item .li-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.line-item .li-amt{font-family:var(--font-mono);font-size:15px;color:var(--ink)}
+.line-item.adj{background:#fbf6ee;border-color:#d98a0033}
+.line-item.adj .li-amt{color:var(--amber)}
+.li-badge{font-size:10px;letter-spacing:.01em;text-transform:uppercase;padding:2px 7px;border-radius:99px;font-weight:600}
+.li-badge.adj{color:var(--amber);background:#d98a0018}
+
+.detail-hero{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:16px}
+.kv{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--muted)}
+.kv .v{color:var(--ink);font-weight:500;text-align:right}
+.info-note{display:flex;gap:9px;background:#f0f0ff;border:1px solid var(--indigo-line);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--indigo-2);margin:14px 0}
+.info-note.warn{background:#fbf6ee;border-color:#d98a0033;color:#8a6400}
+.info-note .i{flex:none}
+.ghost-app{width:100%;padding:13px;border-radius:13px;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+.prim-app{width:100%;padding:14px;border-radius:14px;border:none;background:var(--indigo);color:#fff;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px var(--indigo-line)}
+.prim-app:disabled{opacity:.4;box-shadow:none}
+textarea{resize:vertical;min-height:88px}
+.field-app{margin-bottom:16px}
+.field-app label{display:block;font-size:13px;color:var(--ink-2);font-weight:600;margin-bottom:6px}
+.field-app .fhint{font-size:11.5px;color:var(--muted);font-weight:400;margin-top:4px}
+.attach{border:1.5px dashed var(--line-2);border-radius:13px;padding:18px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer}
+.dispute-status{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;cursor:pointer}
+.dispute-status .li-main{flex:1}
+
+.hero-wrap{max-width:940px}
+.hero{background:linear-gradient(150deg,var(--navy),#02121e 55%,#050608);border:1px solid var(--shell-line);border-radius:var(--r-xl);padding:40px 40px 36px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,var(--indigo-soft),transparent 70%);pointer-events:none}
+.hero .tagline{font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+.hero h1{font-size:40px;font-weight:800;color:#fff;margin:14px 0 8px;letter-spacing:-.02em}
+.hero .lead{color:var(--shell-muted);font-size:16px;max-width:620px}
+.hero .kick{font-family:var(--font-display);font-size:17px;color:#fff;margin-top:22px;font-weight:500}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+@media(max-width:900px){.two-col{grid-template-columns:1fr}}
+.entry{background:var(--card);border-radius:var(--r-xl);padding:26px;border:1px solid var(--line);cursor:pointer;transition:.16s;box-shadow:var(--shadow-card)}
+.entry:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(3,4,5,.4)}
+.entry .badge{font-size:11.5px;letter-spacing:.02em;color:var(--indigo-2);text-transform:uppercase;font-weight:700}
+.entry h3{font-size:20px;color:var(--ink);margin:8px 0 6px}
+.entry p{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+.entry .steps{display:flex;flex-wrap:wrap;gap:6px}
+.entry .steps span{font-size:11.5px;color:var(--muted);border:1px solid var(--line);padding:4px 9px;border-radius:99px}
+.entry .go{margin-top:18px;color:var(--indigo);font-weight:600;font-size:14px}
+.states-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+@media(max-width:900px){.states-strip{grid-template-columns:1fr}}
+.state-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-card)}
+.state-card h4{font-size:15px;color:var(--ink);display:flex;align-items:center;gap:9px}
+.state-card p{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.note-block{background:rgba(255,255,255,.03);border:1px solid var(--shell-line);border-radius:var(--r-lg);padding:16px 18px;margin-top:20px;font-size:13px;color:var(--shell-muted)}
+.note-block b{color:var(--shell-ink)}
+.section-title{font-size:12px;letter-spacing:.02em;text-transform:uppercase;color:var(--shell-muted);font-weight:700;margin:30px 2px 12px}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;box-shadow:var(--shadow-pop);opacity:0;pointer-events:none;transition:.3s;z-index:100;max-width:340px;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span><div>REWARDS &amp; PAYOUTS<small>Simple flow demo</small></div></div>
+  <div class="tabs">
+    <button class="tab active" data-goto="home">Start here</button>
+    <button class="tab" data-goto="a-list">Office — set rules</button>
+    <button class="tab" data-goto="b-home">App — my earnings</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="ver">CLICKABLE DEMO</div>
+</div>
+
+<div class="layout">
+  <nav class="rail">
+    <div class="grp">Start here</div>
+    <button class="navitem" data-goto="home"><span class="no">•</span> How it works</button>
+
+    <div class="grp">For the office — set the rules</div>
+    <button class="navitem" data-goto="a-list"><span class="no">1</span> All rules</button>
+    <button class="navitem" data-goto="a-form"><span class="no">2</span> Create a rule</button>
+    <button class="navitem" data-goto="a-review"><span class="no">3</span> Check the cost</button>
+    <button class="navitem" data-goto="a-staged"><span class="no">4</span> Send for approval</button>
+    <button class="navitem" data-goto="a-checker"><span class="no">5</span> Approve a rule</button>
+    <button class="navitem" data-goto="a-published"><span class="no">6</span> Rule is live</button>
+
+    <div class="grp">For field agents — see earnings</div>
+    <button class="navitem" data-goto="b-home"><span class="no">1</span> My earnings</button>
+    <button class="navitem" data-goto="b-firm"><span class="no">2</span> A confirmed loan</button>
+    <button class="navitem" data-goto="b-prov"><span class="no">3</span> This month so far</button>
+    <button class="navitem" data-goto="b-final"><span class="no">4</span> A past month</button>
+    <button class="navitem" data-goto="b-explain"><span class="no">5</span> How it was worked out</button>
+    <button class="navitem" data-goto="b-dispute"><span class="no">6</span> Report a problem</button>
+    <button class="navitem" data-goto="b-submitted"><span class="no">7</span> Problem reported</button>
+    <button class="navitem" data-goto="b-history"><span class="no">8</span> My reports</button>
+
+    <div class="legend">
+      <div class="grp" style="margin:0 0 8px">What the 3 labels mean</div>
+      <div class="lrow"><span class="chip firm"></span> <span><b style="color:var(--shell-ink)">Confirmed</b> — set when the loan is given. Won't change.</span></div>
+      <div class="lrow"><span class="chip prov"></span> <span><b style="color:var(--shell-ink)">This month</b> — still adding up. Grows as you work.</span></div>
+      <div class="lrow"><span class="chip final"></span> <span><b style="color:var(--shell-ink)">Final</b> — the month is closed. The total is set.</span></div>
+    </div>
+  </nav>
+
+  <main class="stage">
+
+    <!-- ===== START HERE ===== -->
+    <section class="screen active" id="home">
+      <div class="hero-wrap">
+        <div class="hero">
+          <div class="tagline">Two simple screens · one honest record</div>
+          <h1>See what you earn — and why</h1>
+          <p class="lead">One easy screen lets the office decide how people get paid. One live screen lets field agents see what they've earned so far, and exactly how each amount was worked out — no waiting, no guessing.</p>
+          <div class="kick">Set who gets paid, for what, how much, and when — with no coding and no help from engineering.</div>
+        </div>
+
+        <div class="two-col">
+          <div class="entry" data-goto="a-list">
+            <div class="badge">For the office</div>
+            <h3>Set up how people get paid</h3>
+            <p>Fill in one simple form. It fills in whatever it can guess — you just check it or change it. Then someone approves it before it starts working.</p>
+            <div class="steps"><span>1 · All rules</span><span>2 · Create</span><span>3 · Check cost</span><span>4 · Approve</span><span>5 · Go live</span></div>
+            <div class="go">Open the office flow →</div>
+          </div>
+          <div class="entry" data-goto="b-home">
+            <div class="badge">For field agents</div>
+            <h3>See your earnings, clearly</h3>
+            <p>See what you've earned so far this month, what's already confirmed, and — line by line — exactly how each amount was worked out.</p>
+            <div class="steps"><span>1 · My earnings</span><span>2–4 · Details</span><span>5 · How it adds up</span><span>6–8 · Report a problem</span></div>
+            <div class="go">Open the agent flow →</div>
+          </div>
+        </div>
+
+        <div class="section-title">The three simple labels you'll see</div>
+        <div class="states-strip">
+          <div class="state-card"><h4><span class="chip firm"></span> Confirmed</h4><p>Set the moment a loan is given. Nothing can change it after that.</p></div>
+          <div class="state-card"><h4><span class="chip prov"></span> This month</h4><p>Your running total for this month. It goes up as you do more work — and we always show how close you are to the next level.</p></div>
+          <div class="state-card"><h4><span class="chip final"></span> Final</h4><p>Locked when the month ends. It only changes if a correction is added — and we always show corrections.</p></div>
+        </div>
+
+        <div class="note-block">
+          <b>About this demo.</b> This is the clickable version of the design. Colours and fonts follow the sample style you shared. Every button below opens the screen it names — go ahead and click through the whole thing.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OFFICE 1 · ALL RULES ===== -->
+    <section class="screen" id="a-list">
+      <div class="screen-head"><span class="id">Office · 1</span><div><h2>All rules</h2><div class="sub">Every payout rule — the ones working now and the ones still being written. A new rule only starts working after someone approves it.</div></div></div>
+      <div class="console">
+        <div class="panel">
+          <div class="toolbar">
+            <div class="filters">
+              <span class="filter on">Type <b>· all</b></span>
+              <span class="filter">Who gets paid <b>· all</b></span>
+              <span class="filter">Status <b>· all</b></span>
+            </div>
+            <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create a rule</button>
+          </div>
+          <table class="rule-table">
+            <thead><tr><th>Rule name</th><th>Type</th><th>Who gets paid</th><th>Status</th><th>Starts from</th><th>Pays</th><th></th></tr></thead>
+            <tbody>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Sales Partner — new loans</td><td class="rule-cat">Finding customers</td><td>Sales Partner</td><td><span class="pill live">working</span></td><td class="mono">01 Jun 2026</td><td class="rate-sum">0.35% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Associate Partner — renewals</td><td class="rule-cat">Convincing</td><td>Associate Partner</td><td><span class="pill live">working</span></td><td class="mono">12 May 2026</td><td class="rate-sum">0.20% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">City Lead — extra bonus</td><td class="rule-cat">Bonus</td><td>City Lead</td><td><span class="pill live">working</span></td><td class="mono">01 Apr 2026</td><td class="rate-sum">every 3 months</td><td><button class="row-edit" data-stop>View</button></td></tr>
+              <tr class="rule-row" data-goto="a-staged"><td class="rule-name">New customers — by levels</td><td class="rule-cat">New customers</td><td>Caller</td><td><span class="pill staged">waiting for approval</span></td><td class="mono">01 Jul 2026</td><td class="rate-sum">by level</td><td><button class="row-edit" data-stop data-goto="a-form">Edit</button></td></tr>
+              <tr class="rule-row" data-goto="a-form"><td class="rule-name">Special push to close loans</td><td class="rule-cat">Collections <span class="pill flash" style="margin-left:6px">limited-time</span></td><td>Collection Partner</td><td><span class="pill draft">draft</span></td><td class="mono">—</td><td class="rate-sum">0.50% of loan</td><td><button class="row-edit" data-stop data-goto="a-form">Edit</button></td></tr>
+              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Digital Manager — new loans</td><td class="rule-cat">Finding customers</td><td>Digital Manager</td><td><span class="pill expired">ended</span></td><td class="mono">31 Mar 2026</td><td class="rate-sum">0.15% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
+    <section class="screen" id="a-form">
+      <div class="breadcrumb"><b>Create a rule</b><span class="sep">›</span> Who &amp; what<span class="sep">›</span> Based on<span class="sep">›</span> How much<span class="sep">›</span> Extra rules<span class="sep">›</span> When paid</div>
+      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create a rule</h2><div class="sub">Fill the steps on the left — the preview on the right updates as you go. We pre-fill whatever we can guess; anything with a <span class="auto-tag" style="vertical-align:middle">we filled this</span> tag can be changed.</div></div></div>
+
+      <div class="create-grid">
+      <div class="wizard">
+        <!-- Step 1 -->
+        <div class="fsection done" id="secA">
+          <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid &amp; what they did</h4><div class="hint">The people this is for, and what they need to do. You fill this in.</div></div></div>
+          <div class="fsec-body">
+            <div class="field"><label>Who gets paid <span class="desc">— pick one or more roles</span></label>
+              <div class="chipselect" id="f-actor">
+                <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner</button>
+                <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Associate Partner</button>
+                <button type="button" class="pchip" data-val="Caller" onclick="toggleActor(this)">Caller</button>
+                <button type="button" class="pchip" data-val="City Lead" onclick="toggleActor(this)">City Lead</button>
+                <button type="button" class="pchip" data-val="Digital Manager" onclick="toggleActor(this)">Digital Manager</button>
+                <button type="button" class="pchip" data-val="Collection Partner" onclick="toggleActor(this)">Collection Partner</button>
+                <button type="button" class="pchip" data-val="Internal DB" onclick="toggleActor(this)">Internal team</button>
+              </div>
+              <div class="minihint" id="actor-hint">1 role selected</div>
+            </div>
+            <div class="field"><label>Type of loan</label>
+              <select id="f-loan" onchange="applyAutofill()">
+                <option value="fresh">Fresh</option>
+                <option value="takeover">Takeover</option>
+                <option value="others">Others</option>
+              </select>
+            </div>
+            <div class="field"><label>What they did <span class="desc">— the options change with the loan type</span></label>
+              <select id="f-event" onchange="applyAutofill()">
+                <option value="self-source">Found the customer themselves</option>
+                <option value="convincing">Convinced the customer</option>
+                <option value="new-customer">Brought a brand-new customer</option>
+                <option value="funnel-a2nu">Brought new customers (counted by level)</option>
+                <option value="closure-bucket">Reached a loan-closing target</option>
+              </select>
+            </div>
+            <div class="field"><label>Kind of rule</label>
+              <div class="seg" id="f-ruletype">
+                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
+                <button data-rt="flash" onclick="setRuleType('flash')">Limited-time</button>
+              </div>
+              <div id="flash-inline" style="display:none;margin-top:12px">
+                <div class="field" style="margin:0"><label>Ends on <span class="auto-tag">limited-time</span></label><input type="date" id="flash-date" value="2026-07-31"></div>
+              </div>
+              <div class="note"><span class="i">✦</span> A limited-time rule adds extra pay on top of the normal pay, and stops on its own once the end date passes.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="fsection" id="secB">
+          <div class="fsec-head"><span class="fsec-tag">2</span><div><h4>What the pay is based on</h4><div class="hint">We usually fill this in — using only what we can actually measure for this person.</div></div></div>
+          <div class="fsec-body">
+            <div class="field autofilled" id="fw-basis"><label>Pay is based on <span class="auto-tag" id="basis-auto">we filled this</span></label>
+              <select id="f-basis"><option>The loan amount</option><option>Number of new customers</option><option>A finance target</option></select>
+              <div class="note" id="basis-note" style="display:none"><span class="i">⚠</span> This uses a finance target — please check with the finance team before it goes live.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="fsection" id="secC">
+          <div class="fsec-head"><span class="fsec-tag">3</span><div><h4>How much to pay</h4><div class="hint">A flat percentage, a different rate for each role, or rates by level.</div></div></div>
+          <div class="fsec-body">
+            <div class="seg" id="rate-mode">
+              <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat rate</button>
+              <button data-m="slab" onclick="setRateMode('slab')">Rates by level</button>
+            </div>
+            <div id="rate-flat" style="margin-top:14px">
+              <label class="sameall" id="same-rate-wrap" style="display:none"><input type="checkbox" id="same-rate" checked onchange="renderRoleRates()"> Use the same rate for every role</label>
+              <div id="role-rates"></div>
+              <input type="hidden" id="f-rate" value="0.35">
+              <div class="rate-preview" id="rate-prev">For example — on a ₹50,000 loan, this pays <b>₹175</b></div>
+            </div>
+            <div id="rate-slab" style="display:none;margin-top:14px">
+              <div style="overflow-x:auto">
+                <table class="slab-table" id="slab-table">
+                  <thead id="slab-head"></thead>
+                  <tbody id="slab-body"></tbody>
+                </table>
+              </div>
+              <button class="add-row" onclick="addSlab()" style="margin-top:10px">+ Add a level</button>
+              <div class="note"><span class="i">✦</span> Set a rate for every role at each level. Leave the last <b>Up to</b> blank for “and above”.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="fsection" id="secD">
+          <div class="fsec-head"><span class="fsec-tag">4</span><div><h4>Extra rules <span style="color:var(--muted);font-weight:400;font-size:13px">(optional)</span></h4><div class="hint">Add a condition they must meet, or pay a bit more or less in some cases.</div></div></div>
+          <div class="fsec-body">
+            <div id="mods"></div>
+            <div class="note empty" id="mods-empty">No extra rules — this pays the full amount to everyone who qualifies, with no extra checks.</div>
+            <button class="add-row" onclick="addMod('gate')" style="margin-top:10px">+ Add a condition they must meet <span style="color:var(--muted)">— e.g. a minimum number of loans, or a fraud check</span></button>
+            <button class="add-row" onclick="addMod('scaler')" style="margin-top:8px">+ Pay more or less in some cases <span style="color:var(--muted)">— e.g. pay less for higher-risk loans</span></button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="fsection" id="secE">
+          <div class="fsec-head"><span class="fsec-tag">5</span><div><h4>When they get paid</h4><div class="hint">We usually fill this in from the last rule for the same group.</div></div></div>
+          <div class="fsec-body">
+            <div class="field autofilled" id="fw-sched"><label>Payout timing <span class="auto-tag" id="sched-auto">we filled this</span></label>
+              <select id="f-sched">
+                <option>Half now, half next month</option><option>Full amount next month</option>
+                <option>This month or next month</option><option>Every 3 months</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.wizard -->
+
+      <aside class="rule-preview">
+        <div class="rp-head"><span class="rp-dot"></span> Live preview</div>
+        <div class="rp-sentence" id="preview-sentence"></div>
+        <div class="rp-facts">
+          <div class="rp-fact"><span>Who gets paid</span><b id="pv-who">—</b></div>
+          <div class="rp-fact"><span>Type of loan</span><b id="pv-loan">—</b></div>
+          <div class="rp-fact"><span>What they did</span><b id="pv-did">—</b></div>
+          <div class="rp-fact"><span>Kind of rule</span><b id="pv-kind">—</b></div>
+          <div class="rp-fact"><span>Based on</span><b id="pv-basis">—</b></div>
+          <div class="rp-fact"><span>How much</span><b id="pv-pay">—</b></div>
+          <div class="rp-fact"><span>Extra rules</span><b id="pv-extra">—</b></div>
+          <div class="rp-fact"><span>When paid</span><b id="pv-when">—</b></div>
+        </div>
+        <div class="rp-status" id="resolve-status"><span>✓</span> Ready to check the cost</div>
+        <div class="rp-actions">
+          <button class="btn primary full" id="to-review" data-goto="a-review">Check the cost →</button>
+          <button class="btn ghost full" data-goto="a-list">Cancel</button>
+        </div>
+      </aside>
+      </div><!-- /.create-grid -->
+    </section>
+
+    <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
+    <section class="screen" id="a-review">
+      <div class="breadcrumb"><span data-goto="a-form" style="cursor:pointer">Create a rule</span><span class="sep">›</span><b>Check the cost</b></div>
+      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost</h2><div class="sub">See how much this rule will cost before you send it for approval.</div></div></div>
+      <div class="console">
+        <div class="panel">
+          <div class="p-sub" style="margin-bottom:12px">Here's your rule in one plain sentence:</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a new loan</em>, pay <em>0.35% of the loan amount</em> — but only <em>half of that for higher-risk loans</em> — and give it as <em>half this month and half next month</em>.</div>
+        </div>
+        <div class="panel">
+          <h3>What will it cost?</h3>
+          <div class="p-sub">A quick check against your current pay rules and your expected work.</div>
+          <div class="sim-grid">
+            <div class="sim-card">
+              <h5>What it would have cost</h5>
+              <div class="cap">If you'd used this rule for the last 3 months, by type (₹ lakh)</div>
+              <div class="bars">
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:52%"></div><div class="bar new" style="height:70%"></div></div><div class="lbl">Finding<br>customers</div></div>
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:40%"></div><div class="bar new" style="height:44%"></div></div><div class="lbl">Convincing</div></div>
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:64%"></div><div class="bar new" style="height:58%"></div></div><div class="lbl">New<br>customers</div></div>
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:30%"></div><div class="bar new" style="height:34%"></div></div><div class="lbl">Collections</div></div>
+              </div>
+              <div class="legend-mini"><span><i style="background:#b6b6cf"></i> your rules now</span><span><i style="background:var(--indigo)"></i> this new rule</span></div>
+              <div class="delta-line"><span>Extra cost compared to now</span><span class="val">+ ₹2.4 lakh each period</span></div>
+            </div>
+            <div class="sim-card">
+              <h5>What it might cost next month</h5>
+              <div class="cap">A best guess, based on the work you expect</div>
+              <div class="bars">
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:38%"></div></div><div class="lbl">Week 1</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:56%"></div></div><div class="lbl">Week 2</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:72%"></div></div><div class="lbl">Week 3</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Week 4</div></div>
+              </div>
+              <div class="legend-mini"><span><i style="background:var(--indigo)"></i> expected payout</span></div>
+              <div class="delta-line"><span>Expected total next month</span><span class="val" style="color:var(--indigo-2)">₹18.7 lakh</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="sticky-foot">
+          <button class="btn ghost" data-goto="a-form">← Go back and edit</button>
+          <div class="spacer"></div>
+          <button class="btn primary" data-goto="a-staged">Send for approval</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OFFICE 4 · SENT FOR APPROVAL ===== -->
+    <section class="screen" id="a-staged">
+      <div class="screen-head"><span class="id">Office · 4</span><div><h2>Sent for approval</h2><div class="sub">Your rule is saved and waiting. It won't start working until someone approves it.</div></div></div>
+      <div class="console">
+        <div class="confirm">
+          <div class="seal stage">◔</div>
+          <h3>Saved — waiting for approval</h3>
+          <p>It won't start working until an approver says yes. You can still edit it until then.</p>
+          <div class="meta-row">
+            <span class="meta-chip"><b>status</b> waiting</span>
+            <span class="meta-chip"><b>approver</b> Pragadeesh</span>
+            <span class="meta-chip"><b>rule no.</b> RUL-2026-0714</span>
+          </div>
+          <div class="actions">
+            <button class="btn ghost-light" data-goto="a-form">Edit it</button>
+            <button class="btn primary" data-goto="a-list">See all rules</button>
+            <button class="btn ghost-light" data-goto="a-checker">See the approver's view →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OFFICE 5 · APPROVE A RULE ===== -->
+    <section class="screen" id="a-checker">
+      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve a rule</h2><div class="sub">Say yes or no to this rule before it starts working.</div></div></div>
+      <div class="console">
+        <div class="panel">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — this is what the creator sent</span></div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find a customer for a new loan</em>, pay <em>0.35% of the loan amount</em> — but only <em>half of that for higher-risk loans</em> — and give it as <em>half this month and half next month</em>.</div>
+        </div>
+        <div class="panel">
+          <h3>The creator's cost check <span class="readonly-flag" style="margin-left:8px">👁 view only</span></h3>
+          <div class="sim-grid">
+            <div class="sim-card">
+              <h5>What it would have cost</h5><div class="cap">Compared to your current rules, last 3 months</div>
+              <div class="bars">
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:52%"></div><div class="bar new" style="height:70%"></div></div><div class="lbl">Finding<br>customers</div></div>
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:40%"></div><div class="bar new" style="height:44%"></div></div><div class="lbl">Convincing</div></div>
+                <div class="barpair"><div class="cols"><div class="bar cur" style="height:64%"></div><div class="bar new" style="height:58%"></div></div><div class="lbl">New<br>customers</div></div>
+              </div>
+              <div class="delta-line"><span>Extra cost vs now</span><span class="val">+ ₹2.4 lakh each period</span></div>
+            </div>
+            <div class="sim-card">
+              <h5>What it might cost next month</h5><div class="cap">Based on the work expected</div>
+              <div class="bars">
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:38%"></div></div><div class="lbl">Wk 1</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:56%"></div></div><div class="lbl">Wk 2</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:72%"></div></div><div class="lbl">Wk 3</div></div>
+                <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Wk 4</div></div>
+              </div>
+              <div class="delta-line"><span>Expected total</span><span class="val" style="color:var(--indigo-2)">₹18.7 lakh</span></div>
+            </div>
+          </div>
+        </div>
+        <div id="reject-box" class="panel" style="display:none">
+          <h3>Why are you saying no? <span style="color:var(--red)">*</span></h3>
+          <div class="p-sub">This is required — the creator will see your reason and can fix it.</div>
+          <textarea id="reject-reason" placeholder="For example: the cost next month is too high — please lower the rate to 0.30% and send it again." style="margin-top:12px"></textarea>
+        </div>
+        <div class="sticky-foot">
+          <button class="btn danger" id="reject-btn" onclick="toggleReject()">Say no</button>
+          <div class="spacer"></div>
+          <button class="btn primary" data-goto="a-published">Say yes — make it live</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OFFICE 6 · LIVE ===== -->
+    <section class="screen" id="a-published">
+      <div class="screen-head"><span class="id">Office · 6</span><div><h2>The rule is live</h2><div class="sub">It's now working, and it's saved in the records.</div></div></div>
+      <div class="console">
+        <div class="confirm">
+          <div class="seal ok">✓</div>
+          <h3>This rule is now live</h3>
+          <p>Working from 14 July 2026. From now on, everyone this rule matches will be paid this way.</p>
+          <div class="meta-row">
+            <span class="meta-chip"><b>version</b> 3</span>
+            <span class="meta-chip"><b>status</b> working</span>
+            <span class="meta-chip"><b>starts</b> 14 Jul 2026</span>
+            <span class="meta-chip"><b>rule no.</b> RUL-2026-0714</span>
+          </div>
+          <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FIELD APP ================= -->
+
+    <!-- ===== APP 1 · MY EARNINGS ===== -->
+    <section class="screen" id="b-home">
+      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings</h2><div class="sub">This month's running total is at the top, your confirmed loans below it, and past months at the bottom. Your numbers are always right here — you never have to dig for them.</div></div></div>
+      <div class="phone-stage">
+        <div class="phone"><div class="notch"></div><div class="screenview">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="appbar"><h3>My earnings</h3><div class="period" onclick="toast('Pick a month — this month or an earlier one')">This month ▾</div></div>
+          <div class="appbody">
+            <div class="acard hero" data-goto="b-prov">
+              <div class="top"><span class="state-label prov">This month · still adding up</span><span class="arrow">›</span></div>
+              <div class="big-num"><span class="cur">₹</span>42,300</div>
+              <div class="sub-num">A live estimate — it grows as you do more loans</div>
+              <div class="slab">
+                <div class="track"><div class="fill" style="width:68%"></div></div>
+                <div class="cap"><span><b>41 loans done</b></span><span>19 more to earn a higher rate</span></div>
+              </div>
+            </div>
+
+            <div class="section-label">Confirmed — locked when the loan was given</div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Federal Bank · new loan</div><div class="li-meta">Loan OMGL30784773 · given 28 Jun 2026</div></div><div class="li-amt">₹1,750</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">HDFC · new loan</div><div class="li-meta">Loan OMGL30784120 · given 24 Jun 2026</div></div><div class="li-amt">₹2,240</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Axis · renewal</div><div class="li-meta">Loan OMGL30783998 · given 21 Jun 2026</div></div><div class="li-amt">₹980</div></div>
+
+            <div class="section-label">Past months — final totals</div>
+            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">June 2026</div><div class="li-meta">closed 30 Jun 2026 · 62 loans</div></div><div class="li-amt">₹58,900</div></div>
+            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">May 2026</div><div class="li-meta">closed 31 May 2026 · 54 loans</div></div><div class="li-amt">₹51,200</div></div>
+          </div>
+          <div class="appfoot"><button class="prim-app" data-goto="b-explain">How was this worked out?</button></div>
+        </div></div>
+
+        <div class="note-block" style="max-width:320px;margin-top:0">
+          <b>Why show everything at once?</b> Seeing your confirmed pay and your growing total together keeps it motivating. And a changing number always comes with "how close you are to the next level" — so it feels like <b>progress, not a glitch</b>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APP 2 · CONFIRMED LOAN ===== -->
+    <section class="screen" id="b-firm">
+      <div class="screen-head"><span class="id">App · 2</span><div><h2>A confirmed loan</h2><div class="sub">This was set the moment the loan was given — nothing about this month can change it.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Confirmed loan</h3></div>
+        <div class="appbody">
+          <div class="detail-hero">
+            <span class="state-label firm">Confirmed · locked</span>
+            <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>1,750</div>
+            <div class="sub-num">Set when the loan was given · can't change</div>
+          </div>
+          <div class="detail-hero" style="padding-top:6px">
+            <div class="kv"><span class="k">Loan number</span><span class="v mono">OMGL30784773</span></div>
+            <div class="kv"><span class="k">Loan given on</span><span class="v">28 Jun 2026</span></div>
+            <div class="kv"><span class="k">What it's for</span><span class="v">Finding a customer · new loan</span></div>
+            <div class="kv"><span class="k">When you'll be paid</span><span class="v">Half now, half next month</span></div>
+          </div>
+          <button class="ghost-app" data-goto="b-explain">See how this was worked out →</button>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP 3 · THIS MONTH ===== -->
+    <section class="screen" id="b-prov">
+      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month so far</h2><div class="sub">Still adding up — this number can go up as you book more loans.</div></div></div>
+      <div class="phone-stage">
+        <div class="phone"><div class="notch"></div><div class="screenview">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>This month so far</h3></div>
+          <div class="appbody">
+            <div class="detail-hero">
+              <span class="state-label prov">This month · still adding up</span>
+              <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>42,300</div>
+              <div class="slab" style="margin-top:14px">
+                <div class="track"><div class="fill" style="width:68%"></div></div>
+                <div class="cap"><span><b>41 loans done</b></span><span>19 more to reach the 0.50% rate</span></div>
+              </div>
+            </div>
+            <div class="info-note"><span class="i">✦</span> We always show how close you are to the next level. Without it, a changing number could look broken — with it, it's clearly progress.</div>
+            <div class="section-label">Loans counted so far</div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Federal Bank · new loan</div><div class="li-meta">OMGL30784773 · 28 Jun</div></div><div class="li-amt">₹1,750</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">HDFC · new loan</div><div class="li-meta">OMGL30784120 · 24 Jun</div></div><div class="li-amt">₹2,240</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">ICICI · new loan</div><div class="li-meta">OMGL30784051 · 22 Jun</div></div><div class="li-amt">₹1,410</div></div>
+            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Axis · renewal</div><div class="li-meta">OMGL30783998 · 21 Jun</div></div><div class="li-amt">₹980</div></div>
+          </div>
+          <div class="appfoot"><button class="prim-app" data-goto="b-explain">See how this was worked out →</button></div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ===== APP 4 · PAST MONTH ===== -->
+    <section class="screen" id="b-final">
+      <div class="screen-head"><span class="id">App · 4</span><div><h2>A past month</h2><div class="sub">This month is closed. It only changes if a correction is added — and we always show corrections.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026</h3></div>
+        <div class="appbody">
+          <div class="detail-hero">
+            <span class="state-label final">Final · closed</span>
+            <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>58,900</div>
+            <div class="sub-num">Closed 30 Jun 2026 · 62 loans</div>
+          </div>
+          <div class="section-label">What made up this total</div>
+          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Finding customers · 44 new loans</div><div class="li-meta">0.35% of loan · rule version 2</div></div><div class="li-amt">₹41,300</div></div>
+          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Convincing · 12 renewals</div><div class="li-meta">0.20% of loan · rule version 2</div></div><div class="li-amt">₹14,200</div></div>
+          <div class="line-item adj" data-goto="b-explain"><div class="li-main"><div class="li-title">Added later — one more loan counted <span class="li-badge adj">correction</span></div><div class="li-meta">a problem report was accepted · 06 Jul</div></div><div class="li-amt">+₹3,400</div></div>
+        </div>
+        <div class="appfoot">
+          <button class="prim-app" data-goto="b-explain">See how this was worked out →</button>
+          <button class="ghost-app" data-goto="b-dispute">Something looks wrong</button>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
+    <section class="screen" id="b-explain">
+      <div class="screen-head"><span class="id">App · 5</span><div><h2>How it was worked out</h2><div class="sub">Every line comes straight from the records — nothing is re-calculated here, so it opens instantly.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>How it was worked out</h3><span class="right" data-goto="b-home">Done</span></div>
+        <div class="appbody">
+          <div class="info-note"><span class="i">≡</span> Straight from the records — which loan, which rule was used, how much, and why.</div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Federal Bank · OMGL30784773</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,750</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">HDFC · OMGL30784120</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹2,240</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">Axis · OMGL30783998</div><div class="li-meta">rule v2 · 0.20% of loan · renewal</div></div><div class="li-amt">₹980</div></div>
+          <div class="line-item adj" data-goto="b-dispute"><div class="li-main"><div class="li-title">A correction — this loan was counted twice <span class="li-badge adj">correction</span></div><div class="li-meta">shown here on purpose · never hidden</div></div><div class="li-amt">−₹410</div></div>
+          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">ICICI · OMGL30784051</div><div class="li-meta">rule v2 · 0.35% of loan · found the customer</div></div><div class="li-amt">₹1,410</div></div>
+        </div>
+        <div class="appfoot"><button class="ghost-app" data-goto="b-dispute">Report a problem with a line</button></div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP 6 · REPORT A PROBLEM ===== -->
+    <section class="screen" id="b-dispute">
+      <div class="screen-head"><span class="id">App · 6</span><div><h2>Report a problem</h2><div class="sub">Tell us what looks wrong. This won't change your number right away — someone checks it first. We never quietly change your numbers.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><button class="back" data-goto="b-explain">‹</button><h3>Report a problem</h3></div>
+        <div class="appbody">
+          <div class="field-app">
+            <label>Which line</label>
+            <div class="line-item" style="cursor:default;margin:0"><div class="li-main"><div class="li-title">Axis · OMGL30783998</div><div class="li-meta">rule v2 · 0.20% of loan · renewal</div></div><div class="li-amt">₹980</div></div>
+            <div class="fhint">Already filled in from the line you tapped.</div>
+          </div>
+          <div class="field-app">
+            <label>What looks wrong?</label>
+            <textarea id="dispute-reason" placeholder="Tell us in a few words why this doesn't look right" oninput="checkDispute()"></textarea>
+          </div>
+          <div class="field-app">
+            <label>Proof <span style="color:var(--muted);font-weight:400">· optional</span></label>
+            <div class="attach" onclick="toast('Add a photo or file (optional)')">＋ Add a photo or file</div>
+          </div>
+        </div>
+        <div class="appfoot">
+          <button class="prim-app" id="submit-dispute" data-goto="b-submitted" disabled>Send report</button>
+          <button class="ghost-app" data-goto="b-explain">Cancel</button>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP 7 · PROBLEM REPORTED ===== -->
+    <section class="screen" id="b-submitted">
+      <div class="screen-head"><span class="id">App · 7</span><div><h2>Problem reported</h2><div class="sub">It's on record. Nothing changes until someone reviews it.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><h3>Problem reported</h3></div>
+        <div class="appbody" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <div class="seal ok" style="background:#16880418;color:var(--ok);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:32px;margin-bottom:18px">✓</div>
+          <h3 style="color:var(--ink);font-size:20px">Your report is on record</h3>
+          <p style="color:var(--muted);font-size:13.5px;margin:8px 24px 22px">Nothing changes until someone reviews it. If they agree, the fix is added to next month — a closed month is never re-opened.</p>
+          <div style="width:100%;padding:0 4px">
+            <div class="kv"><span class="k">Report number</span><span class="v mono">DSP-2026-0338</span></div>
+            <div class="kv"><span class="k">About loan</span><span class="v mono">OMGL30783998</span></div>
+            <div class="kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
+          </div>
+        </div>
+        <div class="appfoot">
+          <button class="prim-app" data-goto="b-history">See the status of my report</button>
+          <button class="ghost-app" data-goto="b-home">Back to my earnings</button>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP 8 · MY REPORTS ===== -->
+    <section class="screen" id="b-history">
+      <div class="screen-head"><span class="id">App · 8</span><div><h2>My reports</h2><div class="sub">Tap a report to see the reason it was turned down, or the correction that was added if it was accepted. Accepted fixes are added to next month — a closed month is never re-opened.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>My reports</h3></div>
+        <div class="appbody">
+          <div class="dispute-status" onclick="toast('Still being reviewed by the office')"><div class="li-main"><div class="li-title mono">DSP-2026-0338</div><div class="li-meta">About loan OMGL30783998 · 03 Jul 2026</div></div><span class="pill staged">being reviewed</span></div>
+          <div class="dispute-status" onclick="toast('Accepted — a fix of +₹3,400 was added to next month')"><div class="li-main"><div class="li-title mono">DSP-2026-0310</div><div class="li-meta">About loan OMGL30712004 · 18 Jun 2026</div></div><span class="pill live">accepted</span></div>
+          <div class="dispute-status" onclick="toast('Turned down — the pay matched the rule when the loan was given')"><div class="li-main"><div class="li-title mono">DSP-2026-0287</div><div class="li-meta">About loan OMGL30655890 · 02 Jun 2026</div></div><span class="pill draft" style="color:var(--red);background:#94214310">turned down</span></div>
+        </div>
+      </div></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id));
+  document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active', n.dataset.goto===id));
+  const tab = id==='home'?'home':(id.startsWith('a-')?'a-list':'b-home');
+  document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
+  if(id==='a-review'||id==='a-checker') buildSummary();
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelector('.stage').scrollTop=0;
+}
+document.addEventListener('click',e=>{
+  const stop = e.target.closest('[data-stop]');
+  const t = e.target.closest('[data-goto]');
+  if(stop && stop.dataset.goto){ e.stopPropagation(); if(stop.dataset.fresh) resetForm(); show(stop.dataset.goto); return; }
+  if(stop && !stop.dataset.goto){ return; }
+  if(t){ if(t.dataset.fresh) resetForm(); show(t.dataset.goto); }
+});
+
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
+
+function unlock(){ ['secB','secC','secD','secE'].forEach(id=>document.getElementById(id).classList.remove('locked')); }
+function setRuleType(rt){
+  document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
+  document.getElementById('flash-inline').style.display = rt==='flash'?'block':'none';
+  updatePreview();
+}
+function setRateMode(m){
+  document.querySelectorAll('#rate-mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  document.getElementById('rate-flat').style.display = m==='flat'?'block':'none';
+  document.getElementById('rate-slab').style.display = m==='slab'?'block':'none';
+  updatePreview();
+}
+
+/* ---- editable rates-by-level table (a rate per role at each level) ---- */
+const DEFAULT_BANDS=[{from:1,to:25,pay:0.20},{from:26,to:50,pay:0.35},{from:51,to:'',pay:0.50}];
+let slabState=[];  // [{from,to,pay,pays:{roleKey:val}}]
+
+function captureSlabs(){
+  const rows=[...document.querySelectorAll('#slab-body .slab-r')];
+  if(!rows.length) return;                       // nothing rendered yet — keep model
+  slabState=rows.map(r=>{
+    const pays={};
+    r.querySelectorAll('.s-pay').forEach(p=>{ pays[p.dataset.role]=p.value; });
+    const base=Object.values(pays)[0] ?? 0.20;
+    return { from:r.querySelector('.s-from').value, to:r.querySelector('.s-to').value, pay:base, pays };
+  });
+}
+function initSlabs(){
+  slabState=DEFAULT_BANDS.map(b=>({from:b.from,to:b.to,pay:b.pay,pays:{}}));
+  renderSlabs();
+}
+function renderSlabs(){
+  const roles=selectedActors();
+  const single=roles.length<=1;
+  const cols=single?['ALL']:roles;
+  let head='<tr><th>From (loans)</th><th>Up to</th>';
+  cols.forEach(c=>head+='<th>'+(single?'Pays %':ROLE_NAMES[c]+' %')+'</th>');
+  head+='<th></th></tr>';
+  document.getElementById('slab-head').innerHTML=head;
+  document.getElementById('slab-body').innerHTML=slabState.map(row=>{
+    let cells='';
+    cols.forEach(c=>{
+      const v = single ? (row.pay ?? 0.20) : (row.pays?.[c] ?? row.pay ?? 0.20);
+      cells+='<td class="pcell"><span class="pwrap"><input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" value="'+v+'">%</span></td>';
+    });
+    return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'"></td>'+
+      '<td><input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="and above"></td>'+
+      cells+'<td class="act"><button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button></td></tr>';
+  }).join('');
+}
+function refreshSlabs(){ captureSlabs(); renderSlabs(); }   // keep edits when roles change
+function addSlab(){
+  captureSlabs();
+  const lastTo=slabState.length?parseInt(slabState[slabState.length-1].to||0):0;
+  slabState.push({from:lastTo?lastTo+1:1,to:'',pay:0.20,pays:{}});
+  renderSlabs(); toast('Level added');
+}
+function rmSlab(btn){
+  const rows=[...document.querySelectorAll('#slab-body .slab-r')];
+  if(rows.length<=1){ toast('Keep at least one level'); return; }
+  const idx=rows.indexOf(btn.closest('.slab-r'));
+  captureSlabs(); slabState.splice(idx,1); renderSlabs();
+}
+
+/* ---- roles + per-role rates ---- */
+const ROLE_NAMES={SP:'Sales Partner',AP:'Associate Partner','Caller':'Caller','City Lead':'City Lead','Digital Manager':'Digital Manager','Collection Partner':'Collection Partner','Internal DB':'Internal team'};
+const ROLE_PLURAL={SP:'Sales Partners',AP:'Associate Partners','Caller':'Callers','City Lead':'City Leads','Digital Manager':'Digital Managers','Collection Partner':'Collection Partners','Internal DB':'the internal team'};
+const ROLE_RATE={SP:0.35,AP:0.20,'Caller':0.25,'City Lead':0.40,'Digital Manager':0.15,'Collection Partner':0.50,'Internal DB':0.10};
+let rateStore={};
+
+function selectedActors(){ return [...document.querySelectorAll('#f-actor .pchip.on')].map(b=>b.dataset.val); }
+function toggleActor(btn){
+  if(btn.classList.contains('on') && selectedActors().length===1){ toast('Pick at least one role'); return; }
+  btn.classList.toggle('on');
+  applyAutofill();
+}
+function updateActorHint(){
+  const n=selectedActors().length;
+  document.getElementById('actor-hint').textContent = n+' role'+(n>1?'s':'')+' selected'+(n>1?' — set a different rate for each below':'');
+}
+function rateRow(label,key,val){
+  return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
+    '<span class="rin"><input type="number" class="role-rate" data-role="'+key+'" value="'+val+'" step="0.01" min="0" oninput="ratePreview()"><span class="pct">%</span></span></div>';
+}
+function renderRoleRates(){
+  const roles=selectedActors();
+  const wrap=document.getElementById('role-rates');
+  const sameWrap=document.getElementById('same-rate-wrap');
+  const same=document.getElementById('same-rate');
+  document.querySelectorAll('#role-rates .role-rate').forEach(i=>{ rateStore[i.dataset.role]=i.value; });
+  sameWrap.style.display = roles.length>1 ? 'inline-flex' : 'none';
+  let html='';
+  if(roles.length<=1 || same.checked){
+    if(roles.length===1){
+      const k=roles[0]; html=rateRow('Rate for '+ROLE_NAMES[k], k, rateStore[k]??ROLE_RATE[k]);
+    } else {
+      html=rateRow('Rate for every role','ALL', rateStore.ALL??0.35);
+    }
+  } else {
+    roles.forEach(r=>{ html+=rateRow('Rate for '+ROLE_NAMES[r], r, rateStore[r]??ROLE_RATE[r]); });
+  }
+  wrap.innerHTML=html;
+  ratePreview();
+}
+function ratePreview(){
+  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
+  const prev=document.getElementById('rate-prev');
+  if(!inputs.length){ prev.innerHTML=''; return; }
+  document.getElementById('f-rate').value=inputs[0].value;
+  if(inputs.length===1){
+    const r=parseFloat(inputs[0].value||0), amt=Math.round(50000*r/100);
+    prev.innerHTML='For example — on a ₹50,000 loan, this pays <b>₹'+amt.toLocaleString('en-IN')+'</b>';
+  } else {
+    let html='<div style="margin-bottom:4px">On a ₹50,000 loan, each role earns:</div>';
+    inputs.forEach(i=>{
+      const r=parseFloat(i.value||0), amt=Math.round(50000*r/100);
+      html+='<div style="display:flex;justify-content:space-between;margin-top:5px"><span>'+(ROLE_NAMES[i.dataset.role]||i.dataset.role)+' · '+r+'%</span><b>₹'+amt.toLocaleString('en-IN')+'</b></div>';
+    });
+    prev.innerHTML=html;
+  }
+}
+function setAuto(fieldWrap, tagId, isAuto){
+  document.getElementById(fieldWrap).classList.toggle('autofilled', isAuto);
+  document.getElementById(tagId).style.display = isAuto?'inline-block':'none';
+}
+function applyAutofill(){
+  const actors=selectedActors();
+  const event=document.getElementById('f-event').value;
+  const basis=document.getElementById('f-basis');
+  const sched=document.getElementById('f-sched');
+  let basisAuto=false, schedAuto=false, showFinanceNote=false, slab=false;
+
+  if(event==='funnel-a2nu'){ basis.value='Number of new customers'; basisAuto=true; slab=true; ensureGate(); }
+  else if(actors.includes('City Lead')){ basis.value='A finance target'; basisAuto=true; showFinanceNote=true; sched.value='Every 3 months'; schedAuto=true; }
+  else if(actors.length && actors.every(a=>['SP','AP','Internal DB'].includes(a))){ basis.value='The loan amount'; basisAuto=true; if(actors.includes('Internal DB')) slab=true; }
+
+  setAuto('fw-basis','basis-auto',basisAuto);
+  setAuto('fw-sched','sched-auto',schedAuto);
+  document.getElementById('basis-note').style.display = showFinanceNote?'flex':'none';
+  if(slab) setRateMode('slab'); else setRateMode('flat');
+  updateActorHint();
+  renderRoleRates();
+  refreshSlabs();
+  unlock();
+  document.getElementById('to-review').disabled=false;
+  updatePreview();
+}
+
+/* ---- plain-english summary for the review + approver screens ---- */
+const EVENT_TEXT={'self-source':'find a customer','convincing':'convince a customer','new-customer':'bring a brand-new customer','funnel-a2nu':'bring new customers (counted by level)','closure-bucket':'reach a loan-closing target'};
+const LOAN_TEXT={'fresh':'a fresh loan','takeover':'a takeover','others':'other loans'};
+function roleList(plural){
+  const names=selectedActors().map(a=> plural?ROLE_PLURAL[a]:ROLE_NAMES[a]);
+  if(names.length<=1) return names[0]||'—';
+  if(names.length===2) return names[0]+' and '+names[1];
+  return names.slice(0,-1).join(', ')+' and '+names[names.length-1];
+}
+function payText(){
+  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
+  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  if(slabOn){
+    if(selectedActors().length>1) return 'a rate that grows by level, set for each role';
+    const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value||0)).filter(n=>!isNaN(n));
+    if(pays.length) return 'a rate that grows by level ('+Math.min(...pays)+'% up to '+Math.max(...pays)+'%)';
+    return 'a rate that grows by level';
+  }
+  if(inputs.length<=1) return (inputs[0]?inputs[0].value:'0')+'% of the loan amount';
+  return 'a different rate per role — '+inputs.map(i=>ROLE_NAMES[i.dataset.role]+' '+i.value+'%').join(', ');
+}
+function buildSummary(){
+  const event=document.getElementById('f-event').value;
+  const loan=document.getElementById('f-loan').value;
+  const sched=document.getElementById('f-sched').value.toLowerCase();
+  const html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'do the work')+' for '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>, and give it as <em>'+sched+'</em>.';
+  document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
+}
+
+/* ---- live preview panel on the create screen ---- */
+function setFact(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+function payShort(){
+  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  const roles=selectedActors();
+  if(slabOn) return roles.length>1?'By level, per role':'By level';
+  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
+  if(inputs.length<=1) return (inputs[0]?inputs[0].value:'0')+'% of loan';
+  return 'Per role: '+inputs.map(i=>i.value+'%').join(' / ');
+}
+function updatePreview(){
+  const roles=selectedActors();
+  const event=document.getElementById('f-event').value;
+  const loan=document.getElementById('f-loan').value;
+  const flash=document.querySelector('#f-ruletype button.on')?.dataset.rt==='flash';
+  const sched=document.getElementById('f-sched').value;
+  const mods=document.querySelectorAll('#mods .modrow').length;
+  const sent=document.getElementById('preview-sentence');
+  if(sent){
+    let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'do the work')+' for '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>';
+    if(flash){ const d=document.getElementById('flash-date'); s+=' <em>(limited-time'+(d&&d.value?', ends '+d.value:'')+')</em>'; }
+    s+=', as <em>'+sched.toLowerCase()+'</em>.';
+    sent.innerHTML=s;
+  }
+  setFact('pv-who', roles.map(r=>ROLE_NAMES[r]).join(', ')||'—');
+  const lo=document.querySelector('#f-loan option:checked'); setFact('pv-loan', lo?lo.textContent:'—');
+  const ev=document.querySelector('#f-event option:checked'); setFact('pv-did', ev?ev.textContent:'—');
+  setFact('pv-kind', flash?'Limited-time':'Normal');
+  setFact('pv-basis', document.getElementById('f-basis').value);
+  setFact('pv-pay', payShort());
+  setFact('pv-extra', mods? (mods+(mods>1?' rules':' rule')+' added') : 'None');
+  setFact('pv-when', sched);
+}
+
+function ensureGate(){ if(!document.querySelector('#mods .modrow')) addMod('gate',true); }
+function addMod(kind,silent){
+  const wrap=document.getElementById('mods');
+  document.getElementById('mods-empty').style.display='none';
+  const row=document.createElement('div');row.className='modrow';
+  if(kind==='gate'){
+    row.innerHTML='<span class="mtype">Must meet</span> <select style="width:auto;padding:6px 10px"><option>At least this many loans</option><option>A certain mix of loans</option><option>Passes a fraud check</option></select><input type="number" placeholder="number" style="width:90px;padding:6px 10px"><button class="x" onclick="rmMod(this)">✕</button>';
+  }else{
+    row.innerHTML='<span class="mtype">Adjust pay</span> <select style="width:auto;padding:6px 10px"><option>Pay less for higher-risk loans</option><option>Adjust by how long the loan is</option></select><button class="x" onclick="rmMod(this)">✕</button>';
+  }
+  wrap.appendChild(row);
+  if(!silent) toast(kind==='gate'?'Condition added':'Pay adjuster added');
+  updatePreview();
+}
+function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex'; updatePreview(); }
+
+function resetForm(){
+  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='SP'));
+  document.getElementById('f-loan').value='fresh';
+  document.getElementById('f-event').value='self-source';
+  document.getElementById('mods').innerHTML='';
+  document.getElementById('mods-empty').style.display='flex';
+  document.getElementById('same-rate').checked=true;
+  rateStore={};
+  initSlabs();
+  setRuleType('standard'); applyAutofill();
+}
+
+function toggleReject(){
+  const box=document.getElementById('reject-box');
+  const btn=document.getElementById('reject-btn');
+  if(box.style.display==='none'||!box.style.display){
+    box.style.display='block'; btn.textContent='Confirm — say no';
+    document.getElementById('reject-reason').focus();
+  } else {
+    const r=document.getElementById('reject-reason').value.trim();
+    if(!r){ toast('Please add a reason before saying no'); return; }
+    toast('Sent back to the creator with your reason'); show('a-list');
+    box.style.display='none'; btn.textContent='Say no'; document.getElementById('reject-reason').value='';
+  }
+}
+
+function checkDispute(){
+  const v=document.getElementById('dispute-reason').value.trim();
+  document.getElementById('submit-dispute').disabled = v.length<3;
+}
+
+['change','input'].forEach(ev=>document.getElementById('a-form').addEventListener(ev, updatePreview));
+initSlabs();
+applyAutofill();
+updatePreview();
+</script>
+</body>
+</html>
