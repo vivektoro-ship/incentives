@@ -6,7 +6,7 @@
 <title>The Incentive Engine · Funnel Brain Layer 6 · Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Fragment+Mono&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#030405; --bg-2:#010204; --navy:#021c2e; --navy-2:#064e7e;
@@ -354,6 +354,71 @@ textarea{resize:vertical;min-height:88px}
 
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;box-shadow:var(--shadow-pop);opacity:0;pointer-events:none;transition:.3s;z-index:100;max-width:340px;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== Oro Px app design system (from Figma: c-meal--admin / Echo) ===== */
+.screenview{background:#f5f5f5;font-family:"Manrope",-apple-system,sans-serif;color:#101010}
+.px-head{background:#101010;color:#fff;padding:0 16px 16px;position:relative}
+.px-head .statusbar{color:#fff;padding:0 4px 6px;height:40px}
+.px-topline{display:flex;align-items:center;gap:12px;margin-top:6px}
+.px-back{border:none;background:none;color:#fff;font-size:22px;line-height:1;cursor:pointer;padding:0 4px 2px 0}
+.px-id{font-weight:800;font-size:20px;letter-spacing:.01em}
+.px-sub{font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#f5a700;margin-top:3px}
+.px-headrow{display:flex;align-items:center;gap:12px;margin-top:14px}
+.px-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ffc83a,#f5a700);display:grid;place-items:center;font-weight:800;font-size:15px;color:#101010;flex:none}
+.px-headrow .nm{font-weight:700;font-size:14px}
+.px-headrow .ph{font-weight:500;font-size:12px;color:#c6c6c6;margin-top:1px}
+.px-hbtn{width:40px;height:40px;border-radius:50%;background:#fff;border:none;display:grid;place-items:center;font-size:17px;cursor:pointer;flex:none;color:#101010}
+.px-banner{padding:10px 16px;font-size:12px;font-weight:700;color:#fff;display:flex;gap:8px;align-items:center}
+.px-banner.amber{background:#f5a700}.px-banner.blue{background:#2f6fed}.px-banner.green{background:#1f9d55}
+.px-body{flex:1;overflow-y:auto;padding:16px 16px 20px;display:flex;flex-direction:column;gap:12px}
+.px-body::-webkit-scrollbar{width:0}
+.px-card{background:#fff;border:.5px solid #ececec;border-radius:12px;padding:16px;box-shadow:0 12px 20px rgba(0,0,0,.04)}
+.px-label{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#909090}
+.px-div{height:1px;background:#ececec;margin:10px 0;border:none}
+.px-big{font-weight:800;font-size:28px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.px-big .ru{font-size:18px;color:#909090;font-weight:700;margin-right:2px}
+.px-note12{font-size:12px;font-weight:500;color:#585858;line-height:1.45}
+.px-kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.px-kpi{background:#fff;border:.5px solid #ececec;border-radius:12px;padding:12px;cursor:pointer}
+.px-kpi .n{font-weight:800;font-size:16px;margin-top:6px;font-variant-numeric:tabular-nums}
+.px-kpi .d{font-size:10.5px;font-weight:600;color:#909090;margin-top:3px;line-height:1.3}
+.px-kpi.gold{background:linear-gradient(150deg,#fff8eb,#fff);border-color:#f5a70044}
+.px-kpi.gold .n{color:#b97b00}
+.px-kpi.green .n{color:#1f9d55}.px-kpi.amber .n{color:#d98a00}
+.px-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #f0f0f0}
+.px-row:last-child{border-bottom:none;padding-bottom:2px}
+.px-row:first-of-type{padding-top:2px}
+.px-row .t{font-weight:700;font-size:14px;color:#101010}
+.px-row .m{font-size:11.5px;font-weight:500;color:#585858;margin-top:2px}
+.px-row .amt{margin-left:auto;font-weight:800;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.px-row .amt.red{color:#c0392b}
+.px-row .main{flex:1;min-width:0}
+.px-chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-radius:99px;padding:3px 8px;margin-top:6px}
+.px-chip.amber{background:#f5a700}.px-chip.blue{background:#2f6fed}.px-chip.green{background:#1f9d55}.px-chip.red{background:#c0392b}.px-chip.grey{background:#909090}
+.px-track{height:8px;border-radius:99px;background:#ececec;overflow:hidden;margin-top:12px}
+.px-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#ffc83a,#f5a700)}
+.px-caps{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#585858;margin-top:8px}
+.px-caps b{color:#101010;font-weight:800}
+.px-kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.px-kv:last-child{border-bottom:none}
+.px-kv .k{color:#909090;font-weight:600}
+.px-kv .v{font-weight:700;text-align:right;color:#101010}
+.px-kv .v.green{color:#1f9d55}.px-kv .v.amber{color:#d98a00}
+.px-foot{background:#fff;border-top:1px solid #ececec;padding:12px 16px 18px}
+.px-cta{width:100%;background:#101010;color:#fff;border:none;border-radius:99px;padding:15px;font-family:inherit;font-weight:800;font-size:14.5px;cursor:pointer}
+.px-cta:disabled{background:#c4c4c4;cursor:not-allowed}
+.px-cta2{width:100%;background:#fff;color:#101010;border:1px solid #ececec;border-radius:99px;padding:13px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;margin-top:8px}
+.px-qm{width:32px;height:32px;border-radius:50%;background:#fff8eb;border:none;color:#b97b00;font-weight:800;font-size:14px;cursor:pointer;display:grid;place-items:center;flex:none}
+.px-seal{width:72px;height:72px;border-radius:50%;background:#e7f6ee;color:#1f9d55;display:grid;place-items:center;font-size:30px;margin:26px auto 14px}
+.px-center{text-align:center;padding:0 20px}
+.px-center h4{font-size:17px;font-weight:800;margin:0 0 6px}
+.px-field{margin-bottom:14px}
+.px-field label{display:block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#909090;margin-bottom:7px}
+.px-field textarea{width:100%;border:1px solid #ececec;border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;background:#fff;min-height:92px}
+.px-field textarea:focus{outline:none;border-color:#f5a700;box-shadow:0 0 0 3px #f5a70022}
+.px-attach{border:1.5px dashed #dcdcdc;border-radius:12px;background:#fff;padding:16px;text-align:center;font-size:12.5px;font-weight:600;color:#909090;cursor:pointer}
+.px-more{text-align:center;font-size:11px;font-weight:600;color:#909090;padding:2px 0 6px}
+
 </style>
 </head>
 <body>
@@ -788,140 +853,191 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">Actor · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K, a Sales Partner in Chennai. The moment a loan is given, his money shows up. Three boxes answer his three questions: what have I <b>earned</b>, what is <b>coming next</b>, and what is <b>already paid</b>. The <b>?</b> shows the full working, line by line.</div></div></div>
+      <div class="screen-head"><span class="id">Actor · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K, a Sales Partner in Chennai. The moment a loan is given, his money shows up. Three boxes answer his three questions: what have I <b>earned</b>, what is <b>coming next</b>, and what is <b>already paid</b>.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
-          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><h3>My earnings</h3><div class="period" style="margin-left:auto" onclick="toast('Pick a period — this month or a closed one')">July ▾</div><button class="qmark" aria-label="Explain my payout" style="margin-left:8px" title="Explain my payout" data-goto="b-explain">?</button></div>
-          <div class="appbody">
-            <div class="kpi-row">
-              <div class="kpi earned" data-goto="b-prov"><div class="kl">Earned this month</div><div class="kv">₹42,300</div><div class="kd">still growing ›</div></div>
-              <div class="kpi pending" data-goto="b-firm"><div class="kl">Coming to you</div><div class="kv">₹31,900</div><div class="kd">due 05 Aug ›</div></div>
-              <div class="kpi paid" onclick="toast('This is money that has already reached your account.')"><div class="kl">Already paid</div><div class="kv">₹1,10,100</div><div class="kd">till date</div></div>
+          <div class="px-head">
+            <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+            <div class="px-headrow" style="margin-top:4px">
+              <span class="px-avatar">RK</span>
+              <div style="flex:1"><div class="nm">Ravi Krishnan</div><div class="ph">Sales Partner · Chennai</div></div>
+              <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')" style="width:auto;border-radius:99px;padding:0 14px;font-weight:700;font-size:12.5px;font-family:inherit">July ▾</button>
+              <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
+            </div>
+          </div>
+          <div class="px-body">
+            <div class="px-kpis">
+              <div class="px-kpi gold" data-goto="b-prov"><div class="px-label">Earned this month</div><div class="n">₹42,300</div><div class="d">still growing ›</div></div>
+              <div class="px-kpi amber" data-goto="b-firm"><div class="px-label">Coming to you</div><div class="n">₹31,900</div><div class="d">due 05 Aug ›</div></div>
+              <div class="px-kpi green" onclick="toast('This money has already reached your account.')"><div class="px-label">Already paid</div><div class="n">₹1,10,100</div><div class="d">till date</div></div>
             </div>
 
-            <div class="acard" data-goto="b-prov" style="padding:14px 16px">
-              <div class="top" style="margin-bottom:8px"><span class="state-label prov">New customers this month · still counting</span></div>
-              <div class="slab" style="margin:0">
-                <div class="track"><div class="fill" style="width:68%"></div></div>
-                <div class="cap"><span><b>41 done</b></span><span>next level at 60 — higher rate</span></div>
-              </div>
+            <div class="px-card" data-goto="b-prov" style="cursor:pointer">
+              <div class="px-label">New customers this month</div>
+              <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
+              <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
             </div>
 
-            <div class="section-label">This month's loans — every line on your record</div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan <span class="state-label firm" style="font-size:9px;margin-left:4px">firm</span></div><div class="li-meta mono">OML000482 · 0.35% of loan · you found the customer</div><span class="li-status pending">half paid · half comes 05 Aug</span></div><div class="li-amt">₹1,750</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan <span class="pill flash" style="font-size:9px;margin-left:4px">+ flash</span></div><div class="li-meta mono">OML000471 · 0.35% + 0.10% July bonus</div><span class="li-status pending">pay + bonus · comes next payout</span></div><div class="li-amt">₹2,240</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan <span class="state-label firm" style="font-size:9px;margin-left:4px">firm</span></div><div class="li-meta mono">OML000455 · 0.35% of loan · half rate (low value)</div><span class="li-status accr">counted this month</span></div><div class="li-amt">₹1,410</div></div>
-            <div class="line-item" onclick="toast('Ravi did two jobs on this loan — he found the customer AND convinced them. Both pay, separately. One never cuts the other.')"><div class="li-main"><div class="li-title">Fresh gold loan · <span style="color:var(--indigo-2)">2 payments</span></div><div class="li-meta mono">OML000463 · finding ₹1,750 + convincing ₹600</div><span class="li-status accr">both jobs pay</span></div><div class="li-amt">₹2,350</div></div>
-            <div class="line-item adj" onclick="toast('The customer closed this loan within 60 days, so the pay was taken back. You can still see both lines — nothing is ever hidden.')"><div class="li-main"><div class="li-title">Takeover gold loan · taken back</div><div class="li-meta mono">OML000459 · customer closed within 60 days</div><span class="li-status" style="color:var(--red);background:#94214310">money taken back · shown, not hidden</span></div><div class="li-amt" style="color:var(--red)">−₹1,120</div></div>
+            <div class="px-card">
+              <div class="px-label">This month's loans</div>
+              <hr class="px-div">
+              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000482 · you found the customer</div><span class="px-chip amber">half paid · half 05 Aug</span></div><div class="amt">₹1,750</div></div>
+              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000471 · 0.35% + July bonus</div><span class="px-chip blue">comes next payout</span></div><div class="amt">₹2,240</div></div>
+              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000455 · half rate (low value)</div><span class="px-chip blue">counted this month</span></div><div class="amt">₹1,410</div></div>
+              <div class="px-row" onclick="toast('Ravi did two jobs on this loan — found the customer AND convinced them. Both pay, separately.')" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan · 2 payments</div><div class="m">OML000463 · finding ₹1,750 + convincing ₹600</div><span class="px-chip green">both jobs pay</span></div><div class="amt">₹2,350</div></div>
+              <div class="px-row" onclick="toast('The customer closed this loan within 60 days, so the pay was taken back. Both lines stay visible — nothing is hidden.')" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000459 · closed within 60 days</div><span class="px-chip red">money taken back</span></div><div class="amt red">−₹1,120</div></div>
+              <div class="px-more">+ 37 more loans this month</div>
+            </div>
 
-            <div class="section-label">Past months — closed and paid</div>
-            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">June 2026 <span class="state-label final" style="font-size:9px;margin-left:4px">final</span></div><div class="li-meta">62 loans · month closed 30 Jun · paid 05 Jul</div><span class="li-status paid">paid</span></div><div class="li-amt">₹58,900</div></div>
-            <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">May 2026 <span class="state-label final" style="font-size:9px;margin-left:4px">final</span></div><div class="li-meta">54 loans · month closed 31 May · paid 05 Jun</div><span class="li-status paid">paid</span></div><div class="li-amt">₹51,200</div></div>
+            <div class="px-card">
+              <div class="px-label">Past months — closed &amp; paid</div>
+              <hr class="px-div">
+              <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">June 2026</div><div class="m">62 loans · paid 05 Jul</div><span class="px-chip green">paid</span></div><div class="amt">₹58,900</div></div>
+              <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">May 2026</div><div class="m">54 loans · paid 05 Jun</div><span class="px-chip green">paid</span></div><div class="amt">₹51,200</div></div>
+            </div>
           </div>
         </div></div>
 
         <div class="note-block" style="max-width:320px;margin-top:0">
-          <b>Why this works.</b> Earlier, this number arrived <b>about 20 days</b> after month end, calculated by hand. Now it shows up the moment a loan is given. A growing number always shows <b>how close you are to the next level</b>, so it reads as progress — and every rupee has one line on the record saying exactly why it exists.
+          <b>Why this works.</b> Earlier, this number arrived <b>about 20 days</b> after month end, calculated by hand. Now it shows up the moment a loan is given. A growing number always shows <b>how close you are to the next level</b> — and every rupee has one line on the record saying exactly why it exists.
         </div>
       </div>
     </section>
 
     <!-- ===== APP 2 · CONFIRMED LOAN ===== -->
     <section class="screen" id="b-firm">
-      <div class="screen-head"><span class="id">Actor · 2</span><div><h2>One loan, locked</h2><div class="sub">This amount was fixed the moment the loan was given — nothing that happens later this month can change it. It reaches Ravi in two parts, on the dates shown.</div></div></div>
+      <div class="screen-head"><span class="id">Actor · 2</span><div><h2>One loan, locked</h2><div class="sub">This amount was fixed the moment the loan was given — nothing that happens later can change it. It reaches Ravi in two parts, on the dates shown.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>Fresh gold loan</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
-        <div class="appbody">
-          <div class="detail-hero">
-            <span class="state-label firm">Locked — set when the loan was given</span>
-            <div class="li-meta mono" style="margin-top:8px">OML000482 · disbursed 28 Jun 2026</div>
-            <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>1,750</div>
-            <div class="sub-num">0.35% of the ₹5,00,000 loan · under rule v7</div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-home">‹</button>
+            <div style="flex:1"><div class="px-id">OML000482</div><div class="px-sub">Fresh gold loan · 28 Jun 2026</div></div>
+            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
-          <div class="detail-hero" style="padding-top:6px">
-            <div class="kv"><span class="k">Already paid</span><span class="v" style="color:var(--ok)">₹875 · 05 Jul 2026</span></div>
-            <div class="kv"><span class="k">Coming to you</span><span class="v" style="color:var(--amber)">₹875 · 05 Aug 2026</span></div>
-            <div class="kv"><span class="k">Rule</span><span class="v">SP self-source · Fresh · v7</span></div>
-            <div class="kv"><span class="k">Why you earned it</span><span class="v">You found the customer</span></div>
-            <div class="kv"><span class="k">Rate band</span><span class="v">Full rate (high-value loan)</span></div>
-            <div class="kv"><span class="k">Paid as</span><span class="v">Half next month + half after</span></div>
-            <div class="kv"><span class="k">Take-back window</span><span class="v">60 days from loan date</span></div>
-          </div>
-          <div class="info-note"><span class="i">≡</span> The rate was locked on the day of this loan. Even if rates change tomorrow, this loan keeps its rate — your money is never quietly recalculated. Tap <b>?</b> to see the full working.</div>
         </div>
+        <div class="px-banner green">✓ Locked — set when the loan was given. Won't change.</div>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">You earned on this loan</div>
+            <hr class="px-div">
+            <div class="px-big"><span class="ru">₹</span>1,750</div>
+            <div class="px-note12" style="margin-top:6px">0.35% of the ₹5,00,000 loan · under rule v7</div>
+          </div>
+          <div class="px-card">
+            <div class="px-label">When it reaches you</div>
+            <hr class="px-div">
+            <div class="px-kv"><span class="k">Already paid</span><span class="v green">₹875 · 05 Jul 2026</span></div>
+            <div class="px-kv"><span class="k">Coming to you</span><span class="v amber">₹875 · 05 Aug 2026</span></div>
+          </div>
+          <div class="px-card">
+            <div class="px-label">How it was worked out</div>
+            <hr class="px-div">
+            <div class="px-kv"><span class="k">Rule</span><span class="v">SP self-source · Fresh · v7</span></div>
+            <div class="px-kv"><span class="k">Why you earned it</span><span class="v">You found the customer</span></div>
+            <div class="px-kv"><span class="k">Rate band</span><span class="v">Full rate (high-value loan)</span></div>
+            <div class="px-kv"><span class="k">Paid as</span><span class="v">Half next month + half after</span></div>
+            <div class="px-kv"><span class="k">Take-back window</span><span class="v">60 days from loan date</span></div>
+          </div>
+          <div class="px-note12" style="padding:0 4px">The rate was locked the day this loan was given. Even if rates change tomorrow, this loan keeps its rate — your money is never quietly recalculated.</div>
+        </div>
+        <div class="px-foot"><button class="px-cta" data-goto="b-explain">See the working</button></div>
       </div></div>
     </section>
 
     <!-- ===== APP 3 · THIS MONTH ===== -->
     <section class="screen" id="b-prov">
       <div class="screen-head"><span class="id">Actor · 3</span><div><h2>This month — still adding up</h2><div class="sub">This number grows as Ravi works, and locks when the month closes. It always shows how close he is to the next level, so a moving number reads as progress — not a mistake.</div></div></div>
-      <div class="phone-stage">
-        <div class="phone"><div class="notch"></div><div class="screenview">
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>July · still adding up</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
-          <div class="appbody">
-            <div class="detail-hero">
-              <span class="state-label prov">Still adding up — grows as you work</span>
-              <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>42,300</div>
-              <div class="sub-num">Based on new customers brought this month — live count</div>
-              <div class="slab" style="margin-top:14px">
-                <div class="track"><div class="fill" style="width:68%"></div></div>
-                <div class="cap"><span><b>41 done</b></span><span>next level at 60 — higher rate</span></div>
-              </div>
-            </div>
-            <div class="info-note"><span class="i">✦</span> Earlier this number came <b>about 20 days</b> after month end, calculated by hand. Now it updates the moment a loan is given, and locks when the month closes.</div>
-            <div class="section-label">Loans counted so far</div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000482 · you found the customer</div></div><div class="li-amt">₹1,750</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000471 · found customer + July bonus</div></div><div class="li-amt">₹2,240</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000455 · half rate (low value)</div></div><div class="li-amt">₹1,410</div></div>
-            <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000448 · you convinced the customer</div></div><div class="li-amt">₹980</div></div>
-            <div class="minihint" style="text-align:center;padding:4px 0 8px">+ 37 more loans this month — every one on your record</div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-home">‹</button>
+            <div style="flex:1"><div class="px-id">July 2026</div><div class="px-sub">Still adding up</div></div>
+            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
-        </div></div>
-      </div>
+        </div>
+        <div class="px-banner blue">● Grows as you work — locks when the month closes.</div>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">Earned so far · July</div>
+            <hr class="px-div">
+            <div class="px-big"><span class="ru">₹</span>42,300</div>
+            <div class="px-note12" style="margin-top:6px">Based on new customers brought this month — live count</div>
+            <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
+            <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
+          </div>
+          <div class="px-card">
+            <div class="px-label">Loans counted so far</div>
+            <hr class="px-div">
+            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000482 · you found the customer</div></div><div class="amt">₹1,750</div></div>
+            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000471 · found customer + July bonus</div></div><div class="amt">₹2,240</div></div>
+            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000455 · half rate (low value)</div></div><div class="amt">₹1,410</div></div>
+            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000448 · you convinced the customer</div></div><div class="amt">₹980</div></div>
+            <div class="px-more">+ 37 more · your total is the sum of your lines</div>
+          </div>
+          <div class="px-note12" style="padding:0 4px">Earlier this number came <b>about 20 days</b> after month end, calculated by hand. Now it updates the moment a loan is given.</div>
+        </div>
+      </div></div>
     </section>
 
     <!-- ===== APP 4 · PAST MONTH ===== -->
     <section class="screen" id="b-final">
       <div class="screen-head"><span class="id">Actor · 4</span><div><h2>A closed month</h2><div class="sub">Once a month closes, its total never changes. If something is corrected later, the fix is added to the <b>next</b> month — and it is always shown, never slipped in quietly.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>June 2026 · closed</h3><button class="qmark" aria-label="Explain my payout" style="margin-left:auto" title="Explain my payout" data-goto="b-explain">?</button></div>
-        <div class="appbody">
-          <div class="detail-hero">
-            <span class="state-label final">Closed — this total will not change</span>
-            <div class="big-num" style="margin-top:10px"><span class="cur">₹</span>58,900</div>
-            <div class="sub-num">Month closed 30 Jun · paid 05 Jul · 62 loans</div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-home">‹</button>
+            <div style="flex:1"><div class="px-id">June 2026</div><div class="px-sub">Closed · paid</div></div>
+            <button class="px-qm" style="background:#fff" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
-          <div class="section-label">What made up this total</div>
-          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Finding customers · 44 fresh loans</div><div class="li-meta mono">0.35% of loan · rule v7</div></div><div class="li-amt">₹41,300</div></div>
-          <div class="line-item" data-goto="b-explain"><div class="li-main"><div class="li-title">Convincing customers · 12 loans</div><div class="li-meta mono">0.20% of loan · rule v4 · pays along with finding</div></div><div class="li-amt">₹14,200</div></div>
-          <div class="line-item adj" data-goto="b-explain"><div class="li-main"><div class="li-title">Added later — complaint accepted <span class="li-badge adj">correction</span></div><div class="li-meta mono">+₹3,400 added to next month · 06 Jul</div></div><div class="li-amt">+₹3,400</div></div>
         </div>
-        <div class="appfoot">
-          <button class="ghost-app" data-goto="b-dispute">Something looks wrong</button>
+        <div class="px-banner green">✓ Month closed — this total will not change.</div>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">June total</div>
+            <hr class="px-div">
+            <div class="px-big"><span class="ru">₹</span>58,900</div>
+            <div class="px-note12" style="margin-top:6px">Month closed 30 Jun · paid 05 Jul · 62 loans</div>
+          </div>
+          <div class="px-card">
+            <div class="px-label">What made up this total</div>
+            <hr class="px-div">
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Finding customers · 44 fresh loans</div><div class="m">0.35% of loan · rule v7</div></div><div class="amt">₹41,300</div></div>
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Convincing customers · 12 loans</div><div class="m">0.20% of loan · rule v4 · pays along with finding</div></div><div class="amt">₹14,200</div></div>
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Added later — complaint accepted</div><div class="m">added to next month · 06 Jul</div><span class="px-chip amber">correction · shown</span></div><div class="amt" style="color:#d98a00">+₹3,400</div></div>
+          </div>
         </div>
+        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Something looks wrong</button></div>
       </div></div>
     </section>
 
     <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
     <section class="screen" id="b-explain">
-      <div class="screen-head"><span class="id">Actor · 5</span><div><h2>See the working — every rupee has a line</h2><div class="sub">Nothing is calculated on this screen — it reads straight off the money record. What Ravi sees here is exactly what the office sees. Each line: which loan, which rule, how much, and why.</div></div></div>
+      <div class="screen-head"><span class="id">Actor · 5</span><div><h2>See the working — every rupee has a line</h2><div class="sub">Nothing is calculated on this screen — it reads straight off the money record. What Ravi sees here is exactly what the office sees.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>See the working</h3><span class="right" data-goto="b-home">Done</span></div>
-        <div class="appbody">
-          <div class="info-note"><span class="i">≡</span> Every rupee has one line, with its reason. Nothing can be edited — corrections are always new lines you can see.</div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000482 · locked</div><div class="li-meta mono">Ravi K · rule v7 · +0.35% of loan · found the customer</div></div><div class="li-amt">₹1,750</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000471 · locked + bonus</div><div class="li-meta mono">Ravi K · rule v7 + July bonus · +0.45% of loan</div></div><div class="li-amt">₹2,240</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000448 · locked</div><div class="li-meta mono">Ravi K · rule v4 · +0.20% of loan · convinced the customer</div></div><div class="li-amt">₹980</div></div>
-          <div class="line-item adj" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000459 · taken back <span class="li-badge adj">shown, not hidden</span></div><div class="li-meta mono">Ravi K · −0.35% · loan closed within 60 days</div></div><div class="li-amt">−₹1,120</div></div>
-          <div class="line-item" data-goto="b-dispute"><div class="li-main"><div class="li-title">OML000455 · locked</div><div class="li-meta mono">Ravi K · rule v7 · +0.175% · half rate, low-value loan</div></div><div class="li-amt">₹1,410</div></div>
-          <div class="minihint" style="text-align:center;padding:4px 0 8px">+ 37 more lines · your total is just the sum of your lines</div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-home">‹</button>
+            <div style="flex:1"><div class="px-id">The working</div><div class="px-sub">Every rupee · one line · one reason</div></div>
+          </div>
         </div>
-        <div class="appfoot"><button class="ghost-app" data-goto="b-dispute">This looks wrong →</button></div>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">July · line by line</div>
+            <hr class="px-div">
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000482</div><div class="m">rule v7 · +0.35% of loan · found the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹1,750</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000471</div><div class="m">rule v7 + July bonus · +0.45% of loan</div><span class="px-chip amber">+ bonus</span></div><div class="amt">₹2,240</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000448</div><div class="m">rule v4 · +0.20% of loan · convinced the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹980</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000459</div><div class="m">−0.35% · loan closed within 60 days</div><span class="px-chip red">taken back · shown</span></div><div class="amt red">−₹1,120</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">rule v7 · +0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
+            <div class="px-more">+ 37 more lines · your total is the sum of your lines</div>
+          </div>
+          <div class="px-note12" style="padding:0 4px">Nothing here can be edited. A correction is always a <b>new line you can see</b> — never a quiet change.</div>
+        </div>
+        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">This looks wrong →</button></div>
       </div></div>
     </section>
 
@@ -929,26 +1045,33 @@ textarea{resize:vertical;min-height:88px}
     <section class="screen" id="b-dispute">
       <div class="screen-head"><span class="id">Actor · 6</span><div><h2>Tell us what looks wrong</h2><div class="sub">Your complaint goes on the record. Nothing changes until someone checks it — and whatever the answer, you will see it, with the reason.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-explain">‹</button><h3>Something looks wrong</h3></div>
-        <div class="appbody">
-          <div class="field-app">
-            <label>Which line</label>
-            <div class="line-item" style="cursor:default;margin:0"><div class="li-main"><div class="li-title">OML000448</div><div class="li-meta mono">+0.20% of loan · convinced the customer</div></div><div class="li-amt">₹980</div></div>
-            <div class="fhint">Filled in from the line you tapped.</div>
-          </div>
-          <div class="field-app">
-            <label>What looks wrong?</label>
-            <textarea id="dispute-reason" placeholder="e.g. I found this customer myself — this should be 0.35%, not 0.20%" oninput="checkDispute()"></textarea>
-          </div>
-          <div class="field-app">
-            <label>Evidence <span style="color:var(--muted);font-weight:400">· optional</span></label>
-            <div class="attach" onclick="toast('Add a photo or proof — optional')">＋ Add a photo or proof</div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-explain">‹</button>
+            <div style="flex:1"><div class="px-id">Report issue</div><div class="px-sub">OML000448</div></div>
           </div>
         </div>
-        <div class="appfoot">
-          <button class="prim-app" id="submit-dispute" data-goto="b-submitted" disabled>Send</button>
-          <button class="ghost-app" data-goto="b-explain">Cancel</button>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">Which line</div>
+            <hr class="px-div">
+            <div class="px-row"><div class="main"><div class="t">OML000448</div><div class="m">+0.20% of loan · convinced the customer</div></div><div class="amt">₹980</div></div>
+          </div>
+          <div class="px-card">
+            <div class="px-field" style="margin-bottom:12px">
+              <label>What looks wrong?</label>
+              <textarea id="dispute-reason" placeholder="e.g. I found this customer myself — this should be 0.35%, not 0.20%" oninput="checkDispute()"></textarea>
+            </div>
+            <div class="px-field" style="margin:0">
+              <label>Attach files <span style="color:#c4c4c4">· optional</span></label>
+              <div class="px-attach" onclick="toast('Add a photo or proof — optional')">＋ Add a photo or proof</div>
+            </div>
+          </div>
+        </div>
+        <div class="px-foot">
+          <button class="px-cta" id="submit-dispute" data-goto="b-submitted" disabled>Report issue</button>
+          <button class="px-cta2" data-goto="b-explain">Cancel</button>
         </div>
       </div></div>
     </section>
@@ -957,21 +1080,26 @@ textarea{resize:vertical;min-height:88px}
     <section class="screen" id="b-submitted">
       <div class="screen-head"><span class="id">Actor · 7</span><div><h2>Your complaint is on record</h2><div class="sub">Someone will check it. If it is accepted, the fix is added to next month's money — a closed month is never re-opened.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><h3>Complaint sent</h3></div>
-        <div class="appbody" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-          <div class="seal ok" style="background:#16880418;color:var(--ok);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:32px;margin-bottom:18px">✓</div>
-          <h3 style="color:var(--ink);font-size:20px">Your complaint is on record</h3>
-          <p style="color:var(--muted);font-size:13.5px;margin:8px 24px 22px">The amount you flagged stays visible on your record. Nothing changes until someone checks it — and the answer will come back with a reason.</p>
-          <div style="width:100%;padding:0 4px">
-            <div class="kv"><span class="k">Complaint no.</span><span class="v mono">DSP-2026-0338</span></div>
-            <div class="kv"><span class="k">About loan</span><span class="v mono">OML000448</span></div>
-            <div class="kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline"><div style="flex:1"><div class="px-id">Reported</div><div class="px-sub">DSP-2026-0338</div></div></div>
+        </div>
+        <div class="px-banner amber">● We've received your report and will look into it.</div>
+        <div class="px-body">
+          <div class="px-center">
+            <div class="px-seal">✓</div>
+            <h4>Reported</h4>
+            <div class="px-note12">The amount you flagged stays visible on your record. Nothing changes until someone checks it — the answer comes back with a reason.</div>
+          </div>
+          <div class="px-card">
+            <div class="px-kv"><span class="k">Complaint no.</span><span class="v">DSP-2026-0338</span></div>
+            <div class="px-kv"><span class="k">About loan</span><span class="v">OML000448</span></div>
+            <div class="px-kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
           </div>
         </div>
-        <div class="appfoot">
-          <button class="prim-app" data-goto="b-history">See my complaints</button>
-          <button class="ghost-app" data-goto="b-home">Back to my earnings</button>
+        <div class="px-foot">
+          <button class="px-cta" data-goto="b-history">See my complaints</button>
+          <button class="px-cta2" data-goto="b-home">Back to my earnings</button>
         </div>
       </div></div>
     </section>
@@ -980,12 +1108,25 @@ textarea{resize:vertical;min-height:88px}
     <section class="screen" id="b-history">
       <div class="screen-head"><span class="id">Actor · 8</span><div><h2>My complaints</h2><div class="sub">Every complaint gets an answer on the record. Accepted → the fix is added to next month. Not accepted → you see the reason, always.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-        <div class="appbar"><button class="back" data-goto="b-home">‹</button><h3>My complaints</h3></div>
-        <div class="appbody">
-          <div class="dispute-status" onclick="toast('Being checked by the office')"><div class="li-main"><div class="li-title mono">DSP-2026-0338</div><div class="li-meta">About OML000448 · 03 Jul 2026</div></div><span class="pill staged">being checked</span></div>
-          <div class="dispute-status" onclick="toast('Accepted — ₹3,400 was added to your next month')"><div class="li-main"><div class="li-title mono">DSP-2026-0310</div><div class="li-meta">About OML000391 · 18 Jun 2026</div></div><span class="pill live">accepted</span></div>
-          <div class="dispute-status" onclick="toast('Not accepted — the pay matched the rule on the loan date. The reason is on your record.')"><div class="li-main"><div class="li-title mono">DSP-2026-0287</div><div class="li-meta">About OML000305 · 02 Jun 2026</div></div><span class="pill draft" style="color:var(--red);background:#94214310">not accepted · reason given</span></div>
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-home">‹</button>
+            <div style="flex:1"><div class="px-id">Reported issues</div><div class="px-sub">3 issues</div></div>
+          </div>
+        </div>
+        <div class="px-body">
+          <div class="px-card">
+            <div class="px-label">Today</div>
+            <hr class="px-div">
+            <div class="px-row" onclick="toast('Being checked by the office')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0338</div><div class="m">About OML000448 · 03 Jul 2026</div><span class="px-chip amber">reported</span></div></div>
+          </div>
+          <div class="px-card">
+            <div class="px-label">Earlier</div>
+            <hr class="px-div">
+            <div class="px-row" onclick="toast('Accepted — ₹3,400 was added to your next month')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0310</div><div class="m">About OML000391 · 18 Jun 2026</div><span class="px-chip green">resolved · ₹3,400 added</span></div></div>
+            <div class="px-row" onclick="toast('Not accepted — the pay matched the rule on the loan date. The reason is on your record.')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0287</div><div class="m">About OML000305 · 02 Jun 2026</div><span class="px-chip grey">not accepted · reason given</span></div></div>
+          </div>
         </div>
       </div></div>
     </section>
