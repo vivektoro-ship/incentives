@@ -209,15 +209,18 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .rp-status.warn{color:#8a6400;background:#fbf6ee;border-color:#d98a0033}
 .rp-actions{display:flex;flex-direction:column;gap:9px}
 @media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
-.facts-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
-.ftile{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
-.ftile .fl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2)}
-.ftile .fv{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:6px;line-height:1.35;overflow-wrap:break-word}
-.ftile.hero{background:var(--indigo-soft);border-color:var(--indigo-line)}
-.ftile.hero .fv{color:var(--indigo-2);font-size:15px}
-.fmeta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.fmeta .mchip{font-size:11.5px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 11px}
-.fmeta .mchip b{color:var(--ink);font-weight:700}
+.spec-flow{display:flex;align-items:stretch;margin-top:16px;border:1px solid var(--line-2);border-radius:14px;overflow:hidden;background:var(--card-2)}
+.sf-seg{flex:1;padding:13px 16px;border-right:1px solid var(--line-2);min-width:0;position:relative}
+.sf-seg:last-child{border-right:none}
+.sf-seg .fl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
+.sf-seg .fv{font-size:13px;font-weight:700;color:var(--ink);margin-top:5px;line-height:1.35;overflow-wrap:break-word}
+.sf-seg.hero{background:var(--indigo);flex:0 0 auto}
+.sf-seg.hero .fl{color:#c9d8ff}
+.sf-seg.hero .fv{color:#fff;font-size:16px;white-space:nowrap}
+.fmeta-line{margin-top:12px;font-size:12.5px;color:var(--muted)}
+.fmeta-line b{color:var(--ink-2);font-weight:600}
+.fmeta-line .sep{margin:0 8px;color:var(--line-2)}
+@media(max-width:900px){.spec-flow{flex-wrap:wrap}.sf-seg{flex:1 1 45%;border-bottom:1px solid var(--line-2)}}
 .vh{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
 .vh .vh-t{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px}
 .vrow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--line)}
@@ -537,7 +540,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="tagline">The Incentive Engine · Funnel Brain Layer 6 · ENG-1680</div>
           <h1>Attribution earns the money</h1>
           <p class="lead">The system already knows who earned every loan. This engine turns that into money — on a record that can never be quietly edited, with incentives the business changes itself, and a number every field agent watches grow in real time. No more month-end hand calculation.</p>
-          <div class="kick">Every incentive is one sentence: for this kind of actor on this kind of loan, pay this rate on this basis, adjusted by these gates, released on this schedule.</div>
+          <div class="kick">Every incentive is one sentence: for this kind of actor on this kind of loan, pay this rate on this basis, adjusted by these gates, given on this schedule.</div>
         </div>
 
         <div class="two-col">
@@ -806,7 +809,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The incentive, in one sentence:</div>
-          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, given as <em>half next month + half the month after</em>.</div>
           <div id="rv-facts"></div>
           <div id="rv-history" style="margin-top:14px"></div>
         </div>
@@ -879,7 +882,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
-          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
+          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, given as <em>half next month + half the month after</em>.</div>
           <div id="ck-facts"></div>
         </div>
         <div class="panel">
@@ -1529,25 +1532,20 @@ function buildSummary(){
   const loan=document.getElementById('f-loan').value;
   const sched=document.getElementById('f-sched').value.toLowerCase();
   const mods=document.querySelectorAll('#mods .modrow').length;
-  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', released <em>'+sched+'</em>.';
+  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   // the same facts, on every rule view
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
   const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
   const tiles=[
-    ['Who gets paid', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
-    ['If they do', (ev?ev.textContent.split(' → ')[0]:'—')+' · '+(lo?lo.textContent.split(' (')[0]:''), ''],
-    ['How much', payShort(), 'hero'],
-    ['On what amount', document.getElementById('f-basis').value.split(' (')[0], ''],
-    ['When paid', document.getElementById('f-sched').value, '']
+    ['Who', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
+    ['Does what', (ev?ev.textContent.split(' → ')[0]:'—')+' · '+(lo?lo.textContent.split(' (')[0]:''), ''],
+    ['Gets', payShort(), 'hero'],
+    ['Of what', document.getElementById('f-basis').value.split(' (')[0].split(' — ')[0], ''],
+    ['Given as', document.getElementById('f-sched').value, '']
   ];
-  const fhtml='<div class="facts-tiles">'+tiles.map(t=>'<div class="ftile '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+'</div>'+
-    '<div class="fmeta">'+
-    '<span class="mchip">kind of pay · <b>'+(EVENT_CAT[event]||'—')+'</b></span>'+
-    '<span class="mchip">type · <b>'+(flash?'flash bonus':'normal')+'</b></span>'+
-    '<span class="mchip">extra conditions · <b>'+(mods?mods+' added':'none')+'</b></span>'+
-    '<span class="mchip">starts · <b>'+fmtDate(document.getElementById('f-start').value)+'</b></span>'+
-    '</div>';
+  const fhtml='<div class="spec-flow">'+tiles.map(t=>'<div class="sf-seg '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+'</div>'+
+    '<div class="fmeta-line">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
   // version history (D9): this rule's category+payee over time — versioned publishes, never edits
   const hv=document.getElementById('rv-history');
@@ -1580,7 +1578,7 @@ function updatePreview(){
   if(sent){
     let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>';
     if(mods) s+=', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>';
-    s+=', released <em>'+sched.toLowerCase()+'</em>';
+    s+=', given as <em>'+sched.toLowerCase()+'</em>';
     if(flash){ const d=document.getElementById('flash-date'); s+=' <em>(flash — additive over the base'+(d&&d.value?', expires '+d.value:'')+')</em>'; }
     s+='.';
     sent.innerHTML=s;
