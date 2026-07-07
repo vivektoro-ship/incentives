@@ -219,6 +219,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .li-status.paid{color:var(--ok);background:#16880412}
 .li-status.pending{color:var(--amber);background:#d98a0016}
 .li-status.accr{color:var(--indigo-2);background:var(--indigo-soft)}
+.fsel{padding:8px 12px;border:1px solid var(--line-2);border-radius:99px;background:var(--card);color:var(--ink-2);font-size:12.5px;font-family:var(--font-ui);cursor:pointer}
+.fsel:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
 
 .sticky-foot{position:sticky;bottom:0;margin-top:16px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 18px;box-shadow:0 -8px 24px rgba(3,4,5,.35)}
 .sticky-foot .spacer{flex:1}
@@ -445,22 +447,29 @@ textarea{resize:vertical;min-height:88px}
         <div class="panel">
           <div class="toolbar">
             <div class="filters">
-              <span class="filter on">Type <b>· all</b></span>
-              <span class="filter">Who gets paid <b>· all</b></span>
-              <span class="filter">Status <b>· all</b></span>
+              <select class="fsel" id="flt-who" onchange="renderRulesTable()">
+                <option value="all">Who · all</option>
+                <option value="SP">Sales Partner</option>
+                <option value="AP">Associate Partner</option>
+                <option value="Caller">Caller</option>
+                <option value="City Lead">City Lead</option>
+                <option value="Digital Manager">Digital Manager</option>
+                <option value="Collection Partner">Collection Partner</option>
+                <option value="Internal DB">Internal team</option>
+              </select>
+              <select class="fsel" id="flt-status" onchange="renderRulesTable()">
+                <option value="all">Status · all</option>
+                <option value="working">Working</option>
+                <option value="staged">Waiting for approval</option>
+                <option value="draft">Draft</option>
+                <option value="ended">Ended</option>
+              </select>
             </div>
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create a rule</button>
           </div>
           <table class="rule-table">
             <thead><tr><th>Rule name</th><th>Type</th><th>Who gets paid</th><th>Status</th><th>Starts from</th><th>Pays</th><th></th></tr></thead>
-            <tbody>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Sales Partner — fresh loans</td><td class="rule-cat">Finding customers</td><td>Sales Partner</td><td><span class="pill live">working</span></td><td class="mono">01 Jun 2026</td><td class="rate-sum">0.35% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Associate Partner — takeovers</td><td class="rule-cat">Convincing</td><td>Associate Partner</td><td><span class="pill live">working</span></td><td class="mono">12 May 2026</td><td class="rate-sum">0.20% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">City Lead — extra bonus</td><td class="rule-cat">Bonus</td><td>City Lead</td><td><span class="pill live">working</span></td><td class="mono">01 Apr 2026</td><td class="rate-sum">every 3 months</td><td><button class="row-edit" data-stop>View</button></td></tr>
-              <tr class="rule-row" data-goto="a-staged"><td class="rule-name">New customers — by levels</td><td class="rule-cat">New customers</td><td>Caller</td><td><span class="pill staged">waiting for approval</span></td><td class="mono">01 Jul 2026</td><td class="rate-sum">by level</td><td><button class="row-edit" data-stop data-rule='{"name":"New customers — by levels","roles":["Caller"],"loan":"fresh","event":"funnel-a2nu","mode":"slab","start":"2026-07-01"}'>Edit</button></td></tr>
-              <tr class="rule-row" data-goto="a-form"><td class="rule-name">Special push to close loans</td><td class="rule-cat">Collections <span class="pill flash" style="margin-left:6px">limited-time</span></td><td>Collection Partner</td><td><span class="pill draft">draft</span></td><td class="mono">—</td><td class="rate-sum">0.50% of loan</td><td><button class="row-edit" data-stop data-rule='{"name":"Special push to close loans","roles":["Collection Partner"],"loan":"others","event":"closure-bucket","mode":"flat","rate":0.50,"flash":true,"end":"2026-08-31","start":"2026-07-14"}'>Edit</button></td></tr>
-              <tr class="rule-row" data-goto="a-review"><td class="rule-name">Digital Manager — fresh loans</td><td class="rule-cat">Finding customers</td><td>Digital Manager</td><td><span class="pill expired">ended</span></td><td class="mono">31 Mar 2026</td><td class="rate-sum">0.15% of loan</td><td><button class="row-edit" data-stop>View</button></td></tr>
-            </tbody>
+            <tbody id="rules-body"></tbody>
           </table>
         </div>
       </div>
@@ -632,7 +641,7 @@ textarea{resize:vertical;min-height:88px}
                 <div class="barpair"><div class="cols"><div class="bar cur" style="height:30%"></div><div class="bar new" style="height:34%"></div></div><div class="lbl">Collections</div></div>
               </div>
               <div class="legend-mini"><span><i style="background:#b6b6cf"></i> your rules now</span><span><i style="background:var(--indigo)"></i> this new rule</span></div>
-              <div class="delta-line"><span>Extra cost compared to now</span><span class="val">+ ₹2.4 lakh each period</span></div>
+              <div class="delta-line"><span>Extra cost compared to now</span><span class="val" id="cost-delta">+ ₹2.4 lakh each period</span></div>
             </div>
             <div class="sim-card">
               <h5>What it might cost next month</h5>
@@ -644,7 +653,7 @@ textarea{resize:vertical;min-height:88px}
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Week 4</div></div>
               </div>
               <div class="legend-mini"><span><i style="background:var(--indigo)"></i> expected payout</span></div>
-              <div class="delta-line"><span>Expected total next month</span><span class="val" style="color:var(--indigo-2)">₹18.7 lakh</span></div>
+              <div class="delta-line"><span>Expected total next month</span><span class="val" style="color:var(--indigo-2)" id="cost-next">₹18.7 lakh</span></div>
             </div>
           </div>
         </div>
@@ -697,7 +706,7 @@ textarea{resize:vertical;min-height:88px}
                 <div class="barpair"><div class="cols"><div class="bar cur" style="height:40%"></div><div class="bar new" style="height:44%"></div></div><div class="lbl">Convincing</div></div>
                 <div class="barpair"><div class="cols"><div class="bar cur" style="height:64%"></div><div class="bar new" style="height:58%"></div></div><div class="lbl">New<br>customers</div></div>
               </div>
-              <div class="delta-line"><span>Extra cost vs now</span><span class="val">+ ₹2.4 lakh each period</span></div>
+              <div class="delta-line"><span>Extra cost vs now</span><span class="val" id="cost-delta2">+ ₹2.4 lakh each period</span></div>
             </div>
             <div class="sim-card">
               <h5>What it might cost next month</h5><div class="cap">Based on the work expected</div>
@@ -719,7 +728,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="sticky-foot">
           <button class="btn danger" id="reject-btn" onclick="toggleReject()">Say no</button>
           <div class="spacer"></div>
-          <button class="btn primary" data-goto="a-published">Say yes — make it live</button>
+          <button class="btn primary" onclick="publishRule()">Say yes — make it live</button>
         </div>
       </div>
     </section>
@@ -770,6 +779,8 @@ textarea{resize:vertical;min-height:88px}
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000482 · 28 Jun 2026</div><span class="li-status pending">half paid · half due 05 Aug</span></div><div class="li-amt">₹1,750</div></div>
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Takeover gold loan</div><div class="li-meta mono">OML000471 · 24 Jun 2026</div><span class="li-status pending">due next payout</span></div><div class="li-amt">₹2,240</div></div>
             <div class="line-item" data-goto="b-firm"><div class="li-main"><div class="li-title">Fresh gold loan</div><div class="li-meta mono">OML000455 · 22 Jun 2026</div><span class="li-status accr">counted this month</span></div><div class="li-amt">₹1,410</div></div>
+            <div class="line-item" onclick="toast('You were Sales Partner AND Appraisal Partner on OML000463 — ₹1,750 as Sales + ₹600 as Appraisal, counted separately under each rule.')"><div class="li-main"><div class="li-title">Fresh gold loan · <span style="color:var(--indigo-2)">2 roles</span></div><div class="li-meta mono">OML000463 · 20 Jun 2026</div><span class="li-status accr">Sales ₹1,750 + Appraisal ₹600</span></div><div class="li-amt">₹2,350</div></div>
+            <div class="line-item adj" onclick="toast('OML000459 was closed within 7 days, so the incentive was reversed. We always show a reversal — it is never hidden.')"><div class="li-main"><div class="li-title">Takeover gold loan · reversed</div><div class="li-meta mono">OML000459 · closed early 26 Jun</div><span class="li-status" style="color:var(--red);background:#94214310">clawed back</span></div><div class="li-amt" style="color:var(--red)">−₹1,120</div></div>
 
             <div class="section-label">Paid out — past months</div>
             <div class="line-item" data-goto="b-final"><div class="li-main"><div class="li-title">June 2026 payout</div><div class="li-meta">62 loans · paid 05 Jul 2026</div><span class="li-status paid">paid</span></div><div class="li-amt">₹58,900</div></div>
@@ -952,12 +963,14 @@ function show(id){
   document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active', n.dataset.goto===id));
   const tab = id==='home'?'home':(id.startsWith('a-')?'a-list':'b-home');
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
-  if(id==='a-review'||id==='a-checker') buildSummary();
+  if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); }
   if(id==='a-staged'||id==='a-published') fillConfirmation();
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelector('.stage').scrollTop=0;
 }
 document.addEventListener('click',e=>{
+  const openEl = e.target.closest('[data-open]');
+  if(openEl){ e.stopPropagation(); openRule(openEl.dataset.open); return; }
   const ruleBtn = e.target.closest('[data-rule]');
   if(ruleBtn){ e.stopPropagation(); try{ loadRule(JSON.parse(ruleBtn.dataset.rule)); }catch(_){}; show('a-form'); return; }
   const stop = e.target.closest('[data-stop]');
@@ -1273,6 +1286,84 @@ function loadRule(o){
   updatePreview();
 }
 
+/* ---- Office rules: data-driven list, filters, publish, supersede, live cost ---- */
+const EVENT_CAT={'self-source':'Finding customers','convincing':'Convincing','new-customer':'New customers','funnel-a2nu':'New customers','closure-bucket':'Collections'};
+const STATUS_PILL={working:['live','working'],staged:['staged','waiting for approval'],draft:['draft','draft'],ended:['expired','ended']};
+let RULES=[
+  {id:'RUL-2026-0601',name:'Sales Partner — fresh loans',cat:'Finding customers',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan',mode:'flat',rate:0.35},
+  {id:'RUL-2026-0512',name:'Associate Partner — takeovers',cat:'Convincing',roles:['AP'],loan:'takeover',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20},
+  {id:'RUL-2026-0401',name:'City Lead — extra bonus',cat:'Bonus',roles:['City Lead'],loan:'fresh',event:'self-source',status:'working',start:'2026-04-01',pay:'every 3 months',mode:'flat',rate:0.10},
+  {id:'RUL-2026-0701',name:'New customers — by levels',cat:'New customers',roles:['Caller'],loan:'fresh',event:'funnel-a2nu',status:'staged',start:'2026-07-01',pay:'by level',mode:'slab'},
+  {id:'RUL-2026-0714',name:'Special push to close loans',cat:'Collections',roles:['Collection Partner'],loan:'others',event:'closure-bucket',status:'draft',start:'',pay:'0.50% of loan',mode:'flat',rate:0.50,flash:true,end:'2026-08-31'},
+  {id:'RUL-2026-0331',name:'Digital Manager — fresh loans',cat:'Finding customers',roles:['Digital Manager'],loan:'fresh',event:'self-source',status:'ended',start:'2026-03-31',pay:'0.15% of loan',mode:'flat',rate:0.15}
+];
+function rolesText(roles){ return roles.map(r=>ROLE_NAMES[r]||r).join(', '); }
+function renderRulesTable(){
+  const who=(document.getElementById('flt-who')||{}).value||'all';
+  const st=(document.getElementById('flt-status')||{}).value||'all';
+  const body=document.getElementById('rules-body'); if(!body) return;
+  const rows=RULES.filter(r=>(who==='all'||r.roles.includes(who))&&(st==='all'||r.status===st));
+  body.innerHTML = rows.length ? rows.map(r=>{
+    const sp=STATUS_PILL[r.status]||['draft',r.status];
+    const flash=r.flash?' <span class="pill flash" style="margin-left:6px">limited-time</span>':'';
+    const label=(r.status==='draft'||r.status==='staged')?'Edit':'View';
+    return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
+      '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
+      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
+      '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
+      '<td class="rate-sum">'+r.pay+'</td>'+
+      '<td><button class="row-edit" data-open="'+r.id+'" data-stop>'+label+'</button></td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
+}
+function openRule(id){
+  const r=RULES.find(x=>x.id===id); if(!r) return;
+  loadRule(r);
+  if(r.status==='draft'||r.status==='staged') show('a-form'); else show('a-review');
+}
+function currentRuleObj(){
+  const event=document.getElementById('f-event').value;
+  const mode=document.querySelector('#rate-mode button.on').dataset.m;
+  const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
+  const firstRate=parseFloat((document.querySelector('#role-rates .role-rate')||{}).value);
+  return {
+    id:ruleNoFor(),
+    name:(document.getElementById('f-name').value.trim()||'Untitled rule'),
+    cat:EVENT_CAT[event]||'—',
+    roles:selectedActors().slice(),
+    loan:document.getElementById('f-loan').value, event, status:'working',
+    start:document.getElementById('f-start').value,
+    pay:payShort(), mode, rate:isNaN(firstRate)?null:firstRate,
+    flash, end:flash?document.getElementById('flash-date').value:''
+  };
+}
+function supersede(r){
+  RULES.forEach(x=>{ if(x.status==='working'&&x.loan===r.loan&&x.event===r.event&&x.roles.some(role=>r.roles.includes(role))) x.status='ended'; });
+}
+function publishRule(){
+  const r=currentRuleObj();
+  supersede(r);
+  RULES=RULES.filter(x=>x.id!==r.id);
+  RULES.unshift(r);
+  renderRulesTable();
+  show('a-published');
+}
+function roleCurrentRate(role){ const r=RULES.find(x=>x.status==='working'&&x.roles.includes(role)&&typeof x.rate==='number'); return r?r.rate:0; }
+function computeCost(){
+  const roles=selectedActors();
+  const mode=document.querySelector('#rate-mode button.on').dataset.m;
+  let ratePct;
+  if(mode==='slab'){ const p=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)||0); ratePct=p.length?(Math.min(...p)+Math.max(...p))/2:0.3; }
+  else { const rs=[...document.querySelectorAll('#role-rates .role-rate')].map(i=>parseFloat(i.value)||0); ratePct=rs.length?rs.reduce((a,b)=>a+b,0)/rs.length:0.3; }
+  const AVG=52000, VOL={SP:120,AP:80,Caller:200,'City Lead':40,'Digital Manager':60,'Collection Partner':90,'Internal DB':40};
+  let next=0, now=0;
+  roles.forEach(r=>{ const v=VOL[r]||60; next+=ratePct/100*AVG*v; now+=roleCurrentRate(r)/100*AVG*v; });
+  const lakh=x=>'₹'+(x/100000).toFixed(1)+' lakh';
+  const d=next-now, sign=d>=0?'+ ':'− ';
+  setFact('cost-next', lakh(next));
+  setFact('cost-delta', sign+lakh(Math.abs(d))+' each period');
+  setFact('cost-delta2', sign+lakh(Math.abs(d)));
+}
+
 function ensureGate(){ if(!document.querySelector('#mods .modrow')) addMod('gate',true,true); }
 function addMod(kind,silent,auto){
   const wrap=document.getElementById('mods');
@@ -1326,6 +1417,7 @@ function checkDispute(){
 initSlabs();
 applyAutofill();
 updatePreview();
+renderRulesTable();
 </script>
 </body>
 </html>
