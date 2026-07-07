@@ -183,7 +183,14 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .create-grid .wizard{max-width:none;gap:16px}
 .fsection{transition:box-shadow .2s,border-color .2s}
 .fsection:focus-within{border-color:var(--indigo-line);box-shadow:0 0 0 3px var(--indigo-soft),var(--shadow-card)}
-.fsec-head{align-items:flex-start;padding:18px 20px 4px}
+.fsec-head{align-items:flex-start;padding:18px 20px 4px;cursor:pointer;user-select:none}
+.fsection.collapsed .fsec-body{display:none}
+.fsection.collapsed .fsec-head{padding-bottom:16px}
+.fsection.collapsed .fsec-head .hint{display:none}
+.fsec-sum{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--indigo-2);text-align:right;max-width:46%;display:none;padding-top:3px;line-height:1.35}
+.fsection.collapsed .fsec-sum{display:block}
+.fsec-chev{color:var(--muted-2);font-size:13px;padding-top:4px;margin-left:10px;transition:.15s}
+.fsection.collapsed .fsec-chev{transform:rotate(-90deg)}
 .fsec-tag{border-radius:50%;width:26px;height:26px;font-size:12px;flex:none;margin-top:1px}
 .fsec-head h4{font-size:16px}
 .fsec-body{padding-top:12px}
@@ -594,16 +601,16 @@ textarea{resize:vertical;min-height:88px}
     <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
     <section class="screen" id="a-form">
       <div class="breadcrumb"><b>Build a rule</b><span class="sep">›</span> Condition<span class="sep">›</span> Basis<span class="sep">›</span> Rate / slab<span class="sep">›</span> Modifiers<span class="sep">›</span> Schedule</div>
-      <div class="screen-head"><span class="id">Config · 2</span><div><h2>Build a rule — five slots</h2><div class="sub">A guided slot-builder, not a blank editor. Each slot picks only from facts the estate actually captures — the surface itself is the guardrail. Anything with a <span class="auto-tag" style="vertical-align:middle">pre-filled</span> tag came from the Incentive Structure defaults and can be changed.</div></div></div>
+      <div class="screen-head"><span class="id">Config · 2</span><div><h2>Build a rule — five slots</h2><div class="sub">Five blanks, one rule. Open a step to change it — the sentence on the right updates live. <span class="auto-tag" style="vertical-align:middle">pre-filled</span> values come from the Incentive Structure and can be changed.</div></div></div>
 
       <div class="create-grid">
       <div class="wizard">
         <!-- Config agent · D13 -->
         <div class="fsection" style="border-color:var(--indigo-line);background:linear-gradient(150deg,#f4f7ff,#fff)">
-          <div class="fsec-head"><span class="fsec-tag" style="background:var(--indigo)">✦</span><div><h4>Or just describe it <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the config agent — maker only, never the checker</span></h4><div class="hint">Type the incentive in plain words. The agent fills the five slots below — a human checker still approves before anything goes live.</div></div></div>
+          <div class="fsec-head"><span class="fsec-tag" style="background:var(--indigo)">✦</span><div><h4>Describe it in plain words <span style="color:var(--muted-2);font-weight:400;font-size:12px">· agent drafts, a human approves</span></h4><div class="hint">e.g. “flash 0.1% bonus for APs on takeover loans, same month”</div></div></div>
           <div class="fsec-body">
             <div style="display:flex;gap:10px">
-              <input type="text" id="agent-text" placeholder='e.g. "pay associate partners 0.25% on takeover loans, half next month" or "flash 0.1% bonus for SPs on fresh loans"' style="flex:1">
+              <input type="text" id="agent-text" placeholder="Type the incentive in one sentence…" style="flex:1">
               <button class="btn primary" style="flex:none" onclick="agentDraft()">Draft it</button>
             </div>
             <div class="note" id="agent-read" style="display:none;margin-top:10px"></div>
@@ -611,12 +618,12 @@ textarea{resize:vertical;min-height:88px}
         </div>
         <!-- Step 1 -->
         <div class="fsection done" id="secA">
-          <div class="fsec-head"><span class="fsec-tag">1</span><div><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Condition slot</span></h4><div class="hint">Pick the people, the loan type, and what they must do — e.g. a Sales Partner who finds the customer for a Fresh loan.</div></div></div>
+          <div class="fsec-head" onclick="accOpen('secA')"><span class="fsec-tag">1</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Condition</span></h4><div class="hint">The people, the loan type, and what they must do.</div></div><span class="fsec-sum" id="sum-A"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div class="field"><label>Rule name</label>
               <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35% ND" maxlength="60">
             </div>
-            <div class="field"><label>Who gets paid <span class="desc">— SP/AP/Caller/CP are paid per loan; City Lead &amp; Digital Manager are paid on their area or channel</span></label>
+            <div class="field"><label>Who gets paid</label>
               <div class="chipselect" id="f-actor">
                 <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner (SP)</button>
                 <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Associate Partner (AP)</button>
@@ -639,7 +646,7 @@ textarea{resize:vertical;min-height:88px}
                 <option value="additional">Additional</option>
               </select>
             </div>
-            <div class="field"><label>If they do this <span class="desc">— the action that earns the pay; it decides the category</span></label>
+            <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
               <select id="f-event" onchange="applyAutofill()">
                 <option value="self-source">Find the customer themselves → sourcing</option>
                 <option value="convincing">Convince the customer → convincing</option>
@@ -656,17 +663,17 @@ textarea{resize:vertical;min-height:88px}
               <div id="flash-inline" style="display:none;margin-top:12px">
                 <div class="field" style="margin:0"><label>Expiry <span class="auto-tag">flash</span></label><input type="date" id="flash-date" value="2026-07-31"></div>
               </div>
-              <div class="note"><span class="i">✦</span> A flash is a short-time extra bonus <b>on top of</b> normal pay. It switches itself off on the expiry date — no one has to remember to stop it.</div>
+              <div class="note"><span class="i">✦</span> Flash = short-time extra <b>on top of</b> normal pay. Switches itself off at expiry.</div>
             </div>
-            <div class="field"><label>Starts from <span class="desc">— if a monthly rate changes mid-month, the change waits for next month, so no one's running month is disturbed</span></label>
+            <div class="field"><label>Starts from <span class="desc">— mid-month changes wait for next month</span></label>
               <input type="date" id="f-start" value="2026-08-01">
             </div>
           </div>
         </div>
 
         <!-- Step 2 -->
-        <div class="fsection" id="secB">
-          <div class="fsec-head"><span class="fsec-tag">2</span><div><h4>On what amount <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Basis slot</span></h4><div class="hint">The amount the percentage is taken on — usually the loan amount. Only numbers the system actually records.</div></div></div>
+        <div class="fsection collapsed" id="secB">
+          <div class="fsec-head" onclick="accOpen('secB')"><span class="fsec-tag">2</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>On what amount <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Basis</span></h4><div class="hint">The amount the percentage is taken on.</div></div><span class="fsec-sum" id="sum-B"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div class="field autofilled" id="fw-basis"><label>Basis <span class="auto-tag" id="basis-auto">pre-filled</span></label>
               <select id="f-basis"><option>The loan amount (net disbursal)</option><option>New customers this month (A2NU %)</option><option>Company profit numbers (finance — later)</option></select>
@@ -676,8 +683,8 @@ textarea{resize:vertical;min-height:88px}
         </div>
 
         <!-- Step 3 -->
-        <div class="fsection" id="secC">
-          <div class="fsec-head"><span class="fsec-tag">3</span><div><h4>How much <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Rate / slab slot</span></h4><div class="hint">One fixed percentage — or a table where doing more lands you in a higher-paying row.</div></div></div>
+        <div class="fsection collapsed" id="secC">
+          <div class="fsec-head" onclick="accOpen('secC')"><span class="fsec-tag">3</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>How much <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Rate / slab</span></h4><div class="hint">A fixed % — or a slab table.</div></div><span class="fsec-sum" id="sum-C"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div class="seg" id="rate-mode">
               <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat rate</button>
@@ -697,25 +704,25 @@ textarea{resize:vertical;min-height:88px}
                 </table>
               </div>
               <button class="add-row" onclick="addSlab()" style="margin-top:10px">+ Add a slab row</button>
-              <div class="note"><span class="i">✦</span> The more they do, the higher the row they land in. Leave the last <b>Up to</b> empty to mean “and above”.</div>
+              <div class="note"><span class="i">✦</span> Leave the last <b>Up to</b> empty = “and above”.</div>
             </div>
           </div>
         </div>
 
         <!-- Step 4 -->
-        <div class="fsection" id="secD">
-          <div class="fsec-head"><span class="fsec-tag">4</span><div><h4>Extra conditions <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Modifiers slot (optional)</span></h4><div class="hint">A <b>gate</b> switches the rule on or off (e.g. at least 10 customers). A <b>scaler</b> pays more or less (e.g. half rate for low-value loans).</div></div></div>
+        <div class="fsection collapsed" id="secD">
+          <div class="fsec-head" onclick="accOpen('secD')"><span class="fsec-tag">4</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>Extra conditions <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Modifiers · optional</span></h4><div class="hint">Gates switch the rule on/off; scalers pay more or less.</div></div><span class="fsec-sum" id="sum-D"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div id="mods"></div>
             <div class="note empty" id="mods-empty">No extra conditions — everyone who matches gets the full rate.</div>
-            <button class="add-row" onclick="addMod('gate')" style="margin-top:10px">+ Add a gate <span style="color:var(--muted)">— a condition they must meet</span></button>
-            <button class="add-row" onclick="addMod('scaler')" style="margin-top:8px">+ Add a scaler <span style="color:var(--muted)">— pay more or less in some cases</span></button>
+            <button class="add-row" onclick="addMod('gate')" style="margin-top:10px">+ Add a gate — a condition they must meet</button>
+            <button class="add-row" onclick="addMod('scaler')" style="margin-top:8px">+ Add a scaler — pay more or less in some cases</button>
           </div>
         </div>
 
         <!-- Step 5 -->
-        <div class="fsection" id="secE">
-          <div class="fsec-head"><span class="fsec-tag">5</span><div><h4>When they get the money <span style="color:var(--muted-2);font-weight:400;font-size:12px">· the Schedule slot</span></h4><div class="hint">In how many parts, and when. The split and the take-back window are settings you control — not code.</div></div></div>
+        <div class="fsection collapsed" id="secE">
+          <div class="fsec-head" onclick="accOpen('secE')"><span class="fsec-tag">5</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>When they get the money <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Schedule</span></h4><div class="hint">In how many parts, and when.</div></div><span class="fsec-sum" id="sum-E"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
             <div class="field autofilled" id="fw-sched"><label>Release plan <span class="auto-tag" id="sched-auto">pre-filled</span></label>
               <select id="f-sched">
@@ -726,7 +733,7 @@ textarea{resize:vertical;min-height:88px}
                 <option>Every 3 months</option>
               </select>
             </div>
-            <div class="field"><label>Taking money back <span class="desc">— if the customer closes the loan very early, the pay (bonus included) is taken back</span></label>
+            <div class="field"><label>Taking money back <span class="desc">— if the loan closes very early</span></label>
               <select id="f-claw">
                 <option>Closed within 60 days → take back all of it</option>
                 <option>Closed within 60 days → take back part of it</option>
@@ -1277,6 +1284,24 @@ let toastT;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
 
 function unlock(){ ['secB','secC','secD','secE'].forEach(id=>document.getElementById(id).classList.remove('locked')); }
+function accOpen(id){
+  ['secA','secB','secC','secD','secE'].forEach(x=>{
+    const el=document.getElementById(x); if(!el) return;
+    if(x===id) el.classList.toggle('collapsed'); else el.classList.add('collapsed');
+  });
+}
+function updateSums(){
+  const roles=selectedActors().map(r=>ROLE_NAMES[r]);
+  const lo=document.querySelector('#f-loan option:checked');
+  const flash=document.querySelector('#f-ruletype button.on')?.dataset.rt==='flash';
+  const mods=document.querySelectorAll('#mods .modrow').length;
+  const set=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('sum-A',(roles.length>2?roles.length+' payee types':roles.join(', '))+' · '+(lo?lo.textContent.split(' (')[0]:'')+(flash?' · flash':''));
+  set('sum-B',document.getElementById('f-basis').value.split(' (')[0]);
+  set('sum-C',payShort());
+  set('sum-D',mods?mods+' added':'None');
+  set('sum-E',document.getElementById('f-sched').value);
+}
 function setRuleType(rt){
   document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
   document.getElementById('flash-inline').style.display = rt==='flash'?'block':'none';
@@ -1538,6 +1563,7 @@ function updatePreview(){
   setFact('pv-pay', payShort());
   setFact('pv-extra', mods? (mods+' modifier'+(mods>1?'s':'')) : 'None');
   setFact('pv-when', sched);
+  updateSums();
   runValidation();
 }
 
