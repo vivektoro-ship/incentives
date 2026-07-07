@@ -209,7 +209,24 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .rp-status.warn{color:#8a6400;background:#fbf6ee;border-color:#d98a0033}
 .rp-actions{display:flex;flex-direction:column;gap:9px}
 @media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
-.rp-facts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 26px;margin-top:14px;border-top:1px solid var(--line);padding-top:4px}
+.facts-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+.ftile{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.ftile .fl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2)}
+.ftile .fv{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:6px;line-height:1.35;overflow-wrap:break-word}
+.ftile.hero{background:var(--indigo-soft);border-color:var(--indigo-line)}
+.ftile.hero .fv{color:var(--indigo-2);font-size:15px}
+.fmeta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.fmeta .mchip{font-size:11.5px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 11px}
+.fmeta .mchip b{color:var(--ink);font-weight:700}
+.vh{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.vh .vh-t{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px}
+.vrow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--line)}
+.vrow:last-child{border-bottom:none}
+.vdot{width:8px;height:8px;border-radius:50%;background:var(--muted-2);flex:none}
+.vrow.live .vdot{background:var(--ok);box-shadow:0 0 0 3px #16880422}
+.vrow .vv{font-weight:800;font-family:var(--font-mono);font-size:12px;color:var(--ink)}
+.vrow .vd{color:var(--ink-2);flex:1;min-width:0}
+.vrow .vw{color:var(--muted);font-size:12px;white-space:nowrap}
 
 /* field-agent earnings — money buckets + question-mark help */
 .kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
@@ -790,7 +807,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The rule, in one sentence:</div>
           <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
-          <div class="rp-facts rp-facts-row" id="rv-facts"></div>
+          <div id="rv-facts"></div>
           <div id="rv-history" style="margin-top:14px"></div>
         </div>
         <div class="panel">
@@ -811,7 +828,7 @@ textarea{resize:vertical;min-height:88px}
             </div>
             <div class="sim-card">
               <h5>What it may cost next month</h5>
-              <div class="cap">a best guess from the work we expect</div>
+              <div class="cap">assumes next month’s volume looks like the last 3 months’ average — swap in the volume plan when finance shares one</div>
               <div class="bars">
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:38%"></div></div><div class="lbl">Week 1</div></div>
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:56%"></div></div><div class="lbl">Week 2</div></div>
@@ -819,7 +836,7 @@ textarea{resize:vertical;min-height:88px}
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Week 4</div></div>
               </div>
               <div class="legend-mini"><span><i style="background:var(--indigo)"></i> projected accrual</span></div>
-              <div class="delta-line"><span>Projected total next period</span><span class="val" style="color:var(--indigo-2)" id="cost-next">₹33.5 lakh</span></div>
+              <div class="delta-line"><span>Projected next month <span style="color:var(--muted-2);font-weight:400">· estimate, not a promise</span></span><span class="val" style="color:var(--indigo-2)" id="cost-next">₹33.5 lakh</span></div>
             </div>
           </div>
           <div class="note" style="margin-top:14px"><span class="i">≡</span> Per-actor and per-category impact attach to the staged version — no rule reaches a checker without a costed simulation beside it.</div>
@@ -863,7 +880,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
           <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, released <em>half next month + half the month after</em>.</div>
-          <div class="rp-facts rp-facts-row" id="ck-facts"></div>
+          <div id="ck-facts"></div>
         </div>
         <div class="panel">
           <h3>The cost check, attached <span class="readonly-flag" style="margin-left:8px">👁 view only</span></h3>
@@ -886,7 +903,7 @@ textarea{resize:vertical;min-height:88px}
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:72%"></div></div><div class="lbl">Wk 3</div></div>
                 <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Wk 4</div></div>
               </div>
-              <div class="delta-line"><span>Projected total</span><span class="val" style="color:var(--indigo-2)">₹33.5 lakh</span></div>
+              <div class="delta-line"><span>Projected next month</span><span class="val" style="color:var(--indigo-2)">₹33.5 lakh</span></div>
             </div>
           </div>
         </div>
@@ -1517,27 +1534,28 @@ function buildSummary(){
   // the same facts, on every rule view
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
   const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
-  const facts=[
-    ['Who gets paid', selectedActors().map(r=>ROLE_NAMES[r]).join(', ')],
-    ['Loan type', lo?lo.textContent.split(' (')[0]:'—'],
-    ['If they do', ev?ev.textContent.split(' → ')[0]:'—'],
-    ['Category', EVENT_CAT[event]||'—'],
-    ['Rule type', flash?'Flash · short-time bonus':'Normal'],
-    ['On what amount', document.getElementById('f-basis').value],
-    ['How much', payShort()],
-    ['Extra conditions', mods? mods+' added':'None'],
-    ['When paid', document.getElementById('f-sched').value],
-    ['Starts from', fmtDate(document.getElementById('f-start').value)]
+  const tiles=[
+    ['Who gets paid', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
+    ['If they do', (ev?ev.textContent.split(' → ')[0]:'—')+' · '+(lo?lo.textContent.split(' (')[0]:''), ''],
+    ['How much', payShort(), 'hero'],
+    ['On what amount', document.getElementById('f-basis').value.split(' (')[0], ''],
+    ['When paid', document.getElementById('f-sched').value, '']
   ];
-  const fhtml=facts.map(f=>'<div class="rp-fact"><span>'+f[0]+'</span><b>'+f[1]+'</b></div>').join('');
+  const fhtml='<div class="facts-tiles">'+tiles.map(t=>'<div class="ftile '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+'</div>'+
+    '<div class="fmeta">'+
+    '<span class="mchip">kind of pay · <b>'+(EVENT_CAT[event]||'—')+'</b></span>'+
+    '<span class="mchip">type · <b>'+(flash?'flash bonus':'normal')+'</b></span>'+
+    '<span class="mchip">extra conditions · <b>'+(mods?mods+' added':'none')+'</b></span>'+
+    '<span class="mchip">starts · <b>'+fmtDate(document.getElementById('f-start').value)+'</b></span>'+
+    '</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
   // version history (D9): this rule's category+payee over time — versioned publishes, never edits
   const hv=document.getElementById('rv-history');
   if(hv){
     const cat=EVENT_CAT[event], acts=selectedActors();
     const hist=RULES.filter(x=>x.cat===cat&&x.roles.some(r=>acts.includes(r))&&!x.flash).sort((a,b)=>(b.ver||'').localeCompare(a.ver||'v0',undefined,{numeric:true}));
-    hv.innerHTML = hist.length ? '<div class="p-sub" style="margin-bottom:8px"><b>Version history</b> — a change is a new version with its own effective date; old accruals keep the version they were computed under.</div>'+
-      hist.map(x=>'<div class="kv" style="border-bottom:1px solid var(--line)"><span class="k"><b class="mono">'+(x.ver||'v1')+'</b> · '+x.pay+'</span><span class="v" style="font-weight:500">'+(x.status==='working'?'<span class="pill live">live</span>':x.status==='staged'?'<span class="pill staged">staged</span>':'<span class="pill expired">replaced</span>')+' · effective '+(x.start?fmtDate(x.start):'—')+'</span></div>').join('') : '';
+    hv.innerHTML = hist.length ? '<div class="vh"><div class="vh-t">Version history — every loan keeps the version live on its own date</div>'+
+      hist.map(x=>'<div class="vrow '+(x.status==='working'?'live':'')+'"><span class="vdot"></span><span class="vv">'+(x.ver||'v1')+'</span><span class="vd">'+x.pay+'</span>'+(x.status==='working'?'<span class="pill live">live</span>':x.status==='staged'?'<span class="pill staged">waiting</span>':'<span class="pill expired">replaced</span>')+'<span class="vw">from '+(x.start?fmtDate(x.start):'—')+'</span></div>').join('')+'</div>' : '';
   }
 }
 
