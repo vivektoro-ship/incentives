@@ -88,6 +88,10 @@ a{color:inherit}
 .filter.on{background:var(--indigo-soft);border-color:var(--indigo);color:var(--indigo-2)}
 
 #a-list .console{max-width:1220px}
+.atabs{display:flex;gap:8px;margin:0 0 16px}
+.atab{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted-2);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.12s}
+.atab:hover{border-color:var(--indigo-line);color:var(--indigo-2)}
+.atab.on{background:var(--indigo);border-color:var(--indigo);color:#fff}
 .rule-table{width:100%;min-width:1060px;border-collapse:collapse;table-layout:fixed}
 .rule-table th:nth-child(1){width:20%}
 .rule-table th:nth-child(2){width:11%}
@@ -638,14 +642,17 @@ textarea{resize:vertical;min-height:88px}
     <div class="grp">Start here</div>
     <button class="navitem" data-goto="home"><span class="no">•</span> How it works</button>
 
-    <div class="grp">Admin</div>
-    <button class="navitem" data-goto="a-list"><span class="no">1</span> All incentives</button>
-    <button class="navitem" data-goto="a-form"><span class="no">2</span> Create an incentive</button>
-    <button class="navitem" data-goto="a-review"><span class="no">3</span> Check the cost</button>
-    <button class="navitem" data-goto="a-staged"><span class="no">4</span> Sent for approval</button>
-    <button class="navitem" data-goto="a-checker"><span class="no">5</span> Approve it</button>
-    <button class="navitem" data-goto="a-published"><span class="no">6</span> It goes live</button>
-    <button class="navitem" data-goto="a-disputes"><span class="no">7</span> Answer complaints</button>
+    <div class="grp">Admin · Incentives</div>
+    <button class="navitem" data-goto="a-list"><span class="no">1</span> Incentives</button>
+    <button class="navitem" data-goto="a-disputes"><span class="no">2</span> Issues reported</button>
+    <button class="navitem" data-goto="a-earners"><span class="no">3</span> Getting incentives</button>
+
+    <div class="grp">Admin · Creating one</div>
+    <button class="navitem" data-goto="a-form"><span class="no">1</span> Create an incentive</button>
+    <button class="navitem" data-goto="a-review"><span class="no">2</span> Check the cost</button>
+    <button class="navitem" data-goto="a-staged"><span class="no">3</span> Sent for approval</button>
+    <button class="navitem" data-goto="a-checker"><span class="no">4</span> Approve it</button>
+    <button class="navitem" data-goto="a-published"><span class="no">5</span> It goes live</button>
 
     <div class="grp">Partner</div>
     <button class="navitem" data-goto="b-home"><span class="no">1</span> My incentives</button>
@@ -693,7 +700,8 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 1 · ALL RULES ===== -->
     <section class="screen" id="a-list">
-      <div class="screen-head"><span class="id">Office · 1</span><div><h2>All incentives</h2><div class="sub">One incentive = one simple sentence. Kinds of pay add up on a loan; within a kind, the highest priority wins — flash adds on top.</div></div></div>
+      <div class="screen-head"><span class="id">Incentives · 1</span><div><h2>Incentives</h2><div class="sub">One incentive = one simple sentence. Kinds of pay add up on a loan; within a kind, the highest priority wins — flash adds on top.</div></div></div>
+      <div class="atabs"><button class="atab on" data-goto="a-list">Incentives</button><button class="atab" data-goto="a-disputes">Issues reported</button><button class="atab" data-goto="a-earners">Getting incentives</button></div>
       <div class="console">
         <div class="panel">
           <div class="toolbar">
@@ -742,7 +750,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
     <section class="screen" id="a-form">
-      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive</h2><div class="sub">Fill the fields — nothing is paid until it's approved.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 1</span><div><h2>Create an incentive</h2><div class="sub">Fill the fields — nothing is paid until it's approved.</div></div></div>
 
       <div class="create-grid">
       <div class="fstack">
@@ -924,7 +932,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
     <section class="screen" id="a-review">
-      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost</h2><div class="sub">A best guess before it goes anywhere. Nothing goes live from here.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 2</span><div><h2>Check the cost</h2><div class="sub">A best guess before it goes anywhere. Nothing goes live from here.</div></div></div>
       <div class="console" style="max-width:640px">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The incentive, in one sentence:</div>
@@ -954,7 +962,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 4 · SENT FOR APPROVAL ===== -->
     <section class="screen" id="a-staged">
-      <div class="screen-head"><span class="id">Office · 4</span><div><h2>Sent for approval</h2><div class="sub">One person drafts, another approves. Nothing is paid until then.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 3</span><div><h2>Sent for approval</h2><div class="sub">One person drafts, another approves. Nothing is paid until then.</div></div></div>
       <div class="console">
         <div class="confirm">
           <div class="seal stage">◔</div>
@@ -978,7 +986,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 5 · APPROVE A RULE ===== -->
     <section class="screen" id="a-checker">
-      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve or reject</h2><div class="sub">Approve → it goes live. Reject → needs a reason, on the record.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 4</span><div><h2>Approve or reject</h2><div class="sub">Approve → it goes live. Reject → needs a reason, on the record.</div></div></div>
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
@@ -1007,7 +1015,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 6 · LIVE ===== -->
     <section class="screen" id="a-published">
-      <div class="screen-head"><span class="id">Office · 6</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date. Every loan keeps the rate that was live on its own date.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 5</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date. Every loan keeps the rate that was live on its own date.</div></div></div>
       <div class="console">
         <div class="confirm">
           <div class="seal ok">✓</div>
@@ -1026,7 +1034,8 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== CONFIG 7 · RESOLVE DISPUTES ===== -->
     <section class="screen" id="a-disputes">
-      <div class="screen-head"><span class="id">Office · 7</span><div><h2>Answer complaints</h2><div class="sub">Accepted → fix added to next month. Not accepted → reason on the record.</div></div></div>
+      <div class="screen-head"><span class="id">Incentives · 2</span><div><h2>Issues reported</h2><div class="sub">Accepted → fix added to next month. Not accepted → reason on the record.</div></div></div>
+      <div class="atabs"><button class="atab" data-goto="a-list">Incentives</button><button class="atab on" data-goto="a-disputes">Issues reported</button><button class="atab" data-goto="a-earners">Getting incentives</button></div>
       <div class="console">
         <div class="panel">
           <div class="toolbar" style="margin-bottom:8px">
@@ -1046,6 +1055,40 @@ textarea{resize:vertical;min-height:88px}
       </div>
     </section>
 
+    <!-- ===== OFFICE · GETTING INCENTIVES ===== -->
+    <section class="screen" id="a-earners">
+      <div class="screen-head"><span class="id">Incentives · 3</span><div><h2>Getting incentives</h2><div class="sub">Everyone earning right now — what has built up this month, what is pending, what has been paid.</div></div></div>
+      <div class="atabs"><button class="atab" data-goto="a-list">Incentives</button><button class="atab" data-goto="a-disputes">Issues reported</button><button class="atab on" data-goto="a-earners">Getting incentives</button></div>
+      <div class="console">
+        <div class="panel">
+          <div class="toolbar">
+            <div class="filters">
+              <select class="fsel" onchange="toast('Filters the list by role')"><option>Role · all</option><option>Sales Partner</option><option>Appraisal Partner</option><option>Caller</option><option>Collection Partner</option></select>
+              <select class="fsel" onchange="toast('Filters the list by city')"><option>City · all</option><option>Chennai</option><option>Madurai</option><option>Coimbatore</option><option>Trichy</option><option>Salem</option></select>
+              <select class="fsel" onchange="toast('Filters by a single incentive')"><option>Incentive · all</option><option>Fresh loan sourcing</option><option>New customers · slab</option><option>Convincing customers</option><option>A2NU push</option></select>
+            </div>
+          </div>
+          <table class="rule-table">
+            <thead><tr>
+              <th style="width:17%">Person</th><th style="width:21%">Role · city</th><th style="width:23%">On incentives</th>
+              <th style="width:13%">This month</th><th style="width:13%">Pending</th><th style="width:13%">Paid this month</th>
+            </tr></thead>
+            <tbody>
+              <tr class="rule-row" data-goto="b-home"><td class="rule-name">Ravi Krishnan</td><td>Sales Partner · Chennai</td><td style="color:var(--muted-2)">Fresh loan sourcing · New customers</td><td><b>₹42,300</b></td><td>₹32,075</td><td style="color:var(--ok);font-weight:700">₹29,450</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Suresh M</td><td>Sales Partner · Madurai</td><td style="color:var(--muted-2)">Fresh loan sourcing · New customers</td><td><b>₹31,850</b></td><td>₹22,100</td><td style="color:var(--ok);font-weight:700">₹19,900</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Priya V</td><td>Sales Partner · Coimbatore</td><td style="color:var(--muted-2)">Fresh loan sourcing</td><td><b>₹24,600</b></td><td>₹18,400</td><td style="color:var(--ok);font-weight:700">₹12,750</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Deepa L</td><td>Caller · Chennai</td><td style="color:var(--muted-2)">A2NU push</td><td><b>₹16,700</b></td><td>₹12,100</td><td style="color:var(--ok);font-weight:700">₹10,400</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Arun D</td><td>Sales Partner · Chennai</td><td style="color:var(--muted-2)">Fresh loan sourcing</td><td><b>₹14,900</b></td><td>₹9,800</td><td style="color:var(--ok);font-weight:700">₹8,300</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Vignesh P</td><td>Caller · Madurai</td><td style="color:var(--muted-2)">A2NU push</td><td><b>₹13,900</b></td><td>₹10,300</td><td style="color:var(--ok);font-weight:700">₹9,000</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Kavitha R</td><td>Appraisal Partner · Trichy</td><td style="color:var(--muted-2)">Convincing customers</td><td><b>₹11,400</b></td><td>₹8,100</td><td style="color:var(--ok);font-weight:700">₹7,200</td></tr>
+              <tr class="rule-row" onclick="toast('Opens their earnings — same view Ravi has')"><td class="rule-name">Manoj S</td><td>Appraisal Partner · Salem</td><td style="color:var(--muted-2)">Convincing customers</td><td><b>₹9,100</b></td><td>₹6,400</td><td style="color:var(--ok);font-weight:700">₹5,600</td></tr>
+            </tbody>
+          </table>
+          <div class="p-sub" style="margin-top:12px">8 people earning · <b>₹1,64,750</b> building up this month · updates the moment a loan books</div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= FIELD APP ================= -->
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
@@ -1058,7 +1101,6 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-headrow" style="margin-top:2px">
               <div style="flex:1"><div class="nm" style="font-size:18px">My incentives</div></div>
               <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')">July ▾</button>
-              <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
             </div>
             <div class="px-hero">
               <div class="hl">Earned this month</div>
