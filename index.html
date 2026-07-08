@@ -86,9 +86,17 @@ a{color:inherit}
 .filter b{color:var(--muted);font-weight:400}
 .filter.on{background:var(--indigo-soft);border-color:var(--indigo);color:var(--indigo-2)}
 
-.rule-table{width:100%;border-collapse:collapse}
+#a-list .console{max-width:1220px}
+.rule-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.rule-table th:nth-child(1){width:22%}
+.rule-table th:nth-child(2){width:12%}
+.rule-table th:nth-child(3){width:14%}
+.rule-table th:nth-child(4){width:11%}
+.rule-table th:nth-child(5){width:22%}
+.rule-table th:nth-child(6){width:12%}
+.rule-table th:nth-child(7){width:7%}
 .rule-table th{text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:6px 12px;border-bottom:1px solid var(--line)}
-.rule-table td{padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle;white-space:nowrap}
+.rule-table td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #a-list .panel{overflow-x:auto}
 .rule-table tr:last-child td{border-bottom:none}
 .rule-row{cursor:pointer;transition:.12s}
@@ -1672,7 +1680,7 @@ function loadRule(o){
 
 /* ---- The rulebook: data-driven, category precedence, versioned publish, backtest ---- */
 const EVENT_CAT={'self-source':'sourcing','convincing':'convincing','funnel-a2nu':'funnel/A2NU','closure-bucket':'collection','net-conversion':'scope-bonus'};
-const STATUS_PILL={working:['live','live'],staged:['staged','waiting for approval'],draft:['draft','draft'],ended:['expired','replaced']};
+const STATUS_PILL={working:['live','live'],staged:['staged','waiting'],draft:['draft','draft'],ended:['expired','replaced']};
 let RULES=[
   {id:'RUL-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v7',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan · half for Low-LTV',mode:'flat',rate:0.35,sched:'Half next month + half the month after'},
   {id:'RUL-AP-CNV',name:'AP convincing · all types',cat:'convincing',ver:'v4',roles:['AP'],loan:'fresh',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20,sched:'Half next month + half the month after'},
