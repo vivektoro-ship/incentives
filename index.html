@@ -88,13 +88,14 @@ a{color:inherit}
 .filter.on{background:var(--indigo-soft);border-color:var(--indigo);color:var(--indigo-2)}
 
 #a-list .console{max-width:1220px}
-.rule-table{width:100%;border-collapse:collapse;table-layout:fixed}
-.rule-table th:nth-child(1){width:23%}
-.rule-table th:nth-child(2){width:12%}
-.rule-table th:nth-child(3){width:15%}
-.rule-table th:nth-child(4){width:11%}
-.rule-table th:nth-child(5){width:25%}
-.rule-table th:nth-child(6){width:14%}
+.rule-table{width:100%;min-width:1060px;border-collapse:collapse;table-layout:fixed}
+.rule-table th:nth-child(1){width:20%}
+.rule-table th:nth-child(2){width:11%}
+.rule-table th:nth-child(3){width:12%}
+.rule-table th:nth-child(4){width:9%}
+.rule-table th:nth-child(5){width:12%}
+.rule-table th:nth-child(6){width:16%}
+.rule-table th:nth-child(7){width:20%}
 .rule-table th{text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:6px 12px;border-bottom:1px solid var(--line)}
 .rule-table td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #a-list .panel{overflow-x:auto}
@@ -729,11 +730,16 @@ textarea{resize:vertical;min-height:88px}
                 <option value="staged">Waiting</option>
                 <option value="ended">Inactive</option>
               </select>
+              <select class="fsel" id="flt-date" onchange="renderRulesTable()">
+                <option value="all">Effective · any date</option>
+                <option value="today">In effect today</option>
+                <option value="future">Starting later</option>
+              </select>
             </div>
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
           </div>
           <table class="rule-table">
-            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th></tr></thead>
+            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Priority</th><th>Effective</th><th>Pays</th><th>Status</th></tr></thead>
             <tbody id="rules-body"></tbody>
           </table>
         </div>
@@ -765,13 +771,25 @@ textarea{resize:vertical;min-height:88px}
             </select>
           </div>
           <div style="display:flex;gap:14px">
+            <div class="field" style="flex:1"><label>Kind <span class="tip" data-tip="Standard competes with other incentives of the same kind — the higher priority pays. Flash adds on top of whatever wins, and must have an end date.">?</span></label>
+              <div class="seg seg-sm" id="f-ruletype">
+                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Standard</button>
+                <button data-rt="flash" onclick="setRuleType('flash')">Flash — adds on top</button>
+              </div>
+            </div>
+            <div class="field" style="flex:1"><label>Priority <span class="tip" data-tip="Two live incentives of the same kind can match the same loan — both stay live, and on each loan the higher priority is the one that pays. Deterministic, never a guess.">?</span></label>
+              <input type="number" id="f-prio" value="100" min="1" step="10">
+            </div>
+          </div>
+          <div style="display:flex;gap:14px">
             <div class="field" style="flex:1"><label>Starts from</label>
               <input type="date" id="f-start" value="2026-08-01">
             </div>
-            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Leave empty for no end date. If set, the incentive switches off on this date.">?</span></label>
+            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Leave empty for no end date. A flash must have one — it switches off on this date.">?</span></label>
               <input type="date" id="flash-date">
             </div>
           </div>
+          <div id="monthly-note" style="display:none;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:-6px">Monthly-target incentive — it starts on the 1st of next month, so the month already running is never disturbed. Picking an earlier date is a deliberate override.</div>
         </div>
 
         <div class="fcard"><div class="fsect">What earns it</div>
@@ -784,12 +802,45 @@ textarea{resize:vertical;min-height:88px}
               <option value="net-conversion">Hit their city or channel numbers</option>
             </select>
           </div>
-          <div class="field"><label>Loan type</label>
-            <select id="f-loan">
-              <option value="fresh">Fresh</option>
-              <option value="continuation">Continuation</option>
-              <option value="takeover">Takeover</option>
-              <option value="attached">Attached</option>
+          <div style="display:flex;gap:14px">
+            <div class="field" style="flex:1"><label>Loan type</label>
+              <select id="f-loan">
+                <option value="fresh">Fresh</option>
+                <option value="continuation">Continuation</option>
+                <option value="takeover">Takeover</option>
+                <option value="attached">Attached</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1" id="f-subtype-wrap" hidden><label>Continuation type</label>
+              <select id="f-subtype">
+                <option value="any">Any continuation</option>
+                <option value="renewal">Renewal only</option>
+                <option value="topup">Top-up only</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px">
+            <div class="field" style="flex:1"><label>Product</label>
+              <select id="f-product">
+                <option value="any">GL + PL</option>
+                <option value="GL">Gold Loan (GL)</option>
+                <option value="PL">Personal Loan (PL)</option>
+              </select>
+            </div>
+            <div class="field" style="flex:1"><label>Customer <span class="tip" data-tip="&quot;Brand-new customer&quot; is a fact about the loan — it lives here as a condition, never as a kind of pay.">?</span></label>
+              <select id="f-cust">
+                <option value="any">New + existing</option>
+                <option value="new">Brand-new only</option>
+                <option value="existing">Existing only</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>LTV band <span class="tip" data-tip="Loan-to-value of the pledged gold. Pick a band to pay differently for low- or high-LTV loans.">?</span></label>
+            <select id="f-ltv">
+              <option value="any">Any LTV</option>
+              <option value="low">Low — 60% and below</option>
+              <option value="mid">Mid — 60 to 75%</option>
+              <option value="high">High — above 75%</option>
             </select>
           </div>
           <div class="field fld-block">
@@ -931,11 +982,11 @@ textarea{resize:vertical;min-height:88px}
             <span class="meta-chip"><b>maker</b> you</span>
             <span class="meta-chip"><b>checker</b> approver seat · assigned via access control</span>
             <span class="meta-chip"><b>effective</b> <span id="staged-starts">01 Aug 2026</span></span>
-            <span class="meta-chip"><b>incentive</b> <span id="staged-ruleno">RUL-2026-0714</span></span>
+            <span class="meta-chip"><b>incentive</b> <span id="staged-ruleno">INC-2026-0714</span></span>
           </div>
           <div class="actions">
             <button class="btn ghost-light" data-goto="a-form">Edit the draft</button>
-            <button class="btn primary" data-goto="a-list">Back to all rules</button>
+            <button class="btn primary" data-goto="a-list">Back to all incentives</button>
             <button class="btn ghost-light" data-goto="a-checker">See the approver's view →</button>
           </div>
         </div>
@@ -982,10 +1033,10 @@ textarea{resize:vertical;min-height:88px}
           <div class="meta-row">
             <span class="meta-chip"><b>status</b> live</span>
             <span class="meta-chip"><b>effective</b> <span id="live-starts">01 Aug 2026</span></span>
-            <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">RUL-2026-0714</span></span>
+            <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">INC-2026-0714</span></span>
           </div>
           <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Inactive, not deleted</b> — the old incentive stays on the record. Monthly-target changes wait for next month.</div>
-          <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
+          <div class="actions"><button class="btn primary" data-goto="a-list">Back to all incentives</button></div>
         </div>
       </div>
     </section>
@@ -1387,6 +1438,7 @@ function syncUnitSeg(){
   else if(v.includes('a2nu')||v.includes('conversions')) u='pct';
   if(u) document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));
 }
+let LAST_BASIS='';
 function basisChanged(){
   syncUnitSeg();
   const help=document.getElementById('basis-tip');
@@ -1394,6 +1446,13 @@ function basisChanged(){
   if(b.includes('count')){ if(help) help.dataset.tip='The partner gets a fixed ₹ amount for each one.'; }
   else if(b.includes('A2NU')||b.includes('conversions')){ if(help) help.dataset.tip='The monthly total decides which slab row applies.'; }
   else { if(help) help.dataset.tip="The partner gets a % of each loan's amount. The loan value comes from each real loan automatically — you never enter it here."; }
+  /* Monthly-target incentives default to next month — a mid-month change never disturbs
+     the month in flight; an earlier date stays possible as a deliberate override (Q5). */
+  const monthly=b.includes('count')||b.includes('A2NU')||b.includes('conversions');
+  const mn=document.getElementById('monthly-note'); if(mn) mn.style.display=monthly?'block':'none';
+  const wasMonthly=LAST_BASIS.includes('count')||LAST_BASIS.includes('A2NU')||LAST_BASIS.includes('conversions');
+  if(monthly&&!wasMonthly){ const st=document.getElementById('f-start'); if(st&&st.value<'2026-08-01') st.value='2026-08-01'; }
+  LAST_BASIS=b;
   refreshSlabs();
   updatePreview();
 }
@@ -1470,7 +1529,7 @@ function setUnitMode(u){
   if(u==='amt' && (v.includes('a2nu')||v.includes('conversions'))) bs.value='The loan amount';
   basisChanged();
 }
-function setRuleType(rt){}
+function setRuleType(rt){ if(document.querySelector('#f-ruletype')){document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));} updatePreview(); }
 function syncFroms(){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
   const isVal=document.getElementById('f-basis').value.startsWith('The loan amount');
@@ -1551,6 +1610,22 @@ function applyAutofill(){
 /* ---- plain-english summary for the simulate + checker screens ---- */
 const EVENT_TEXT={'self-source':'find the customer themselves for','convincing':'convince the customer on','funnel-a2nu':'bring new customers via','closure-bucket':'get repayment on','net-conversion':'hit their numbers on'};
 const LOAN_TEXT={'fresh':'a Fresh loan','takeover':'a Takeover loan','continuation':'a Continuation loan','attached':'an Attached loan'};
+/* the separate condition fields (Q2) rendered as plain words */
+function condParts(){
+  const parts=[];
+  if(document.getElementById('f-loan').value==='continuation'){
+    const st=document.getElementById('f-subtype').value;
+    if(st==='renewal') parts.push('renewals only'); else if(st==='topup') parts.push('top-ups only');
+  }
+  const pr=document.getElementById('f-product').value;
+  if(pr==='GL') parts.push('gold loans only'); else if(pr==='PL') parts.push('personal loans only');
+  const cu=document.getElementById('f-cust').value;
+  if(cu==='new') parts.push('brand-new customers only'); else if(cu==='existing') parts.push('existing customers only');
+  const lt=document.getElementById('f-ltv').value;
+  if(lt!=='any') parts.push(lt+' LTV');
+  return parts;
+}
+function condText(){ const p=condParts(); return p.length? ' ('+p.join(' · ')+')' : ''; }
 function roleList(plural){
   const names=selectedActors().map(a=> plural?ROLE_PLURAL[a]:ROLE_NAMES[a]);
   if(names.length<=1) return names[0]||'—';
@@ -1577,7 +1652,7 @@ function buildSummary(){
   const loan=document.getElementById('f-loan').value;
   const sched=document.getElementById('f-sched').value.toLowerCase();
   const mods=document.querySelectorAll('#mods .modrow').length;
-  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+cityText()+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
+  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+condText()+cityText()+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   // the same facts, on every rule view
   const flash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
@@ -1595,6 +1670,8 @@ function buildSummary(){
     ['Gets', gets, 'big'],
     ['Who', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
     ['Does what', (ev?ev.textContent:'—')+' · '+(lo?lo.textContent:'')+' loan', ''],
+    ['Conditions', condParts().join(' · ')||'None — any loan that matches', ''],
+    ['Priority', (document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash' ? 'flash — adds on top' : (document.getElementById('f-prio').value||100), ''],
     ['Given as', document.getElementById('f-sched').value, ''],
     ['Kind of pay', EVENT_CAT[event]||'—', ''],
     ['Extra conditions', mods? mods+' added':'None', ''],
@@ -1624,9 +1701,10 @@ function updatePreview(){
   const flash=document.querySelector('#f-ruletype button.on')?.dataset.rt==='flash';
   const sched=document.getElementById('f-sched').value;
   const mods=document.querySelectorAll('#mods .modrow').length;
+  const stw=document.getElementById('f-subtype-wrap'); if(stw) stw.hidden = loan!=='continuation';
   const sent=document.getElementById('preview-sentence');
   if(sent){
-    let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+cityText()+'</em>, pay <em>'+payText()+'</em>';
+    let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+condText()+cityText()+'</em>, pay <em>'+payText()+'</em>';
     if(mods) s+=', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>';
     s+=', given as <em>'+sched.toLowerCase()+'</em>';
     const endv=document.getElementById('flash-date').value;
@@ -1679,6 +1757,7 @@ function validate(){
   {
     const st=document.getElementById('f-start').value, en=document.getElementById('flash-date').value;
     const isFlash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
+    if(isFlash && !en) errs.push('A flash needs an end date');
     if(en && st && en<=st) errs.push('The end date must be after the start date');
   }
   return {errs:[...new Set(errs)], warns:[...new Set(warns)]};
@@ -1697,9 +1776,9 @@ function runValidation(){
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(iso){ if(!iso) return '—'; const p=iso.split('-'); if(p.length!==3) return iso; return p[2]+' '+MON[(+p[1])-1]+' '+p[0]; }
 function ruleNoFor(){
-  const nm=document.getElementById('f-name').value||'rule';
+  const nm=document.getElementById('f-name').value||'incentive';
   let h=0; for(const c of nm) h=(h*31+c.charCodeAt(0))%9000;
-  return 'RUL-2026-'+String(1000+h).slice(0,4);
+  return 'INC-2026-'+String(1000+h).slice(0,4);
 }
 function fillConfirmation(){
   const rn=ruleNoFor(), sd=fmtDate(document.getElementById('f-start').value);
@@ -1708,10 +1787,17 @@ function fillConfirmation(){
 }
 
 /* ---- Edit: load an existing rule into the form ---- */
+let EDIT_LIN=null;   // lineage of the incentive being revised — a publish supersedes only this
 function loadRule(o){
   resetForm();
+  EDIT_LIN=o.lin||o.id;
   document.getElementById('f-name').value=o.name||'';
   document.getElementById('f-role').value=(o.roles&&o.roles[0])||'SP';
+  document.getElementById('f-prio').value=o.prio||100;
+  document.getElementById('f-subtype').value=o.subtype||'any';
+  document.getElementById('f-product').value=o.product||'any';
+  document.getElementById('f-cust').value=o.cust||'any';
+  document.getElementById('f-ltv').value=o.ltv||'any';
   if(o.loan) document.getElementById('f-loan').value=o.loan;
   if(o.event) document.getElementById('f-event').value=o.event;
   if(o.start) document.getElementById('f-start').value=o.start;
@@ -1729,46 +1815,53 @@ function loadRule(o){
 const EVENT_CAT={'self-source':'sourcing','convincing':'convincing','funnel-a2nu':'funnel/A2NU','closure-bucket':'collection','net-conversion':'scope-bonus'};
 const STATUS_PILL={working:['live','live'],staged:['staged','waiting'],draft:['staged','waiting'],ended:['expired','inactive']};
 let RULES=[
-  {id:'RUL-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v7',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan · half for Low-LTV',mode:'flat',rate:0.35,sched:'Half next month + half the month after'},
-  {id:'RUL-AP-CNV',name:'AP convincing · all types',cat:'convincing',ver:'v4',roles:['AP'],loan:'fresh',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20,sched:'Half next month + half the month after'},
-  {id:'RUL-A2NU',name:'A2NU funnel slab · Caller',cat:'funnel/A2NU',ver:'v3',roles:['Caller'],loan:'fresh',event:'funnel-a2nu',status:'working',start:'2026-06-01',pay:'new-customer slab · min 10',mode:'slab',sched:'Same month'},
-  {id:'RUL-CP-CLS',name:'CP closure buckets',cat:'collection',ver:'v5',roles:['Collection Partner'],loan:'fresh',event:'closure-bucket',status:'working',start:'2026-04-01',pay:'by closure bucket',mode:'slab',sched:'When the loan closes'},
-  {id:'RUL-DM-NC',name:'Digital Manager · net-conversion slab',cat:'scope-bonus',ver:'v2',roles:['Digital Manager'],loan:'fresh',event:'net-conversion',status:'working',start:'2026-05-01',pay:'conversion slab · channel',mode:'slab',sched:'Full amount next month'},
-  {id:'RUL-CL-QTR',name:'City Lead quarterly · city scope',cat:'scope-bonus',ver:'v2',roles:['City Lead'],loan:'fresh',event:'net-conversion',status:'working',start:'2026-04-01',pay:'every 3 months · profit part later',mode:'flat',rate:0.10,sched:'Every 3 months'},
-  {id:'RUL-IDB',name:'Internal DB · GL-slab',cat:'sourcing',ver:'v6',roles:['Internal DB'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'slab table',mode:'slab',sched:'Full amount next month'},
-  {id:'RUL-BP',name:'Business Partner · month-1 + trail',cat:'sourcing',ver:'v1',roles:['Business Partner'],loan:'fresh',event:'self-source',status:'staged',start:'2026-08-01',pay:'0.50% month 1 · 0.10% months 2–6',mode:'flat',rate:0.50,sched:'Full amount next month'},
-  {id:'RUL-FLASH',name:'July fresh-loan push · SP · flash',cat:'sourcing',ver:'v1',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-07-01',pay:'+0.10% bonus on top',mode:'flat',rate:0.10,flash:true,end:'2026-07-31',sched:'Same month'},
-  {id:'RUL-SP-OLD',name:'SP self-source · Fresh',cat:'sourcing',ver:'v6',roles:['SP'],loan:'fresh',event:'self-source',status:'ended',start:'2026-04-01',pay:'0.30% of loan',mode:'flat',rate:0.30,sched:'Half next month + half the month after'}
+  {id:'INC-SP-SRC',lin:'LIN-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v7',prio:100,roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan · half for Low-LTV',mode:'flat',rate:0.35,sched:'Half next month + half the month after'},
+  {id:'INC-SP-MDU',lin:'LIN-SP-MDU',name:'SP self-source · Madurai push',cat:'sourcing',ver:'v1',prio:120,roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-07-01',pay:'0.40% of loan · Madurai',cities:['Madurai'],mode:'flat',rate:0.40,sched:'Half next month + half the month after'},
+  {id:'INC-AP-CNV',lin:'LIN-AP-CNV',name:'AP convincing · all types',cat:'convincing',ver:'v4',prio:100,roles:['AP'],loan:'fresh',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20,sched:'Half next month + half the month after'},
+  {id:'INC-A2NU',lin:'LIN-A2NU',name:'A2NU funnel slab · Caller',cat:'funnel/A2NU',ver:'v3',prio:100,roles:['Caller'],loan:'fresh',event:'funnel-a2nu',status:'working',start:'2026-06-01',pay:'new-customer slab · min 10',mode:'slab',sched:'Same month'},
+  {id:'INC-CP-CLS',lin:'LIN-CP-CLS',name:'CP closure buckets',cat:'collection',ver:'v5',prio:100,roles:['Collection Partner'],loan:'fresh',event:'closure-bucket',status:'working',start:'2026-04-01',pay:'by closure bucket',mode:'slab',sched:'When the loan closes'},
+  {id:'INC-DM-NC',lin:'LIN-DM-NC',name:'Digital Manager · net-conversion slab',cat:'scope-bonus',ver:'v2',prio:100,roles:['Digital Manager'],loan:'fresh',event:'net-conversion',status:'working',start:'2026-05-01',pay:'conversion slab · channel',mode:'slab',sched:'Full amount next month'},
+  {id:'INC-CL-QTR',lin:'LIN-CL-QTR',name:'City Lead quarterly · city scope',cat:'scope-bonus',ver:'v2',prio:100,roles:['City Lead'],loan:'fresh',event:'net-conversion',status:'working',start:'2026-04-01',pay:'every 3 months · profit part later',mode:'flat',rate:0.10,sched:'Every 3 months'},
+  {id:'INC-IDB',lin:'LIN-IDB',name:'Internal DB · GL-slab',cat:'sourcing',ver:'v6',prio:100,roles:['Internal DB'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'slab table',mode:'slab',sched:'Full amount next month'},
+  {id:'INC-BP',lin:'LIN-BP',name:'Business Partner · month-1 + trail',cat:'sourcing',ver:'v1',prio:100,roles:['Business Partner'],loan:'fresh',event:'self-source',status:'staged',start:'2026-08-01',pay:'0.50% month 1 · 0.10% months 2–6',mode:'flat',rate:0.50,sched:'Full amount next month'},
+  {id:'INC-FLASH',lin:'LIN-FLASH',name:'July fresh-loan push · SP · flash',cat:'sourcing',ver:'v1',prio:100,roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-07-01',pay:'+0.10% bonus on top',mode:'flat',rate:0.10,flash:true,end:'2026-07-31',sched:'Same month'},
+  {id:'INC-SP-OLD',lin:'LIN-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v6',prio:100,roles:['SP'],loan:'fresh',event:'self-source',status:'ended',start:'2026-04-01',pay:'0.30% of loan',mode:'flat',rate:0.30,sched:'Half next month + half the month after'}
 ];
 function rolesText(roles){ return roles.map(r=>ROLE_NAMES[r]||r).join(', '); }
+const DEMO_TODAY='2026-07-08';
 function renderRulesTable(){
   const who=(document.getElementById('flt-who')||{}).value||'all';
   const cat=(document.getElementById('flt-cat')||{}).value||'all';
   const st=(document.getElementById('flt-status')||{}).value||'all';
+  const dt=(document.getElementById('flt-date')||{}).value||'all';
   const body=document.getElementById('rules-body'); if(!body) return;
-  const rows=RULES.filter(r=>(who==='all'||r.roles.includes(who))&&(cat==='all'||r.cat===cat)&&(st==='all'||r.status===st));
+  const dtOk=r=> dt==='all' ? true : dt==='future' ? r.start>DEMO_TODAY : (r.start<=DEMO_TODAY && r.status==='working' && (!r.end||r.end>=DEMO_TODAY));
+  const rows=RULES.filter(r=>(who==='all'||r.roles.includes(who))&&(cat==='all'||r.cat===cat)&&(st==='all'||r.status===st)&&dtOk(r));
   body.innerHTML = rows.length ? rows.map(r=>{
     const sp=STATUS_PILL[r.status]||['draft',r.status];
     const flash=r.flash?' <span class="pill flash" style="margin-left:6px">flash · additive</span>':'';
+    const act = r.status==='working' ? ' <button class="row-edit" onclick="event.stopPropagation();openRule(\''+r.id+'\',this)">Propose new version</button>'
+              : (r.status==='staged'||r.status==='draft') ? ' <button class="row-edit" onclick="event.stopPropagation();openRule(\''+r.id+'\')">Edit draft</button>' : '';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
+      '<td class="mono">'+(r.flash?'additive':(r.prio||100))+'</td>'+
       '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
       '<td class="rate-sum">'+r.pay+'</td>'+
-      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td></tr>';
-  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
+      '<td style="white-space:nowrap"><span class="pill '+sp[0]+'">'+sp[1]+'</span>'+act+'</td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No incentives match these filters.</td></tr>';
 }
 const EARNERS={
-  'RUL-SP-SRC':[
+  'INC-SP-SRC':[
     {n:'Ravi Krishnan',c:'Chennai',paid:110100,pend:31900},
     {n:'Suresh M',c:'Madurai',paid:86400,pend:22100},
     {n:'Priya V',c:'Coimbatore',paid:64100,pend:18400},
     {n:'Arun D',c:'Chennai',paid:41200,pend:9800}
   ],
-  'RUL-AP-CNV':[
+  'INC-AP-CNV':[
     {n:'Kavitha R',c:'Trichy',paid:38200,pend:8100},
     {n:'Manoj S',c:'Salem',paid:29500,pend:6400}
   ],
-  'RUL-A2NU':[
+  'INC-A2NU':[
     {n:'Deepa L',c:'Chennai',paid:52300,pend:12100},
     {n:'Vignesh P',c:'Madurai',paid:44800,pend:10300}
   ]
@@ -1791,11 +1884,12 @@ function openRule(id,btn){
   loadRule(r);
   CUR_R=r;   // after loadRule — resetForm inside it clears CUR_R
   if(r.status==='draft'||r.status==='staged'){ show('a-form'); return; }
-  if(btn){ show('a-form'); toast('Copied into a draft — the change goes live from its own start date; the old one stays on record'); }
+  if(btn){ show('a-form'); toast('Copied into a draft — a new version with its own start date; the live one stays untouched and on record'); }
   else show('a-review');
 }
+/* A version number lives inside one lineage — the same incentive changing over time. */
 function nextVersion(r){
-  const prev=RULES.filter(x=>x.cat===r.cat&&x.event===r.event&&x.roles.some(role=>r.roles.includes(role))&&x.ver);
+  const prev=RULES.filter(x=>x.lin===r.lin&&x.ver);
   const top=Math.max(0,...prev.map(x=>parseInt((x.ver||'v0').slice(1))||0));
   return 'v'+(top+1);
 }
@@ -1804,12 +1898,18 @@ function currentRuleObj(){
   const mode=slabCount()>1?'slab':'flat';
   const flash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
   const firstRate=parseFloat(firstPay());
+  const id=ruleNoFor();
   return {
-    id:ruleNoFor(),
-    name:(document.getElementById('f-name').value.trim()||'Untitled rule'),
+    id, lin:EDIT_LIN||('LIN-'+id),
+    name:(document.getElementById('f-name').value.trim()||'Untitled incentive'),
     cat:EVENT_CAT[event]||'—',
+    prio:parseInt(document.getElementById('f-prio').value)||100,
     roles:selectedActors().slice(),
     loan:document.getElementById('f-loan').value, event, status:'working',
+    subtype:document.getElementById('f-subtype').value,
+    product:document.getElementById('f-product').value,
+    cust:document.getElementById('f-cust').value,
+    ltv:document.getElementById('f-ltv').value,
     start:document.getElementById('f-start').value,
     pay:payShort(), mode, rate:isNaN(firstRate)?null:firstRate,
     flash, end:flash?document.getElementById('flash-date').value:'',
@@ -1817,11 +1917,11 @@ function currentRuleObj(){
     sched:document.getElementById('f-sched').value
   };
 }
-/* Within a category exactly one rule wins by precedence — a new publish supersedes the old.
-   Flash is the declared additive exception: it stacks, so it never supersedes a base rule. */
+/* Only a new version of the SAME incentive (same lineage) retires its predecessor.
+   Overlapping incentives from other lineages both stay live — on each loan the engine
+   pays the higher declared priority; flash is the additive exception, stacking on top. */
 function supersede(r){
-  if(r.flash) return;
-  RULES.forEach(x=>{ if(!x.flash&&x.status==='working'&&x.cat===r.cat&&x.roles.some(role=>r.roles.includes(role))) x.status='ended'; });
+  RULES.forEach(x=>{ if(x.lin===r.lin&&x.id!==r.id&&x.status==='working') x.status='ended'; });
 }
 function publishRule(){
   const r=currentRuleObj();
@@ -1831,7 +1931,9 @@ function publishRule(){
   RULES.unshift(r);
   renderRulesTable();
   show('a-published');
-  if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
+  const overlap=RULES.find(x=>x.id!==r.id&&!x.flash&&!r.flash&&x.status==='working'&&x.lin!==r.lin&&x.cat===r.cat&&x.roles.some(role=>r.roles.includes(role)));
+  if(overlap) toast('Overlaps "'+overlap.name+'" — both stay live; on each loan the higher priority pays');
+  else if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
 }
 function roleCurrentRate(role){ const r=RULES.find(x=>!x.flash&&x.status==='working'&&x.roles.includes(role)&&typeof x.rate==='number'); return r?r.rate:0; }
 /* Backtest: canonical current-rulebook baseline by category (₹ lakh, from the spec's D14 illustration).
@@ -1902,10 +2004,16 @@ function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector
 
 function resetForm(){
   CUR_R=null;
+  EDIT_LIN=null;
   document.getElementById('f-name').value='';
   document.getElementById('f-start').value='2026-08-01';
   document.getElementById('f-role').value='SP';
+  document.getElementById('f-prio').value=100;
   document.getElementById('f-loan').value='fresh';
+  document.getElementById('f-subtype').value='any';
+  document.getElementById('f-product').value='any';
+  document.getElementById('f-cust').value='any';
+  document.getElementById('f-ltv').value='any';
   document.getElementById('f-event').value='self-source';
   document.getElementById('f-basis').selectedIndex=0;
   basisChanged();
