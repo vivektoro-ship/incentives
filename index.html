@@ -713,7 +713,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="fsection collapsed" id="secB">
           <div class="fsec-head" onclick="accOpen('secB')"><span class="fsec-tag">2</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>On what amount <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Basis</span></h4><div class="hint">The amount the percentage is taken on.</div></div><span class="fsec-sum" id="sum-B"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
-            <div class="field autofilled" id="fw-basis"><label>Basis <span class="auto-tag" id="basis-auto">pre-filled</span></label>
+            <div class="field" id="fw-basis"><label>Basis</label>
               <select id="f-basis">
                 <option>The loan amount (net disbursal)</option>
                 <option>Loan count — this month</option>
@@ -770,7 +770,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="fsection collapsed" id="secE">
           <div class="fsec-head" onclick="accOpen('secE')"><span class="fsec-tag">5</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>When they get the money <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Schedule</span></h4><div class="hint">In how many parts, and when.</div></div><span class="fsec-sum" id="sum-E"></span><span class="fsec-chev">▾</span></div></div>
           <div class="fsec-body">
-            <div class="field autofilled" id="fw-sched"><label>Release plan <span class="auto-tag" id="sched-auto">pre-filled</span></label>
+            <div class="field" id="fw-sched"><label>Release plan</label>
               <select id="f-sched">
                 <option>Half next month + half the month after</option>
                 <option>Full amount next month</option>
@@ -1440,7 +1440,7 @@ function updateActorHint(){
 }
 function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
-    '<span class="rin"><input type="number" class="role-rate" data-role="'+key+'" value="'+val+'" step="0.01" min="0" oninput="ratePreview()"><span class="pct">%</span></span></div>';
+    '<span class="rin"><input type="number" class="role-rate" data-role="'+key+'" value="'+val+'" placeholder="0.35" step="0.01" min="0" oninput="ratePreview()"><span class="pct">%</span></span></div>';
 }
 function renderRoleRates(){
   const roles=selectedActors();
@@ -1452,7 +1452,7 @@ function renderRoleRates(){
   let html='';
   if(roles.length<=1 || same.checked){
     if(roles.length===1){
-      const k=roles[0]; html=rateRow('Rate for '+ROLE_NAMES[k], k, rateStore[k]??ROLE_RATE[k]);
+      const k=roles[0]; html=rateRow('Rate for '+ROLE_NAMES[k], k, rateStore[k]??'');
     } else {
       // carry the first role's rate into the shared value instead of resetting to a default
       const shared = rateStore[roles[0]] ?? rateStore.ALL ?? ROLE_RATE[roles[0]] ?? 0.35;
@@ -1475,7 +1475,9 @@ function ratePreview(){
     return;
   }
   if(inputs.length===1){
-    const r=parseFloat(inputs[0].value||0), amt=Math.round(50000*r/100);
+    const r=parseFloat(inputs[0].value);
+    if(!(r>0)){ prev.innerHTML='Enter a rate to see an example.'; return; }
+    const amt=Math.round(50000*r/100);
     prev.innerHTML='On a ₹50,000 loan this pays <b>₹'+amt.toLocaleString('en-IN')+'</b> — locked the moment the loan is given.';
   } else {
     let html='<div style="margin-bottom:4px">On a ₹50,000 loan, each one earns:</div>';
@@ -1491,34 +1493,6 @@ function setAuto(fieldWrap, tagId, isAuto){
   document.getElementById(tagId).style.display = isAuto?'inline-block':'none';
 }
 function applyAutofill(){
-  const actors=selectedActors();
-  const event=document.getElementById('f-event').value;
-  const basis=document.getElementById('f-basis');
-  const sched=document.getElementById('f-sched');
-  let basisAuto=false, schedAuto=false, showFinanceNote=false, slab=false;
-
-  /* Defaults from the Oro Incentive Structure:
-     SP/AP self-source → 0.35%/0.20% ND, 50/50 schedule; A2NU → A2NU% slab + min-10 gate, same month;
-     CP → closure bucket; City Lead → quarterly (finance basis = fast-follow); Internal DB → GL-slab, 100% next month. */
-  if(event==='funnel-a2nu'){ basis.value='A2NU % — period aggregate'; basisAuto=true; slab=true; sched.value='Same month'; schedAuto=true; ensureGate(); }
-  else if(event==='closure-bucket'){ basis.value='The loan amount (net disbursal)'; basisAuto=true; slab=true; sched.value='When the loan closes'; schedAuto=true; }
-  else if(event==='net-conversion'){ basis.value='The loan amount (net disbursal)'; basisAuto=true; slab=true; sched.value=actors.includes('City Lead')?'Every 3 months':'Full amount next month'; schedAuto=true; if(actors.includes('City Lead')) showFinanceNote=true; }
-  else if(actors.includes('City Lead')){ basis.value='Net conversions — period aggregate'; basisAuto=true; showFinanceNote=true; sched.value='Every 3 months'; schedAuto=true; }
-  else if(actors.length && actors.every(a=>['SP','AP','Internal DB','Business Partner'].includes(a))){
-    basis.value='The loan amount (net disbursal)'; basisAuto=true;
-    sched.value=actors.includes('Internal DB')||actors.includes('Business Partner')?'Full amount next month':'Half next month + half the month after'; schedAuto=true;
-    if(actors.includes('Internal DB')) slab=true;
-  }
-
-  if(event!=='funnel-a2nu'){                       // drop any auto-added gate when it no longer applies
-    document.querySelectorAll('#mods .auto-mod').forEach(r=>r.remove());
-    if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex';
-  }
-
-  setAuto('fw-basis','basis-auto',basisAuto);
-  setAuto('fw-sched','sched-auto',schedAuto);
-  document.getElementById('basis-note').style.display = showFinanceNote?'flex':'none';
-  if(slab) setRateMode('slab'); else setRateMode('flat');
   updateActorHint();
   renderRoleRates();
   refreshSlabs();
