@@ -650,21 +650,17 @@ textarea{resize:vertical;min-height:88px}
     <div class="grp">Admin · Creating one</div>
     <button class="navitem" data-goto="a-form"><span class="no">1</span> Create an incentive</button>
     <button class="navitem" data-goto="a-review"><span class="no">2</span> Check the cost</button>
-    <button class="navitem" data-goto="a-staged"><span class="no">3</span> Sent for approval</button>
-    <button class="navitem" data-goto="a-checker"><span class="no">4</span> Approve it</button>
-    <button class="navitem" data-goto="a-published"><span class="no">5</span> It goes live</button>
+    <button class="navitem" data-goto="a-checker"><span class="no">3</span> Approve it</button>
 
     <div class="grp">Partner</div>
     <button class="navitem" data-goto="b-home"><span class="no">1</span> My incentives</button>
     <button class="navitem" data-goto="b-inc"><span class="no">1b</span> One incentive, opened</button>
     <button class="navitem" data-goto="b-rates"><span class="no">★</span> My rate card · live</button>
     <button class="navitem" data-goto="b-firm"><span class="no">2</span> One loan, locked</button>
-    <button class="navitem" data-goto="b-prov"><span class="no">3</span> This month</button>
-    <button class="navitem" data-goto="b-final"><span class="no">4</span> A closed month</button>
-    <button class="navitem" data-goto="b-explain"><span class="no">5</span> See the working</button>
-    <button class="navitem" data-goto="b-dispute"><span class="no">6</span> Report an issue</button>
-    <button class="navitem" data-goto="b-submitted"><span class="no">7</span> Issue reported</button>
-    <button class="navitem" data-goto="b-history"><span class="no">8</span> My issues</button>
+    <button class="navitem" data-goto="b-final"><span class="no">3</span> A closed month</button>
+    <button class="navitem" data-goto="b-explain"><span class="no">4</span> See the working</button>
+    <button class="navitem" data-goto="b-dispute"><span class="no">5</span> Report an issue</button>
+    <button class="navitem" data-goto="b-history"><span class="no">6</span> My issues</button>
     
   </nav>
 
@@ -955,38 +951,14 @@ textarea{resize:vertical;min-height:88px}
         <div class="sticky-foot">
           <button class="btn ghost" data-goto="a-form">← Back to the form</button>
           <div class="spacer"></div>
-          <button class="btn primary" data-goto="a-staged">Send for approval</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== OFFICE 4 · SENT FOR APPROVAL ===== -->
-    <section class="screen" id="a-staged">
-      <div class="screen-head"><span class="id">Create · 3</span><div><h2>Sent for approval</h2><div class="sub">One person drafts, another approves. Nothing is paid until then.</div></div></div>
-      <div class="console">
-        <div class="confirm">
-          <div class="seal stage">◔</div>
-          <h3>Waiting for approval — not yet live</h3>
-          <p>Saved with its cost check attached. You can still change it.</p>
-          <div class="meta-row">
-            <span class="meta-chip"><b>status</b> staged</span>
-            <span class="meta-chip"><b>maker</b> you</span>
-            <span class="meta-chip"><b>checker</b> approver seat</span>
-            <span class="meta-chip"><b>effective</b> <span id="staged-starts">01 Aug 2026</span></span>
-            <span class="meta-chip"><b>incentive</b> <span id="staged-ruleno">INC-2026-0714</span></span>
-          </div>
-          <div class="actions">
-            <button class="btn ghost-light" data-goto="a-form">Edit the draft</button>
-            <button class="btn primary" data-goto="a-list">Back to all incentives</button>
-            <button class="btn ghost-light" data-goto="a-checker">See the approver's view →</button>
-          </div>
+          <button class="btn primary" data-goto="a-checker">Send for approval</button>
         </div>
       </div>
     </section>
 
     <!-- ===== OFFICE 5 · APPROVE A RULE ===== -->
     <section class="screen" id="a-checker">
-      <div class="screen-head"><span class="id">Create · 4</span><div><h2>Approve or reject</h2><div class="sub">Approve → it goes live. Reject → needs a reason, on the record.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 3</span><div><h2>Approve or reject</h2><div class="sub">Approve → it goes live. Reject → needs a reason, on the record.</div></div></div>
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
@@ -1013,21 +985,24 @@ textarea{resize:vertical;min-height:88px}
       </div>
     </section>
 
-    <!-- ===== OFFICE 6 · LIVE ===== -->
+    <!-- ===== OFFICE · INCENTIVE DETAIL ===== -->
     <section class="screen" id="a-published">
-      <div class="screen-head"><span class="id">Create · 5</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date.</div></div></div>
-      <div class="console">
-        <div class="confirm">
-          <div class="seal ok">✓</div>
-          <h3>It's live</h3>
-          <p>Working from <span id="live-startdate">01 Aug 2026</span>. Earlier loans keep their old rate.</p>
-          <div class="meta-row">
-            <span class="meta-chip"><b>status</b> live</span>
-            <span class="meta-chip"><b>effective</b> <span id="live-starts">01 Aug 2026</span></span>
-            <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">INC-2026-0714</span></span>
-          </div>
-          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Inactive, not deleted</b> — the old incentive stays on the record. Monthly-target changes wait for next month.</div>
-          <div class="actions"><button class="btn primary" data-goto="a-list">Back to all incentives</button></div>
+      <div class="screen-head"><span class="id">Incentive</span><div><h2 id="detail-title">Incentive</h2><div class="sub">The full incentive — and whether it's paying out right now.</div></div></div>
+      <div class="console" style="max-width:640px">
+        <div class="panel">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px" id="detail-statusrow"></div>
+          <div class="summary-sentence" id="detail-sentence" style="font-size:16px"></div>
+          <div id="detail-facts"></div>
+        </div>
+        <div class="panel" id="detail-switch">
+          <h3 id="detail-switch-h">Active right now</h3>
+          <div class="p-sub" id="detail-switch-sub"></div>
+          <div class="actions" style="margin-top:16px;justify-content:flex-start" id="detail-switch-actions"></div>
+        </div>
+        <div class="sticky-foot">
+          <button class="btn ghost" data-goto="a-list">← Back to all incentives</button>
+          <div class="spacer"></div>
+          <button class="btn ghost" id="detail-newver" style="display:none">Propose new version</button>
         </div>
       </div>
     </section>
@@ -1252,43 +1227,9 @@ textarea{resize:vertical;min-height:88px}
       </div></div>
     </section>
 
-    <!-- ===== APP 3 · THIS MONTH ===== -->
-    <section class="screen" id="b-prov">
-      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month</h2><div class="sub">Grows as Ravi works; locks when the month closes. Always shows the next level.</div></div></div>
-      <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="px-head">
-          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="px-topline">
-            <button class="px-back" data-goto="b-home">‹</button>
-            <div style="flex:1"><div class="px-id">July 2026</div><div class="px-sub">Still adding up</div></div>
-            <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
-          </div>
-        </div>
-        <div class="px-banner blue">● Grows as you work — locks when the month closes.</div>
-        <div class="px-body">
-          <div class="px-card">
-            <div class="px-label">Earned so far · July</div>
-            <hr class="px-div">
-            <div class="px-big"><span class="ru">₹</span>42,300</div>
-                        <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
-            <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
-          </div>
-          <div class="px-card">
-            <div class="px-label">Loans counted so far</div>
-            <hr class="px-div">
-            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000482 · you found the customer</div></div><div class="amt">₹1,750</div></div>
-            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000471 · found customer + July bonus</div></div><div class="amt">₹2,240</div></div>
-            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000455 · half rate (low value)</div></div><div class="amt">₹1,410</div></div>
-            <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000448 · you convinced the customer</div></div><div class="amt">₹980</div></div>
-            <div class="px-more">+ 37 more · your total is the sum of your lines</div>
-          </div>
-                  </div>
-      </div></div>
-    </section>
-
     <!-- ===== APP 4 · PAST MONTH ===== -->
     <section class="screen" id="b-final">
-      <div class="screen-head"><span class="id">App · 4</span><div><h2>A closed month</h2><div class="sub">A closed month never changes. Fixes go to next month — always shown.</div></div></div>
+      <div class="screen-head"><span class="id">App · 3</span><div><h2>A closed month</h2><div class="sub">A closed month never changes. Fixes go to next month — always shown.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1320,7 +1261,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
     <section class="screen" id="b-explain">
-      <div class="screen-head"><span class="id">App · 5</span><div><h2>See the working</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
+      <div class="screen-head"><span class="id">App · 4</span><div><h2>See the working</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1348,7 +1289,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 6 · REPORT A PROBLEM ===== -->
     <section class="screen" id="b-dispute">
-      <div class="screen-head"><span class="id">App · 6</span><div><h2>Report an issue</h2><div class="sub">Goes on the record. Nothing changes until someone checks it.</div></div></div>
+      <div class="screen-head"><span class="id">App · 5</span><div><h2>Report an issue</h2><div class="sub">Goes on the record. Nothing changes until someone checks it.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1375,42 +1316,16 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
         <div class="px-foot">
-          <button class="px-cta" id="submit-dispute" data-goto="b-submitted" disabled>Report issue</button>
+          <button class="px-cta" id="submit-dispute" data-goto="b-history" onclick="if(!this.disabled)toast(&quot;Issue reported — an answer comes with the reason&quot;)" disabled>Report issue</button>
           <button class="px-cta2" data-goto="b-explain">Cancel</button>
         </div>
       </div></div>
     </section>
 
-    <!-- ===== APP 7 · PROBLEM REPORTED ===== -->
-    <section class="screen" id="b-submitted">
-      <div class="screen-head"><span class="id">App · 7</span><div><h2>Your issue is on record</h2><div class="sub">If accepted, the fix is added to next month.</div></div></div>
-      <div class="phone"><div class="notch"></div><div class="screenview">
-        <div class="px-head">
-          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-          <div class="px-topline"><div style="flex:1"><div class="px-id">Reported</div><div class="px-sub">DSP-2026-0338</div></div></div>
-        </div>
-                <div class="px-body">
-          <div class="px-center">
-            <div class="px-seal">✓</div>
-            <h4>Reported</h4>
-            <div class="px-note12">Nothing changes until someone checks it. The answer comes with a reason.</div>
-          </div>
-          <div class="px-card">
-            <div class="px-kv"><span class="k">Issue no.</span><span class="v">DSP-2026-0338</span></div>
-            <div class="px-kv"><span class="k">About loan</span><span class="v">OML000448</span></div>
-            <div class="px-kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
-          </div>
-        </div>
-        <div class="px-foot">
-          <button class="px-cta" data-goto="b-history">See my issues</button>
-          <button class="px-cta2" data-goto="b-home">Back to my earnings</button>
-        </div>
-      </div></div>
-    </section>
 
     <!-- ===== APP 8 · MY REPORTS ===== -->
     <section class="screen" id="b-history">
-      <div class="screen-head"><span class="id">App · 8</span><div><h2>My issues</h2><div class="sub">Every issue gets an answer — with the reason.</div></div></div>
+      <div class="screen-head"><span class="id">App · 6</span><div><h2>My issues</h2><div class="sub">Every issue gets an answer — with the reason.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1447,7 +1362,7 @@ function show(id){
   const tab = id==='home'?'home':(id.startsWith('a-')?'a-list':'b-home');
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
-  if(id==='a-staged'||id==='a-published') fillConfirmation();
+  if(id==='a-published' && !DETAIL_R){ const r=RULES.find(x=>x.status==='working'); if(r){ renderDetail(r); } }
   if(id==='b-rates') renderRateCard();
   if(id==='b-inc') renderIncDetail();
   if(id==='a-disputes') renderDisputes();
@@ -1459,7 +1374,7 @@ document.addEventListener('click',e=>{
   const incEl=e.target.closest('[data-inc]');
   if(incEl && !e.target.closest('[data-goto]')){ openInc(incEl.dataset.inc); return; }
   const openEl = e.target.closest('[data-open]');
-  if(openEl){ e.stopPropagation(); openRule(openEl.dataset.open, openEl.tagName==='BUTTON'); return; }
+  if(openEl){ e.stopPropagation(); openDetail(openEl.dataset.open); return; }
   const ruleBtn = e.target.closest('[data-rule]');
   if(ruleBtn){ e.stopPropagation(); try{ loadRule(JSON.parse(ruleBtn.dataset.rule)); }catch(_){}; show('a-form'); return; }
   const stop = e.target.closest('[data-stop]');
@@ -1664,6 +1579,7 @@ function applyAutofill(){
 
 /* ---- plain-english summary for the simulate + checker screens ---- */
 const EVENT_TEXT={'self-source':'find the customer themselves for','convincing':'convince the customer on','funnel-a2nu':'bring new customers via','closure-bucket':'get repayment on','net-conversion':'hit their numbers on'};
+const EVENT_LABELS={'self-source':'Find the customer themselves','convincing':'Convince the customer','funnel-a2nu':'Bring new customers','closure-bucket':'Get repayment','net-conversion':'Hit their numbers'};
 const LOAN_TEXT={'fresh':'a Fresh loan','takeover':'a Takeover loan','continuation':'a Continuation loan','attached':'an Attached loan'};
 /* the separate condition fields (Q2) rendered as plain words */
 function condParts(){
@@ -1983,10 +1899,61 @@ function publishRule(){
   RULES=RULES.filter(x=>x.id!==r.id);
   RULES.unshift(r);
   renderRulesTable();
+  renderDetail(r);
   show('a-published');
   const overlap=RULES.find(x=>x.id!==r.id&&!x.flash&&!r.flash&&x.status==='working'&&x.lin!==r.lin&&x.cat===r.cat&&x.roles.some(role=>r.roles.includes(role)));
   if(overlap) toast('Overlaps "'+overlap.name+'" — both stay live; on each loan the higher priority pays');
   else if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
+}
+/* ---- Incentive detail page: full view + make active / inactive ---- */
+let DETAIL_R=null;
+function openDetail(id){
+  const r=RULES.find(x=>x.id===id); if(!r) return;
+  if(r.status==='draft'||r.status==='staged'){ openRule(id); return; }  // a draft opens in the form to edit
+  renderDetail(r); show('a-published');
+}
+function renderDetail(r){
+  DETAIL_R=r;
+  const live=r.status==='working', inactive=r.status==='ended';
+  document.getElementById('detail-title').textContent=r.name||'Incentive';
+  const ev=EVENT_TEXT[r.event]||'work on', lo=LOAN_TEXT[r.loan]||'a loan';
+  document.getElementById('detail-sentence').innerHTML='For <em>'+rolesText(r.roles)+'</em>, when they <em>'+ev+' '+lo+'</em>, pay <em>'+r.pay+'</em>, given as <em>'+(r.sched||'—').toLowerCase()+'</em>.';
+  // status row
+  const pill=live?'<span class="pill live">live</span>':inactive?'<span class="pill expired">inactive</span>':'<span class="pill staged">waiting</span>';
+  const flashTag=r.flash?'<span class="pill flash">flash · additive</span>':'';
+  document.getElementById('detail-statusrow').innerHTML=pill+flashTag;
+  // facts
+  const rows=[
+    ['Who', rolesText(r.roles)],
+    ['Does what', (EVENT_LABELS[r.event]||r.event||'—')+' · '+(r.loan?r.loan[0].toUpperCase()+r.loan.slice(1):'')+' loan'],
+    ['Pays', r.pay],
+    ['Given as', r.sched||'—'],
+    ['Kind of pay', r.cat||'—'],
+    ['Cities', (r.cities&&r.cities.length)?r.cities.join(', '):'All cities'],
+    ['Starts', fmtDate(r.start)]
+  ];
+  if(r.end) rows.push(['Ends', fmtDate(r.end)]);
+  document.getElementById('detail-facts').innerHTML='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
+  // active / inactive switch
+  const h=document.getElementById('detail-switch-h'), sub=document.getElementById('detail-switch-sub'), act=document.getElementById('detail-switch-actions');
+  if(live){
+    h.textContent='Active right now'; sub.textContent='Paying out on every matching loan, and on partners’ rate cards. Turn it off and it stops from today — it stays on the record.';
+    act.innerHTML='<button class="btn danger" onclick="setActive(false)">Make inactive</button>';
+  } else if(inactive){
+    h.textContent='Inactive'; sub.textContent='Not paying out. It stays on the record so past loans keep their history. Turn it back on to pay matching loans from today.';
+    act.innerHTML='<button class="btn primary" onclick="setActive(true)">Make active</button>';
+  } else {
+    h.textContent='Waiting for approval'; sub.textContent='Not live yet.'; act.innerHTML='';
+  }
+  const nv=document.getElementById('detail-newver');
+  nv.style.display=live?'inline-flex':'none';
+  nv.onclick=()=>openRule(r.id,true);
+}
+function setActive(on){
+  if(!DETAIL_R) return;
+  if(on){ DETAIL_R.status='working'; supersede(DETAIL_R); toast('Now active — back on partners’ rate cards, paying matching loans from today'); }
+  else { DETAIL_R.status='ended'; toast('Made inactive — stays on the record, off partners’ rate cards from now'); }
+  renderRulesTable(); renderDetail(DETAIL_R);
 }
 function roleCurrentRate(role){ const r=RULES.find(x=>!x.flash&&x.status==='working'&&x.roles.includes(role)&&typeof x.rate==='number'); return r?r.rate:0; }
 /* Backtest: canonical current-rulebook baseline by category (₹ lakh, from the spec's D14 illustration).
