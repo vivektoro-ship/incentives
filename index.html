@@ -722,7 +722,8 @@ textarea{resize:vertical;min-height:88px}
 
       <div class="create-grid">
       <div class="fstack">
-<div class="fcard"><div class="fsect">Who</div>
+
+        <div class="fcard"><div class="fsect">Who</div>
           <div class="field"><label>Incentive name</label>
             <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
           </div>
@@ -739,8 +740,9 @@ textarea{resize:vertical;min-height:88px}
               <option value="TPF">TPF</option>
             </select>
           </div>
-          </div>
-<div class="fcard"><div class="fsect">What earns it</div>
+        </div>
+
+        <div class="fcard"><div class="fsect">What earns it</div>
           <div class="field"><label>If they do this</label>
             <select id="f-event">
               <option value="self-source">Find the customer themselves</option>
@@ -773,8 +775,9 @@ textarea{resize:vertical;min-height:88px}
               </div>
             </div>
           </div>
-          </div>
-<div class="fcard"><div class="fsect">The pay</div>
+        </div>
+
+        <div class="fcard"><div class="fsect">The pay</div>
           <div class="field"><label>Pay is calculated on <span class="tip" id="basis-tip" data-tip="The partner gets a % of each loan amount.">?</span></label>
             <select id="f-basis" onchange="basisChanged()">
               <option>The loan amount</option>
@@ -796,8 +799,6 @@ textarea{resize:vertical;min-height:88px}
             <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
             <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab — higher level, higher rate</button>
           </div>
-            <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
-          </div>
           <div class="field"><label>Paid out as <span class="tip" data-tip="In how many parts the money reaches them.">?</span></label>
             <select id="f-sched">
               <option>Half next month + half the month after</option>
@@ -815,16 +816,18 @@ textarea{resize:vertical;min-height:88px}
               <option>Never</option>
             </select>
           </div>
-          </div>
-<div class="fcard"><div class="fsect">When</div>
+        </div>
+
+        <div class="fcard"><div class="fsect">When</div>
           <div class="field"><label>Starts from</label>
             <input type="date" id="f-start" value="2026-08-01">
           </div>
           <div class="field"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
             <input type="date" id="flash-date">
           </div>
-          </div>
-<div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
+        </div>
+
+        <div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
           <div class="field">
             <div id="mods"></div>
             <div class="note empty" id="mods-empty" style="margin-top:0">None — everyone who matches gets the full incentive.</div>
@@ -834,8 +837,8 @@ textarea{resize:vertical;min-height:88px}
                 <div class="mm-t">Gates — they must meet this</div>
                 <button type="button" class="mm-i" onclick="addModPick('gate','At least 10 new customers in the month')">At least 10 new customers in the month</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','At least 5 loans in the month')">At least 5 loans in the month</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','More than 90% of the month\'s customers are new')">More than 90% of the month's customers are new</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member\'s name')">Fraud check — loan not in a family member's name</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','More than 90% of the month&#39;s customers are new')">More than 90% of the month's customers are new</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member&#39;s name')">Fraud check — loan not in a family member's name</button>
                 <button type="button" class="mm-i" style="color:var(--indigo-2)" onclick="addModPick('gate','')">＋ Write your own gate…</button>
                 <div class="mm-t">Scalers — pay more or less</div>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Pay by loan value band — full / 70% / half (LTV)')">Pay by loan value band — full / 70% / half (LTV)</button>
@@ -844,8 +847,10 @@ textarea{resize:vertical;min-height:88px}
               </div>
             </div>
           </div>
-          </div>
+        </div>
+
       </div>
+
       <aside class="rule-preview">
         <div class="rp-head"><span class="rp-dot"></span> Live preview</div>
         <div class="rp-sentence" id="preview-sentence" style="font-size:14px"></div>
