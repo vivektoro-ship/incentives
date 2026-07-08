@@ -601,6 +601,24 @@ textarea{resize:vertical;min-height:88px}
 .px-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4C8DFF,#2563EB)}
 .px-caps{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#5B6472;margin-top:8px}
 .px-caps b{color:#0B1220;font-weight:800}
+/* gamification: level band + badges */
+.px-level{background:linear-gradient(135deg,#1D3A8A,#2563EB);color:#fff;box-shadow:0 10px 26px rgba(37,99,235,.32)}
+.px-level .px-track{background:rgba(255,255,255,.22);margin-top:14px}
+.px-level .px-fill{background:linear-gradient(90deg,#FFD68A,#FFB020)}
+.px-level .px-caps{color:rgba(255,255,255,.82)}
+.px-level .px-caps b{color:#fff}
+.lvl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.lvl-tag{font-size:10.5px;font-weight:800;letter-spacing:.12em;color:#FFD68A}
+.lvl-name{font-size:20px;font-weight:800;margin-top:2px;line-height:1.1}
+.lvl-rank{font-size:10.5px;font-weight:700;background:rgba(255,255,255,.16);border-radius:99px;padding:5px 10px;white-space:nowrap}
+.badge-row{display:flex;flex:none;align-items:stretch;gap:8px;overflow-x:auto;padding:2px 0 4px;-webkit-overflow-scrolling:touch}
+.badge{flex:none;width:88px;min-height:70px;box-sizing:border-box;border-radius:14px;padding:12px 8px;background:#fff;box-shadow:0 6px 18px rgba(13,26,64,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.badge .ic{font-size:22px;line-height:1}
+.badge .bl{font-size:9.5px;font-weight:700;color:#334155;line-height:1.25;text-align:center}
+.badge.earned .ic{filter:none}
+.badge.locked{background:#EEF1F4}
+.badge.locked .ic{filter:grayscale(1);opacity:.45}
+.badge.locked .bl{color:#8A94A6}
 .px-kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0F3F8;font-size:13px}
 .px-kv:last-child{border-bottom:none}
 .px-kv .k{color:#64748B;font-weight:600}
@@ -655,7 +673,6 @@ textarea{resize:vertical;min-height:88px}
     <div class="grp">Partner</div>
     <button class="navitem" data-goto="b-home"><span class="no">1</span> My incentives</button>
     <button class="navitem" data-goto="b-inc"><span class="no">1b</span> One incentive, opened</button>
-    <button class="navitem" data-goto="b-rates"><span class="no">★</span> My rate card · live</button>
     <button class="navitem" data-goto="b-firm"><span class="no">2</span> One loan, locked</button>
     <button class="navitem" data-goto="b-final"><span class="no">3</span> A closed month</button>
     <button class="navitem" data-goto="b-explain"><span class="no">4</span> See the working</button>
@@ -1075,6 +1092,11 @@ textarea{resize:vertical;min-height:88px}
           <div id="person-lines"></div>
           <div class="p-sub" style="margin-top:10px">Updates the moment a loan books · the total is the sum of these lines.</div>
         </div>
+        <div class="panel">
+          <h3>Month by month — closed &amp; paid</h3>
+          <table class="rule-table" style="min-width:0"><thead><tr><th style="width:34%">Month</th><th style="width:26%">Loans</th><th style="width:22%">Paid on</th><th style="width:18%">Total</th></tr></thead><tbody id="person-hist"></tbody></table>
+          <div class="p-sub" style="margin-top:10px">Each closed month is fixed — corrections show as their own line, never a silent change.</div>
+        </div>
         <div class="sticky-foot">
           <button class="btn ghost" data-goto="a-earners">← Back to everyone</button>
           <div class="spacer"></div>
@@ -1121,6 +1143,24 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
           <div class="px-body">
+            <div class="px-card px-level">
+              <div class="lvl-top">
+                <div><div class="lvl-tag">⚡ LEVEL 4</div><div class="lvl-name">Gold Sourcer</div></div>
+                <div class="lvl-rank">🏆 Top 3 · Chennai</div>
+              </div>
+              <div class="px-track"><div class="px-fill" style="width:60%"></div></div>
+              <div class="px-caps"><span><b>18</b> fresh loans this month</span><span>12 more → Level 5</span></div>
+            </div>
+
+            <div class="px-label" style="padding:2px 4px 0">Badges</div>
+            <div class="badge-row">
+              <div class="badge earned"><div class="ic">🔥</div><span class="bl">5-loan streak</span></div>
+              <div class="badge earned"><div class="ic">🏅</div><span class="bl">50 this quarter</span></div>
+              <div class="badge earned"><div class="ic">⚡</div><span class="bl">Level 4 reached</span></div>
+              <div class="badge locked"><div class="ic">🎁</div><span class="bl">3 more → ₹175</span></div>
+              <div class="badge locked"><div class="ic">👑</div><span class="bl">Level 5 rate</span></div>
+            </div>
+
             <div class="px-label" style="padding:2px 4px 0">Your incentives · July</div>
 
             <div class="px-card" style="cursor:pointer" data-inc="sourcing">
@@ -1129,7 +1169,7 @@ textarea{resize:vertical;min-height:88px}
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>28,400</div><span style="color:#94A3B8;font-size:18px">›</span></div>
               <div class="px-note12" style="margin-top:2px">18 loans · latest +₹1,750</div>
               <div class="px-track"><div class="px-fill" style="width:40%"></div></div>
-              <div class="px-caps"><span><b>2 of 5</b> fresh loans this month</span><span>₹175 unlocks at 5</span></div>
+              <div class="px-caps"><span><b>2 of 5</b> fresh loans this month</span><span>🎁 ₹175 at 5 fresh</span></div>
             </div>
 
             <div class="px-card" style="cursor:pointer" data-inc="funnel">
@@ -1138,7 +1178,7 @@ textarea{resize:vertical;min-height:88px}
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>4,125</div><span style="color:#94A3B8;font-size:18px">›</span></div>
               <div class="px-note12" style="margin-top:2px">41 customers · ₹125 each</div>
               <div class="px-track"><div class="px-fill" style="width:67%"></div></div>
-              <div class="px-caps"><span><b>41 done</b></span><span>next slab at 61 → ₹150 each</span></div>
+              <div class="px-caps"><span>Level 2 · <b>41 done</b></span><span>⬆ Level 3 at 61 · ₹150</span></div>
             </div>
 
             <div class="px-card" style="cursor:pointer" data-inc="convincing">
@@ -1146,12 +1186,6 @@ textarea{resize:vertical;min-height:88px}
               <hr class="px-div">
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>9,775</div><span style="color:#94A3B8;font-size:18px">›</span></div>
               <div class="px-note12" style="margin-top:2px">12 loans · latest +₹980</div>
-            </div>
-
-            <div class="px-card" onclick="toast('The take-back on OML000459 was bigger than what was left to pay you, so −₹240 carries forward and nets against your next earnings. It is never written off silently.')" style="cursor:pointer">
-              <div class="px-label">Carry-forward</div>
-              <hr class="px-div">
-              <div class="px-row"><div class="main"><div class="t">Balance to recover</div><div class="m">adjusts against your next payout</div><span class="px-chip red">carries forward</span></div><div class="amt red">−₹240</div></div>
             </div>
 
             <div class="px-card">
@@ -1171,27 +1205,6 @@ textarea{resize:vertical;min-height:88px}
 
         <div class="note-block" style="max-width:320px;margin-top:0">
           <b>Why this works.</b> Earlier this number came <b>~20 days</b> after month end, by hand. Now it lands the instant a loan books — and always shows how close the next level is.
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== APP 1b · MY RATE CARD ===== -->
-    <section class="screen" id="b-rates">
-      <div class="screen-head"><span class="id">App · ★</span><div><h2>My rate card — always current</h2><div class="sub">The partner's own rate card, built live from the incentives for their role. Changes show up here before they start.</div></div></div>
-      <div class="phone-stage">
-        <div class="phone"><div class="notch"></div><div class="screenview">
-          <div class="px-head">
-            <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
-            <div class="px-topline">
-              <button class="px-back" data-goto="b-home">‹</button>
-              <div style="flex:1"><div class="px-id">My rate card</div><div class="px-sub">Sales Partner · live incentives</div></div>
-            </div>
-          </div>
-          <div class="px-banner amber" id="rc-flashbanner" style="display:none"></div>
-          <div class="px-body" id="rc-body"></div>
-        </div></div>
-        <div class="note-block" style="max-width:320px;margin-top:0">
-          <b>Try it.</b> Approve a new SP incentive on the office side, then come back — it appears here as <b>changing soon</b>. Past earnings never change.
         </div>
       </div>
     </section>
@@ -1396,7 +1409,6 @@ function show(id){
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
   if(id==='a-published' && !DETAIL_R){ const r=RULES.find(x=>x.status==='working'); if(r){ renderDetail(r); } }
-  if(id==='b-rates') renderRateCard();
   if(id==='b-inc') renderIncDetail();
   if(id==='a-disputes') renderDisputes();
   if(id==='a-earners') renderEarnersTable();
@@ -1937,7 +1949,7 @@ function publishRule(){
   show('a-published');
   const overlap=RULES.find(x=>x.id!==r.id&&!x.flash&&!r.flash&&x.status==='working'&&x.lin!==r.lin&&x.cat===r.cat&&x.roles.some(role=>r.roles.includes(role)));
   if(overlap) toast('Overlaps "'+overlap.name+'" — both stay live; on each loan the higher priority pays');
-  else if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
+  else if(r.roles.includes(RC_ROLE)) toast('Now live — partners see the new rate on their next matching loan; earlier loans keep their old rate');
 }
 /* ---- Incentive detail page: full view + make active / inactive ---- */
 let DETAIL_R=null;
@@ -2179,22 +2191,30 @@ function toggleBulk(){ const b=document.getElementById('bulk-panel'); b.style.di
 const PEOPLE=[
   {id:'ravi',name:'Ravi Krishnan',role:'Sales Partner',city:'Chennai',lines:[
     {inc:'Fresh loan sourcing',detail:'18 loans · 0.35% of each',m:28400,p:21300,pd:20000},
-    {inc:'New customers · slab',detail:'41 customers · ₹125 each',m:13900,p:10775,pd:9450}]},
+    {inc:'New customers · slab',detail:'41 customers · ₹125 each',m:13900,p:10775,pd:9450}],
+    hist:[{mon:'June 2026',loans:62,amt:58900,paid:'05 Jul'},{mon:'May 2026',loans:54,amt:51200,paid:'05 Jun'},{mon:'April 2026',loans:49,amt:46300,paid:'05 May'}]},
   {id:'suresh',name:'Suresh M',role:'Sales Partner',city:'Madurai',lines:[
     {inc:'Fresh loan sourcing',detail:'14 loans · 0.40% (Madurai push)',m:21850,p:15100,pd:13900},
-    {inc:'New customers · slab',detail:'30 customers · ₹125 each',m:10000,p:7000,pd:6000}]},
+    {inc:'New customers · slab',detail:'30 customers · ₹125 each',m:10000,p:7000,pd:6000}],
+    hist:[{mon:'June 2026',loans:48,amt:44100,paid:'05 Jul'},{mon:'May 2026',loans:41,amt:38200,paid:'05 Jun'}]},
   {id:'priya',name:'Priya V',role:'Sales Partner',city:'Coimbatore',lines:[
-    {inc:'Fresh loan sourcing',detail:'16 loans · 0.35% of each',m:24600,p:18400,pd:12750}]},
+    {inc:'Fresh loan sourcing',detail:'16 loans · 0.35% of each',m:24600,p:18400,pd:12750}],
+    hist:[{mon:'June 2026',loans:38,amt:34800,paid:'05 Jul'},{mon:'May 2026',loans:33,amt:29600,paid:'05 Jun'}]},
   {id:'deepa',name:'Deepa L',role:'Caller',city:'Chennai',lines:[
-    {inc:'A2NU push',detail:'new-customer slab · this month',m:16700,p:12100,pd:10400}]},
+    {inc:'A2NU push',detail:'new-customer slab · this month',m:16700,p:12100,pd:10400}],
+    hist:[{mon:'June 2026',loans:0,amt:31200,paid:'05 Jul'},{mon:'May 2026',loans:0,amt:27400,paid:'05 Jun'}]},
   {id:'arun',name:'Arun D',role:'Sales Partner',city:'Chennai',lines:[
-    {inc:'Fresh loan sourcing',detail:'10 loans · 0.35% of each',m:14900,p:9800,pd:8300}]},
+    {inc:'Fresh loan sourcing',detail:'10 loans · 0.35% of each',m:14900,p:9800,pd:8300}],
+    hist:[{mon:'June 2026',loans:28,amt:26100,paid:'05 Jul'},{mon:'May 2026',loans:24,amt:22400,paid:'05 Jun'}]},
   {id:'vignesh',name:'Vignesh P',role:'Caller',city:'Madurai',lines:[
-    {inc:'A2NU push',detail:'new-customer slab · this month',m:13900,p:10300,pd:9000}]},
+    {inc:'A2NU push',detail:'new-customer slab · this month',m:13900,p:10300,pd:9000}],
+    hist:[{mon:'June 2026',loans:0,amt:25800,paid:'05 Jul'},{mon:'May 2026',loans:0,amt:23100,paid:'05 Jun'}]},
   {id:'kavitha',name:'Kavitha R',role:'Appraisal Partner',city:'Trichy',lines:[
-    {inc:'Convincing customers',detail:'8 loans · 0.20% of each',m:11400,p:8100,pd:7200}]},
+    {inc:'Convincing customers',detail:'8 loans · 0.20% of each',m:11400,p:8100,pd:7200}],
+    hist:[{mon:'June 2026',loans:19,amt:21600,paid:'05 Jul'},{mon:'May 2026',loans:16,amt:18200,paid:'05 Jun'}]},
   {id:'manoj',name:'Manoj S',role:'Appraisal Partner',city:'Salem',lines:[
-    {inc:'Convincing customers',detail:'6 loans · 0.20% of each',m:9100,p:6400,pd:5600}]}
+    {inc:'Convincing customers',detail:'6 loans · 0.20% of each',m:9100,p:6400,pd:5600}],
+    hist:[{mon:'June 2026',loans:14,amt:16800,paid:'05 Jul'},{mon:'May 2026',loans:12,amt:14100,paid:'05 Jun'}]}
 ];
 function pTot(p,k){ return p.lines.reduce((s,l)=>s+l[k],0); }
 function renderEarnersTable(){
@@ -2225,6 +2245,10 @@ function renderPerson(p){
     '<span style="display:block;'+sub+'">pending '+inr(l.p)+' · paid '+inr(l.pd)+'</span></span>'+
     '<span class="v">'+inr(l.m)+'</span></div>'
   ).join('')+'</div>';
+  const hb=document.getElementById('person-hist');
+  hb.innerHTML=(p.hist||[]).map(h=>
+    '<tr><td class="rule-name">'+h.mon+'</td><td>'+(h.loans?h.loans+' loans':'—')+'</td><td class="mono">'+h.paid+'</td><td style="color:var(--ok);font-weight:700">'+inr(h.amt)+'</td></tr>'
+  ).join('');
   document.getElementById('person-appbtn').style.display=(p.id==='ravi')?'inline-flex':'none';
 }
 
