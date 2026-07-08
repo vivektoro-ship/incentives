@@ -88,7 +88,8 @@ a{color:inherit}
 
 .rule-table{width:100%;border-collapse:collapse}
 .rule-table th{text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:6px 12px;border-bottom:1px solid var(--line)}
-.rule-table td{padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+.rule-table td{padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle;white-space:nowrap}
+#a-list .panel{overflow-x:auto}
 .rule-table tr:last-child td{border-bottom:none}
 .rule-row{cursor:pointer;transition:.12s}
 .rule-row:hover td{background:var(--card-2)}
@@ -552,8 +553,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="tagline">The Incentive Engine · Funnel Brain Layer 6 · ENG-1680</div>
           <h1>Attribution earns the money</h1>
           <p class="lead">The system already knows who earned every loan. This engine turns that into money — incentives the business changes itself, and a number every partner watches grow in real time.</p>
-          <div class="kick">Every incentive is one sentence: for this kind of actor on this kind of loan, pay this rate on this basis, adjusted by these gates, given on this schedule.</div>
-        </div>
+          </div>
 
         <div class="two-col">
           <div class="entry" data-goto="a-list">
@@ -619,7 +619,7 @@ textarea{resize:vertical;min-height:88px}
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
           </div>
           <table class="rule-table">
-            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Status</th><th>Effective</th><th>Pays</th><th></th></tr></thead>
+            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th><th></th></tr></thead>
             <tbody id="rules-body"></tbody>
           </table>
         </div>
@@ -635,17 +635,7 @@ textarea{resize:vertical;min-height:88px}
 
       <div class="create-grid">
       <div class="wizard">
-        <!-- Config agent · D13 -->
-        <div class="fsection" style="border-color:var(--indigo-line);background:linear-gradient(150deg,#f4f7ff,#fff)">
-          <div class="fsec-head"><span class="fsec-tag" style="background:var(--indigo)">✦</span><div><h4>In a hurry? Describe it in plain words <span style="color:var(--muted-2);font-weight:400;font-size:12px">· we fill the blanks, you check them</span></h4><div class="hint">e.g. “flash 0.1% bonus for APs on takeover loans, same month”</div></div></div>
-          <div class="fsec-body">
-            <div style="display:flex;gap:10px">
-              <input type="text" id="agent-text" placeholder="Type the incentive in one sentence…" style="flex:1">
-              <button class="btn primary" style="flex:none" onclick="agentDraft()">Fill it for me</button>
-            </div>
-            <div class="note" id="agent-read" style="display:none;margin-top:10px"></div>
-          </div>
-        </div>
+        
         <!-- Step 1 -->
         <div class="fsection done" id="secA">
           <div class="fsec-head" onclick="accOpen('secA')"><span class="fsec-tag">1</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Condition</span></h4><div class="hint">The people, the loan type, and what they must do.</div></div><span class="fsec-sum" id="sum-A"></span><span class="fsec-chev">▾</span></div></div>
@@ -1732,9 +1722,9 @@ function renderRulesTable(){
     const label=(r.status==='draft'||r.status==='staged')?'Edit':'Update';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
-      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
       '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
       '<td class="rate-sum">'+r.pay+'</td>'+
+      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
       '<td><button class="row-edit" data-open="'+r.id+'" data-stop>'+label+'</button></td></tr>';
   }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
 }
