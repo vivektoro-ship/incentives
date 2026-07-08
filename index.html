@@ -1503,7 +1503,7 @@ function payText(){
   }
   const v0=(document.getElementById('s-rate')||{}).value||'';
   if(!v0) return 'a rate you\'ll set';
-  if(basis.includes('count')) return '₹'+v0+' for every '+(basis.includes('customer')?'new customer':'loan')+' this month';
+  if(basis.includes('count')) return '₹'+v0+' for every '+(basis.toLowerCase().includes('customer')?'new customer':'loan')+' this month';
   return v0+'% '+on;
   return 'a rate per payee type — '+inputs.map(i=>ROLE_NAMES[i.dataset.role]+' '+i.value+'%').join(', ')+' '+on;
 }
@@ -1553,7 +1553,7 @@ function payShort(){
   const b=document.getElementById('f-basis').value;
   const v0=(document.getElementById('s-rate')||{}).value||'';
   if(!v0) return '—';
-  if(b.includes('count')) return '₹'+v0+' per '+(b.includes('customer')?'customer':'loan');
+  if(b.includes('count')) return '₹'+v0+' per '+(b.toLowerCase().includes('customer')?'customer':'loan');
   return v0+'% of loan';
 }
 function updatePreview(){
