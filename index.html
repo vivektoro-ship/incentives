@@ -194,6 +194,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fsec-tag{border-radius:50%;width:26px;height:26px;font-size:12px;flex:none;margin-top:1px}
 .fsec-head h4{font-size:16px}
 .fsec-body{padding-top:12px}
+#f-name{max-width:380px;padding:9px 12px;font-size:13.5px}
 /* live preview */
 .rule-preview{position:sticky;top:74px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:18px}
 .rp-head{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:13px}
@@ -590,7 +591,7 @@ textarea{resize:vertical;min-height:88px}
               <select class="fsel" id="flt-who" onchange="renderRulesTable()">
                 <option value="all">Payee · all</option>
                 <option value="SP">SP · Sales Partner</option>
-                <option value="AP">AP · Associate Partner</option>
+                <option value="AP">AP · Appraisal Partner</option>
                 <option value="Caller">Caller · Ringmaster</option>
                 <option value="Collection Partner">CP · Collection Partner</option>
                 <option value="City Lead">City Lead · scope</option>
@@ -655,7 +656,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="field"><label>Who gets paid <span class="desc">— one role per incentive</span></label>
               <div class="chipselect" id="f-actor">
                 <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner (SP)</button>
-                <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Associate Partner (AP)</button>
+                <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Appraisal Partner (AP)</button>
                 <button type="button" class="pchip" data-val="Caller" onclick="toggleActor(this)">Caller</button>
                 <button type="button" class="pchip" data-val="Collection Partner" onclick="toggleActor(this)">Collection Partner</button>
                 <button type="button" class="pchip" data-val="City Lead" onclick="toggleActor(this)">City Lead</button>
@@ -680,6 +681,18 @@ textarea{resize:vertical;min-height:88px}
                 <option>Gold loan (GL)</option>
                 <option>Personal loan (PL)</option>
               </select>
+            </div>
+            <div class="field"><label>Cities <span class="desc">— pick one or more; “All cities” means everywhere</span></label>
+              <div class="chipselect" id="f-city">
+                <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
+                <button type="button" class="pchip" data-val="Chennai" onclick="toggleCity(this)">Chennai</button>
+                <button type="button" class="pchip" data-val="Madurai" onclick="toggleCity(this)">Madurai</button>
+                <button type="button" class="pchip" data-val="Coimbatore" onclick="toggleCity(this)">Coimbatore</button>
+                <button type="button" class="pchip" data-val="Trichy" onclick="toggleCity(this)">Trichy</button>
+                <button type="button" class="pchip" data-val="Salem" onclick="toggleCity(this)">Salem</button>
+                <button type="button" class="pchip" data-val="Hyderabad" onclick="toggleCity(this)">Hyderabad</button>
+                <button type="button" class="pchip" data-val="Bengaluru" onclick="toggleCity(this)">Bengaluru</button>
+              </div>
             </div>
             <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
               <select id="f-event" onchange="applyAutofill()">
@@ -794,6 +807,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="rp-facts">
           <div class="rp-fact"><span>Payee type</span><b id="pv-who">—</b></div>
           <div class="rp-fact"><span>Loan type</span><b id="pv-loan">—</b></div>
+          <div class="rp-fact"><span>Cities</span><b id="pv-city">All cities</b></div>
           <div class="rp-fact"><span>If they do</span><b id="pv-did">—</b></div>
           <div class="rp-fact"><span>Category</span><b id="pv-cat">—</b></div>
           <div class="rp-fact"><span>Incentive type</span><b id="pv-kind">—</b></div>
@@ -1341,7 +1355,7 @@ function updateSums(){
   const flash=document.querySelector('#f-ruletype button.on')?.dataset.rt==='flash';
   const mods=document.querySelectorAll('#mods .modrow').length;
   const set=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
-  set('sum-A',(roles.length>2?roles.length+' payee types':roles.join(', '))+' · '+(lo?lo.textContent.split(' (')[0]:'')+(flash?' · flash':''));
+  const _cl=cityList(); set('sum-A',(roles.length>2?roles.length+' payee types':roles.join(', '))+' · '+(lo?lo.textContent.split(' (')[0]:'')+(_cl.length?' · '+(_cl.length>1?_cl.length+' cities':_cl[0]):'')+(flash?' · flash':''));
   set('sum-B',document.getElementById('f-basis').value.split(' (')[0]);
   set('sum-C',payShort());
   set('sum-D',mods?mods+' added':'None');
@@ -1411,12 +1425,21 @@ function rmSlab(btn){
 }
 
 /* ---- payee types + per-payee rates (from the Oro Incentive Structure) ---- */
-const ROLE_NAMES={SP:'Sales Partner',AP:'Associate Partner','Caller':'Caller','City Lead':'City Lead','Digital Manager':'Digital Manager','Collection Partner':'Collection Partner','Internal DB':'Internal DB','Business Partner':'Business Partner',TPF:'TPF'};
-const ROLE_PLURAL={SP:'Sales Partners',AP:'Associate Partners','Caller':'Callers','City Lead':'City Leads','Digital Manager':'Digital Managers','Collection Partner':'Collection Partners','Internal DB':'the Internal DB team','Business Partner':'Business Partners',TPF:'TPF partners'};
+const ROLE_NAMES={SP:'Sales Partner',AP:'Appraisal Partner','Caller':'Caller','City Lead':'City Lead','Digital Manager':'Digital Manager','Collection Partner':'Collection Partner','Internal DB':'Internal DB','Business Partner':'Business Partner',TPF:'TPF'};
+const ROLE_PLURAL={SP:'Sales Partners',AP:'Appraisal Partners','Caller':'Callers','City Lead':'City Leads','Digital Manager':'Digital Managers','Collection Partner':'Collection Partners','Internal DB':'the Internal DB team','Business Partner':'Business Partners',TPF:'TPF partners'};
 const ROLE_RATE={SP:0.35,AP:0.20,'Caller':0.25,'City Lead':0.10,'Digital Manager':0.15,'Collection Partner':0.50,'Internal DB':0.10,'Business Partner':0.50,TPF:0.25};
 let rateStore={};
 
 function selectedActors(){ return [...document.querySelectorAll('#f-actor .pchip.on')].map(b=>b.dataset.val); }
+function selectedCities(){ return [...document.querySelectorAll('#f-city .pchip.on')].map(b=>b.dataset.val); }
+function toggleCity(btn){
+  const all=document.querySelector('#f-city .pchip[data-val="all"]');
+  if(btn.dataset.val==='all'){ document.querySelectorAll('#f-city .pchip').forEach(b=>b.classList.toggle('on', b===all)); }
+  else { all.classList.remove('on'); btn.classList.toggle('on'); if(!selectedCities().length) all.classList.add('on'); }
+  updatePreview();
+}
+function cityList(){ const c=selectedCities().filter(x=>x!=='all'); return c; }
+function cityText(){ const c=cityList(); if(!c.length) return ''; return ' in '+(c.length>1? c.slice(0,-1).join(', ')+' and '+c[c.length-1] : c[0]); }
 function toggleActor(btn){
   /* One rule = one role (Sreekesh, Q1). Two people earning on a loan = two rules fired. */
   document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b===btn));
@@ -1542,7 +1565,7 @@ function buildSummary(){
   const loan=document.getElementById('f-loan').value;
   const sched=document.getElementById('f-sched').value.toLowerCase();
   const mods=document.querySelectorAll('#mods .modrow').length;
-  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
+  let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+cityText()+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   // the same facts, on every rule view
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
@@ -1561,7 +1584,7 @@ function buildSummary(){
     ['Given as', document.getElementById('f-sched').value, 'quiet']
   ];
   const fhtml='<div class="spec-list">'+tiles.map(t=>'<div class="sl-row '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+
-    '<div class="sl-foot">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div></div>';
+    '<div class="sl-foot">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>cities <b>'+(cityList().length?cityList().join(', '):'all')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div></div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
 
@@ -1584,7 +1607,7 @@ function updatePreview(){
   const mods=document.querySelectorAll('#mods .modrow').length;
   const sent=document.getElementById('preview-sentence');
   if(sent){
-    let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+'</em>, pay <em>'+payText()+'</em>';
+    let s='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+cityText()+'</em>, pay <em>'+payText()+'</em>';
     if(mods) s+=', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>';
     s+=', given as <em>'+sched.toLowerCase()+'</em>';
     if(flash){ const d=document.getElementById('flash-date'); s+=' <em>(flash — additive over the base'+(d&&d.value?', expires '+d.value:'')+')</em>'; }
@@ -1593,6 +1616,7 @@ function updatePreview(){
   }
   setFact('pv-who', roles.map(r=>ROLE_NAMES[r]).join(', ')||'—');
   const lo=document.querySelector('#f-loan option:checked'); setFact('pv-loan', lo?lo.textContent.split(' (')[0]:'—');
+  const cl=cityList(); setFact('pv-city', cl.length? cl.join(', ') : 'All cities');
   const ev=document.querySelector('#f-event option:checked'); setFact('pv-did', ev?ev.textContent.split(' → ')[0]:'—');
   setFact('pv-cat', EVENT_CAT[event]||'—');
   setFact('pv-kind', flash?'Flash · additive · auto-expiring':'Normal');
@@ -1670,6 +1694,7 @@ function loadRule(o){
   if(o.loan) document.getElementById('f-loan').value=o.loan;
   if(o.event) document.getElementById('f-event').value=o.event;
   if(o.start) document.getElementById('f-start').value=o.start;
+  document.querySelectorAll('#f-city .pchip').forEach(b=>b.classList.toggle('on', (o.cities&&o.cities.length)? o.cities.includes(b.dataset.val) : b.dataset.val==='all'));
   setRuleType(o.flash?'flash':'standard');
   if(o.flash && o.end) document.getElementById('flash-date').value=o.end;
   applyAutofill();
@@ -1739,6 +1764,7 @@ function currentRuleObj(){
     start:document.getElementById('f-start').value,
     pay:payShort(), mode, rate:isNaN(firstRate)?null:firstRate,
     flash, end:flash?document.getElementById('flash-date').value:'',
+    cities:cityList(),
     sched:document.getElementById('f-sched').value
   };
 }
@@ -1814,6 +1840,7 @@ function resetForm(){
   document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='SP'));
   document.getElementById('f-loan').value='fresh';
   document.getElementById('f-event').value='self-source';
+  document.querySelectorAll('#f-city .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='all'));
   document.getElementById('mods').innerHTML='';
   document.getElementById('mods-empty').style.display='flex';
   document.getElementById('same-rate').checked=true;
@@ -1845,7 +1872,7 @@ function checkDispute(){
 function agentDraft(){
   const t=(document.getElementById('agent-text').value||'').toLowerCase();
   if(t.trim().length<8){ toast('Describe the incentive in a sentence first'); return; }
-  const roleMap=[['business partner','Business Partner'],['associate','AP'],['sales partner','SP'],['sp ','SP'],[' ap','AP'],['caller','Caller'],['collection','Collection Partner'],['city lead','City Lead'],['digital','Digital Manager'],['internal','Internal DB'],['tpf','TPF']];
+  const roleMap=[['business partner','Business Partner'],['appraisal','AP'],['sales partner','SP'],['sp ','SP'],[' ap','AP'],['caller','Caller'],['collection','Collection Partner'],['city lead','City Lead'],['digital','Digital Manager'],['internal','Internal DB'],['tpf','TPF']];
   let roles=[]; roleMap.forEach(([k,v])=>{ if(t.includes(k)&&!roles.includes(v)) roles.push(v); });
   roles=roles.length?[roles[0]]:['SP'];   // one rule = one role
   document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on',roles.includes(b.dataset.val)));
@@ -1864,6 +1891,9 @@ function agentDraft(){
   else if(t.includes('quarter')) sch.value='Every 3 months';
   else if(t.includes('half')) sch.value='Half next month + half the month after';
   else if(t.includes('next month')) sch.value='Full amount next month';
+  const CITIES=['chennai','madurai','coimbatore','trichy','salem','hyderabad','bengaluru'];
+  const foundC=CITIES.filter(c=>t.includes(c));
+  document.querySelectorAll('#f-city .pchip').forEach(b=>b.classList.toggle('on', foundC.length? foundC.includes(b.dataset.val.toLowerCase()) : b.dataset.val==='all'));
   const nm=document.getElementById('f-name');
   if(!nm.value.trim()) nm.value=(ROLE_NAMES[roles[0]]||roles[0])+' · '+loan.charAt(0).toUpperCase()+loan.slice(1)+(m?' · '+m[1]+'%':'')+(flash?' · flash':'');
   updatePreview();
@@ -1901,17 +1931,18 @@ function rejectD(i){ const r=(document.getElementById('drr-'+i).value||'').trim(
 function toggleBulk(){ const b=document.getElementById('bulk-panel'); b.style.display=b.style.display==='none'?'block':'none'; }
 
 /* ---- partner rate card: a live, role-scoped read of the rulebook ---- */
-const RC_TODAY='2026-07-15', RC_ROLE='SP';
+const RC_TODAY='2026-07-15', RC_ROLE='SP', RC_CITY='Chennai';
 const RC_EVENT={'self-source':'you find the customer','convincing':'you convince the customer','funnel-a2nu':'you bring new customers','closure-bucket':'you get the loan repaid','net-conversion':'your channel performs'};
 const RC_LOAN={'fresh':'Fresh gold loan','takeover':'Takeover gold loan','continuation':'Continuation','attached':'Attached','additional':'Additional'};
 function rcRow(r,chip,chipCls,extra){
-  return '<div class="px-row"><div class="main"><div class="t">'+(RC_LOAN[r.loan]||'Loan')+' — '+(RC_EVENT[r.event]||'')+'</div>'+
+  const cty=(r.cities&&r.cities.length)?' · '+r.cities.join(', '):'';
+  return '<div class="px-row"><div class="main"><div class="t">'+(RC_LOAN[r.loan]||'Loan')+' — '+(RC_EVENT[r.event]||'')+cty+'</div>'+
     '<div class="m">'+r.pay+' · '+(r.sched||'')+(extra?' · '+extra:'')+'</div>'+
     '<span class="px-chip '+chipCls+'">'+chip+'</span></div></div>';
 }
 function renderRateCard(){
   const body=document.getElementById('rc-body'); if(!body) return;
-  const mine=RULES.filter(r=>r.roles.includes(RC_ROLE));
+  const mine=RULES.filter(r=>r.roles.includes(RC_ROLE) && (!r.cities||!r.cities.length||r.cities.includes(RC_CITY)));
   const flash=mine.filter(r=>r.flash&&r.status==='working'&&(!r.end||r.end>=RC_TODAY));
   const upcoming=mine.filter(r=>!r.flash&&r.status==='working'&&r.start>RC_TODAY);
   const live=mine.filter(r=>!r.flash&&r.status==='working'&&r.start<=RC_TODAY);
