@@ -662,9 +662,9 @@ textarea{resize:vertical;min-height:88px}
     <button class="navitem" data-goto="b-prov"><span class="no">3</span> This month</button>
     <button class="navitem" data-goto="b-final"><span class="no">4</span> A closed month</button>
     <button class="navitem" data-goto="b-explain"><span class="no">5</span> See the working</button>
-    <button class="navitem" data-goto="b-dispute"><span class="no">6</span> Something looks wrong</button>
-    <button class="navitem" data-goto="b-submitted"><span class="no">7</span> Complaint sent</button>
-    <button class="navitem" data-goto="b-history"><span class="no">8</span> My complaints</button>
+    <button class="navitem" data-goto="b-dispute"><span class="no">6</span> Report an issue</button>
+    <button class="navitem" data-goto="b-submitted"><span class="no">7</span> Issue reported</button>
+    <button class="navitem" data-goto="b-history"><span class="no">8</span> My issues</button>
     
   </nav>
 
@@ -700,7 +700,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 1 · ALL RULES ===== -->
     <section class="screen" id="a-list">
-      <div class="screen-head"><span class="id">Incentives · 1</span><div><h2>Incentives</h2><div class="sub">One incentive = one simple sentence. Kinds of pay add up on a loan; within a kind, the highest priority wins — flash adds on top.</div></div></div>
+      <div class="screen-head"><span class="id">Incentives · 1</span><div><h2>Incentives</h2><div class="sub">Everything live, waiting to start, or inactive — in one place.</div></div></div>
       <div class="atabs"><button class="atab on" data-goto="a-list">Incentives</button><button class="atab" data-goto="a-disputes">Issues reported</button><button class="atab" data-goto="a-earners">Getting incentives</button></div>
       <div class="console">
         <div class="panel">
@@ -932,7 +932,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
     <section class="screen" id="a-review">
-      <div class="screen-head"><span class="id">Create · 2</span><div><h2>Check the cost</h2><div class="sub">A best guess before it goes anywhere. Nothing goes live from here.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 2</span><div><h2>Check the cost</h2><div class="sub">A best guess before it goes anywhere.</div></div></div>
       <div class="console" style="max-width:640px">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The incentive, in one sentence:</div>
@@ -971,7 +971,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="meta-row">
             <span class="meta-chip"><b>status</b> staged</span>
             <span class="meta-chip"><b>maker</b> you</span>
-            <span class="meta-chip"><b>checker</b> approver seat · assigned via access control</span>
+            <span class="meta-chip"><b>checker</b> approver seat</span>
             <span class="meta-chip"><b>effective</b> <span id="staged-starts">01 Aug 2026</span></span>
             <span class="meta-chip"><b>incentive</b> <span id="staged-ruleno">INC-2026-0714</span></span>
           </div>
@@ -1015,7 +1015,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 6 · LIVE ===== -->
     <section class="screen" id="a-published">
-      <div class="screen-head"><span class="id">Create · 5</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date. Every loan keeps the rate that was live on its own date.</div></div></div>
+      <div class="screen-head"><span class="id">Create · 5</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date.</div></div></div>
       <div class="console">
         <div class="confirm">
           <div class="seal ok">✓</div>
@@ -1039,12 +1039,12 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="panel">
           <div class="toolbar" style="margin-bottom:8px">
-            <h3 style="flex:1">Complaints — open and answered</h3>
+            <h3 style="flex:1">Issues — open and answered</h3>
             <button class="btn ghost" onclick="toggleBulk()">⬆ Bulk file (CSV)</button>
           </div>
           <div id="bulk-panel" style="display:none;border:1px dashed var(--indigo-line);border-radius:12px;padding:14px;margin-bottom:14px;background:var(--indigo-soft)">
             <b style="font-size:13.5px">migration-recon-july.csv — 42 rows parsed</b>
-            <div class="p-sub" style="margin:4px 0 10px">Each row lands as its own complaint; the checker reviews them as a set — never one blind approval.</div>
+            <div class="p-sub" style="margin:4px 0 10px">Each row lands as its own issue; the checker reviews them as a set — never one blind approval.</div>
             <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 1 · OML000391 · rate should be 0.35%</span><span class="v" style="color:var(--ok)">looks right</span></div>
             <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 2 · OML000305 · loan counted twice</span><span class="v" style="color:var(--ok)">looks right</span></div>
             <div class="kv"><span class="k mono">row 7 · OML000512 · duplicate of row 2</span><span class="v" style="color:var(--red)">reject · duplicate</span></div>
@@ -1093,7 +1093,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">App · 1</span><div><h2>My incentives — a number that moves</h2><div class="sub">Ravi K · Sales Partner · Chennai. <b>Earned · pending · paid</b> — then every incentive, opened up by kind.</div></div></div>
+      <div class="screen-head"><span class="id">App · 1</span><div><h2>My incentives</h2><div class="sub">Ravi K · Sales Partner · Chennai.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="px-head">
@@ -1105,7 +1105,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-hero">
               <div class="hl">Earned this month</div>
               <div class="hn"><span class="ru">₹</span>42,300</div>
-              <div class="hs">still growing · locks when July closes</div>
+              <div class="hs">locks when July closes</div>
             </div>
             <div class="px-minis">
               <div class="px-mini" data-goto="b-firm"><div class="ml">Payment pending</div><div class="mn">₹32,075</div><div class="md">most of it 05 Aug ›</div></div>
@@ -1113,13 +1113,13 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
           <div class="px-body">
-            <div class="px-label" style="padding:2px 4px 0">What you earned it for · July</div>
+            <div class="px-label" style="padding:2px 4px 0">Your incentives · July</div>
 
             <div class="px-card" style="cursor:pointer" data-inc="sourcing">
               <div class="px-label" style="display:flex;align-items:center;justify-content:space-between">Finding customers <span class="px-chip amber" style="margin:0">★ July push +0.10%</span></div>
               <hr class="px-div">
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>28,400</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">18 loans · 0.35% of each loan · latest: OML000482 · ₹1,750</div>
+              <div class="px-note12" style="margin-top:2px">18 loans · latest +₹1,750</div>
               <div class="px-track"><div class="px-fill" style="width:40%"></div></div>
               <div class="px-caps"><span><b>2 of 5</b> fresh loans this month</span><span>₹175 unlocks at 5</span></div>
             </div>
@@ -1128,7 +1128,7 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-label">New customers · slab</div>
               <hr class="px-div">
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>4,125</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">41 new customers · in slab 2 · ₹125 each · latest: +₹125 today</div>
+              <div class="px-note12" style="margin-top:2px">41 customers · ₹125 each</div>
               <div class="px-track"><div class="px-fill" style="width:67%"></div></div>
               <div class="px-caps"><span><b>41 done</b></span><span>next slab at 61 → ₹150 each</span></div>
             </div>
@@ -1137,13 +1137,13 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-label">Convincing customers</div>
               <hr class="px-div">
               <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>9,775</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">12 loans · 0.20% of each loan — one rate, no slabs · latest: OML000448 · ₹980</div>
+              <div class="px-note12" style="margin-top:2px">12 loans · latest +₹980</div>
             </div>
 
             <div class="px-card" onclick="toast('The take-back on OML000459 was bigger than what was left to pay you, so −₹240 carries forward and nets against your next earnings. It is never written off silently.')" style="cursor:pointer">
               <div class="px-label">Carry-forward</div>
               <hr class="px-div">
-              <div class="px-row"><div class="main"><div class="t">Balance to recover</div><div class="m">take-back was more than the unpaid part · nets against next payout</div><span class="px-chip red">carries forward</span></div><div class="amt red">−₹240</div></div>
+              <div class="px-row"><div class="main"><div class="t">Balance to recover</div><div class="m">adjusts against your next payout</div><span class="px-chip red">carries forward</span></div><div class="amt red">−₹240</div></div>
             </div>
 
             <div class="px-card">
@@ -1155,7 +1155,7 @@ textarea{resize:vertical;min-height:88px}
 
             <div class="px-card" data-goto="b-history" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
               <span style="width:36px;height:36px;border-radius:50%;background:#FFF3D6;color:#B45309;display:grid;place-items:center;font-size:15px;flex:none">⚑</span>
-              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My complaints</div><div style="font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px">1 being checked · 1 fixed (+₹3,400) · 1 answered with reason</div></div>
+              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My issues</div><div style="font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px">1 checking · 1 fixed +₹3,400 · 1 answered</div></div>
               <span style="color:#94A3B8;font-size:18px">›</span>
             </div>
           </div>
@@ -1203,7 +1203,7 @@ textarea{resize:vertical;min-height:88px}
           </div>
           <div class="px-banner amber" id="inc-banner" style="display:none"></div>
           <div class="px-body" id="inc-body"></div>
-          <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Something looks wrong</button></div>
+          <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Report an issue</button></div>
         </div></div>
         <div class="note-block" style="max-width:320px;margin-top:0">
           <b>Why this page.</b> A number is only trusted if it opens up: which loans earned it, which slab you're in, and every rate change with a date and a reason — the same record the office sees.
@@ -1223,7 +1223,7 @@ textarea{resize:vertical;min-height:88px}
             <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
           </div>
         </div>
-        <div class="px-banner green">✓ Locked — set when the loan was given. Won't change.</div>
+        <div class="px-banner green">✓ Locked — won't change.</div>
         <div class="px-body">
           <div class="px-card">
             <div class="px-label">You earned on this loan</div>
@@ -1254,7 +1254,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 3 · THIS MONTH ===== -->
     <section class="screen" id="b-prov">
-      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month — still adding up</h2><div class="sub">Grows as Ravi works; locks when the month closes. Always shows the next level.</div></div></div>
+      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month</h2><div class="sub">Grows as Ravi works; locks when the month closes. Always shows the next level.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1270,8 +1270,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-label">Earned so far · July</div>
             <hr class="px-div">
             <div class="px-big"><span class="ru">₹</span>42,300</div>
-            <div class="px-note12" style="margin-top:6px">Based on new customers brought this month — live count</div>
-            <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
+                        <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
             <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
           </div>
           <div class="px-card">
@@ -1283,8 +1282,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000448 · you convinced the customer</div></div><div class="amt">₹980</div></div>
             <div class="px-more">+ 37 more · your total is the sum of your lines</div>
           </div>
-          <div class="px-note12" style="padding:0 4px">Earlier: ~20 days after month end, by hand. Now: live.</div>
-        </div>
+                  </div>
       </div></div>
     </section>
 
@@ -1306,24 +1304,23 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-label">June total</div>
             <hr class="px-div">
             <div class="px-big"><span class="ru">₹</span>58,900</div>
-            <div class="px-note12" style="margin-top:6px">Month closed 30 Jun · paid 05 Jul · 62 loans</div>
+            <div class="px-note12" style="margin-top:6px">Paid 05 Jul · 62 loans</div>
           </div>
           <div class="px-card">
             <div class="px-label">What made up this total</div>
             <hr class="px-div">
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Finding customers · 44 fresh loans</div><div class="m">0.35% of loan</div></div><div class="amt">₹41,300</div></div>
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Convincing customers · 12 loans</div><div class="m">0.20% of loan · pays along with finding</div></div><div class="amt">₹14,200</div></div>
-            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Added later — complaint accepted</div><div class="m">added to next month · 06 Jul</div><span class="px-chip amber">correction · shown</span></div><div class="amt" style="color:#d98a00">+₹3,400</div></div>
-            <div class="px-row"><div class="main"><div class="t" style="color:#64748B">Month closed</div><div class="m">30 Jun · dated &amp; signed · the total above = sum of every line before this one</div><span class="px-chip grey">close line · ₹0</span></div><div class="amt" style="color:#94A3B8">₹0</div></div>
-          </div>
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Added later — issue accepted</div><div class="m">added to next month · 06 Jul</div><span class="px-chip amber">correction · shown</span></div><div class="amt" style="color:#d98a00">+₹3,400</div></div>
+                      </div>
         </div>
-        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Something looks wrong</button></div>
+        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Report an issue</button></div>
       </div></div>
     </section>
 
     <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
     <section class="screen" id="b-explain">
-      <div class="screen-head"><span class="id">App · 5</span><div><h2>See the working — every rupee has a line</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
+      <div class="screen-head"><span class="id">App · 5</span><div><h2>See the working</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1343,15 +1340,15 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">+0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
             <div class="px-more">+ 37 more lines · your total is the sum of your lines</div>
           </div>
-          <div class="px-note12" style="padding:0 4px">Corrections are always <b>new lines you can see</b> — never a quiet change.</div>
+          <div class="px-note12" style="padding:0 4px">Corrections are <b>new lines</b> — nothing is erased.</div>
         </div>
-        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">This looks wrong →</button></div>
+        <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Report an issue</button></div>
       </div></div>
     </section>
 
     <!-- ===== APP 6 · REPORT A PROBLEM ===== -->
     <section class="screen" id="b-dispute">
-      <div class="screen-head"><span class="id">App · 6</span><div><h2>Tell us what looks wrong</h2><div class="sub">Goes on the record. Nothing changes until someone checks it.</div></div></div>
+      <div class="screen-head"><span class="id">App · 6</span><div><h2>Report an issue</h2><div class="sub">Goes on the record. Nothing changes until someone checks it.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1386,27 +1383,26 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 7 · PROBLEM REPORTED ===== -->
     <section class="screen" id="b-submitted">
-      <div class="screen-head"><span class="id">App · 7</span><div><h2>Your complaint is on record</h2><div class="sub">If accepted, the fix is added to next month.</div></div></div>
+      <div class="screen-head"><span class="id">App · 7</span><div><h2>Your issue is on record</h2><div class="sub">If accepted, the fix is added to next month.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
           <div class="px-topline"><div style="flex:1"><div class="px-id">Reported</div><div class="px-sub">DSP-2026-0338</div></div></div>
         </div>
-        <div class="px-banner amber">● We've received your report and will look into it.</div>
-        <div class="px-body">
+                <div class="px-body">
           <div class="px-center">
             <div class="px-seal">✓</div>
             <h4>Reported</h4>
             <div class="px-note12">Nothing changes until someone checks it. The answer comes with a reason.</div>
           </div>
           <div class="px-card">
-            <div class="px-kv"><span class="k">Complaint no.</span><span class="v">DSP-2026-0338</span></div>
+            <div class="px-kv"><span class="k">Issue no.</span><span class="v">DSP-2026-0338</span></div>
             <div class="px-kv"><span class="k">About loan</span><span class="v">OML000448</span></div>
             <div class="px-kv"><span class="k">Sent on</span><span class="v">03 Jul 2026</span></div>
           </div>
         </div>
         <div class="px-foot">
-          <button class="px-cta" data-goto="b-history">See my complaints</button>
+          <button class="px-cta" data-goto="b-history">See my issues</button>
           <button class="px-cta2" data-goto="b-home">Back to my earnings</button>
         </div>
       </div></div>
@@ -1414,7 +1410,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 8 · MY REPORTS ===== -->
     <section class="screen" id="b-history">
-      <div class="screen-head"><span class="id">App · 8</span><div><h2>My complaints</h2><div class="sub">Every complaint gets an answer — with the reason, always.</div></div></div>
+      <div class="screen-head"><span class="id">App · 8</span><div><h2>My issues</h2><div class="sub">Every issue gets an answer — with the reason.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -2022,7 +2018,7 @@ function computeCost(){
   const working=document.getElementById('cost-working');
   if(working){
     const rest=(curTotal-BT_BASE[cat]).toFixed(1);
-    working.innerHTML='Over the last 3 months, <b>'+cat+'</b> incentives paid about <b>₹'+BT_BASE[cat].toFixed(1)+' lakh a month</b> at today\'s rate ('+curRate.toFixed(2)+'%). At your rate of <b>'+ratePct.toFixed(2)+'%</b>, the same work pays <b>₹'+cand[cat].toFixed(1)+' lakh</b>. Other kinds of pay stay at ₹'+rest+' lakh. Assumes next month has the same volume as the last 3 months\' average — real history, not a promise.';
+    working.innerHTML='Over the last 3 months, <b>'+cat+'</b> incentives paid about <b>₹'+BT_BASE[cat].toFixed(1)+' lakh a month</b> at today\'s rate ('+curRate.toFixed(2)+'%). At your rate of <b>'+ratePct.toFixed(2)+'%</b>, the same work pays <b>₹'+cand[cat].toFixed(1)+' lakh</b>. Based on the last 3 months\' real volume.';
   }
   const d=candTotal-curTotal, sign=d>=0?'+ ':'− ';
   const dcol = Math.abs(d)<0.05 ? 'var(--muted)' : (d>0 ? 'var(--red)' : 'var(--ok)');
@@ -2187,7 +2183,7 @@ const PX_CATS={
   banner:'★ July push — +0.10% extra on every fresh loan · ends 31 Jul',
   amt:'28,400', note:'0.35% of each loan you source · Fresh &amp; Takeover gold loans',
   prog:{pct:40,left:'<b>2 of 5</b> fresh loans this month',right:'₹175 unlocks at 5'},
-  gatenote:'One of your sourcing incentives has a gate: <b>at least 5 fresh loans in the month</b>. The ₹175 is yours from day one — it shows as waiting, and the moment loan 5 lands, all of it firms up together.',
+  gatenote:'₹175 is waiting — <b>3 more fresh loans</b> this month and all of it is yours.',
   rows:[
    {t:'OML000482 · Fresh',m:'12 Jul · 0.35% of ₹5,00,000',c:['green','locked'],a:'₹1,750'},
    {t:'OML000471 · Fresh',m:'10 Jul · 0.35% + 0.10% July push',c:['amber','+ bonus'],a:'₹2,240'},
