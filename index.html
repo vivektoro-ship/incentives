@@ -1460,7 +1460,7 @@ function ratePreview(){
   const r=parseFloat((document.getElementById('s-rate')||{}).value);
   const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   if(slabOn||!basis.startsWith('The loan amount')||!(r>0)){ el.textContent=''; return; }
-  el.textContent='≈ ₹'+Math.round(500000*r/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan';
+  el.textContent='≈ ₹'+Math.round(100000*r/100).toLocaleString('en-IN')+' on a ₹1,00,000 loan';
 }
 function setAuto(fieldWrap, tagId, isAuto){
   document.getElementById(fieldWrap).classList.toggle('autofilled', isAuto);
@@ -1517,7 +1517,7 @@ function buildSummary(){
   const ps=payShort();
   let gets = ps==='—' ? '—' : ps + (basisShort==='The loan amount' ? '' : ' · on '+basisShort.toLowerCase());
   if(!slabOn2 && basisShort==='The loan amount' && r0>0){
-    gets+='<span class="sub">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</span>';
+    gets+='<span class="sub">e.g. ₹'+Math.round(100000*r0/100).toLocaleString('en-IN')+' on a ₹1,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</span>';
   }
   const cl2=cityList();
   const rows=[
