@@ -648,7 +648,8 @@ textarea{resize:vertical;min-height:88px}
     <button class="navitem" data-goto="a-disputes"><span class="no">7</span> Answer complaints</button>
 
     <div class="grp">Partner</div>
-    <button class="navitem" data-goto="b-home"><span class="no">1</span> My earnings</button>
+    <button class="navitem" data-goto="b-home"><span class="no">1</span> My incentives</button>
+    <button class="navitem" data-goto="b-inc"><span class="no">1b</span> One incentive, opened</button>
     <button class="navitem" data-goto="b-rates"><span class="no">★</span> My rate card · live</button>
     <button class="navitem" data-goto="b-firm"><span class="no">2</span> One loan, locked</button>
     <button class="navitem" data-goto="b-prov"><span class="no">3</span> This month</button>
@@ -1067,14 +1068,14 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K · Sales Partner · Chennai. <b>Earned · coming · paid</b> — at a glance.</div></div></div>
+      <div class="screen-head"><span class="id">App · 1</span><div><h2>My incentives — a number that moves</h2><div class="sub">Ravi K · Sales Partner · Chennai. <b>Earned · pending · paid</b> — then every incentive, opened up by kind.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="px-head">
             <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
             <div class="px-headrow" style="margin-top:2px">
               <span class="px-avatar">RK</span>
-              <div style="flex:1"><div class="nm">Ravi Krishnan</div><div class="ph">Sales Partner · Chennai</div></div>
+              <div style="flex:1"><div class="nm">My incentives</div><div class="ph">Ravi K · Sales Partner · 15 Jul 2026</div></div>
               <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')">July ▾</button>
               <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
             </div>
@@ -1084,8 +1085,8 @@ textarea{resize:vertical;min-height:88px}
               <div class="hs">still growing · locks when July closes</div>
             </div>
             <div class="px-minis">
-              <div class="px-mini" data-goto="b-firm"><div class="ml">Coming to you</div><div class="mn">₹31,900</div><div class="md">due 05 Aug ›</div></div>
-              <div class="px-mini" onclick="toast('This money has already reached your account.')"><div class="ml">Already paid</div><div class="mn green">₹1,10,100</div><div class="md">till date</div></div>
+              <div class="px-mini" data-goto="b-firm"><div class="ml">Payment pending</div><div class="mn">₹32,075</div><div class="md">most of it 05 Aug ›</div></div>
+              <div class="px-mini" onclick="toast('Paid into your account on 05 Jul — June\'s second half and July\'s first releases.')"><div class="ml">Paid this month</div><div class="mn green">₹29,450</div><div class="md">on 05 Jul</div></div>
             </div>
           </div>
           <div class="px-body">
@@ -1095,22 +1096,31 @@ textarea{resize:vertical;min-height:88px}
               <span style="color:#94A3B8;font-size:18px">›</span>
             </div>
 
-            <div class="px-card" data-goto="b-prov" style="cursor:pointer">
-              <div class="px-label">New customers this month</div>
-              <div class="px-track"><div class="px-fill" style="width:68%"></div></div>
-              <div class="px-caps"><span><b>41 done</b></span><span>next level at 60 → higher rate</span></div>
+            <div class="px-label" style="padding:2px 4px 0">What you earned it for · July</div>
+
+            <div class="px-card" style="cursor:pointer" data-inc="sourcing">
+              <div class="px-label" style="display:flex;align-items:center;justify-content:space-between">Finding customers <span class="px-chip amber" style="margin:0">★ July push +0.10%</span></div>
+              <hr class="px-div">
+              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>28,400</div><span style="color:#94A3B8;font-size:18px">›</span></div>
+              <div class="px-note12" style="margin-top:2px">18 loans · 0.35% of each loan · latest: OML000482 · ₹1,750</div>
+              <div class="px-track"><div class="px-fill" style="width:40%"></div></div>
+              <div class="px-caps"><span><b>2 of 5</b> fresh loans this month</span><span>₹175 unlocks at 5</span></div>
             </div>
 
-            <div class="px-card">
-              <div class="px-label">This month's loans</div>
+            <div class="px-card" style="cursor:pointer" data-inc="funnel">
+              <div class="px-label">New customers · slab</div>
               <hr class="px-div">
-              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000482 · you found the customer</div><span class="px-chip amber">half paid · half 05 Aug</span></div><div class="amt">₹1,750</div></div>
-              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000471 · 0.35% + July bonus</div><span class="px-chip blue">comes next payout</span></div><div class="amt">₹2,240</div></div>
-              <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000455 · half rate (low value)</div><span class="px-chip blue">counted this month</span></div><div class="amt">₹1,410</div></div>
-              <div class="px-row" onclick="toast('This incentive has a gate: at least 5 fresh loans in the month. The earning exists from day one and shows as pending — when loan 5 lands, all of them firm up together. Never blank until the gate.')" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan</div><div class="m">OML000488 · gate: 5 fresh loans in the month</div><span class="px-chip amber">₹175 pending · 3 more to unlock</span></div><div class="amt" style="color:#94A3B8">₹175</div></div>
-              <div class="px-row" onclick="toast('Ravi did two jobs on this loan — found the customer AND convinced them. Both pay, separately.')" style="cursor:pointer"><div class="main"><div class="t">Fresh gold loan · 2 payments</div><div class="m">OML000463 · finding ₹1,750 + convincing ₹600</div><span class="px-chip green">both jobs pay</span></div><div class="amt">₹2,350</div></div>
-              <div class="px-row" onclick="toast('The customer closed this loan within 60 days, so the pay was taken back. Both lines stay visible — nothing is hidden.')" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000459 · closed within 60 days</div><span class="px-chip red">money taken back</span></div><div class="amt red">−₹1,120</div></div>
-              <div class="px-more">+ 37 more loans this month</div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>4,125</div><span style="color:#94A3B8;font-size:18px">›</span></div>
+              <div class="px-note12" style="margin-top:2px">41 new customers · in slab 2 · ₹125 each · latest: +₹125 today</div>
+              <div class="px-track"><div class="px-fill" style="width:67%"></div></div>
+              <div class="px-caps"><span><b>41 done</b></span><span>next slab at 61 → ₹150 each</span></div>
+            </div>
+
+            <div class="px-card" style="cursor:pointer" data-inc="convincing">
+              <div class="px-label">Convincing customers</div>
+              <hr class="px-div">
+              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>9,775</div><span style="color:#94A3B8;font-size:18px">›</span></div>
+              <div class="px-note12" style="margin-top:2px">12 loans · 0.20% of each loan — one rate, no slabs · latest: OML000448 · ₹980</div>
             </div>
 
             <div class="px-card" onclick="toast('The take-back on OML000459 was bigger than what was left to pay you, so −₹240 carries forward and nets against your next earnings. It is never written off silently.')" style="cursor:pointer">
@@ -1124,6 +1134,12 @@ textarea{resize:vertical;min-height:88px}
               <hr class="px-div">
               <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">June 2026</div><div class="m">62 loans · paid 05 Jul</div><span class="px-chip green">paid</span></div><div class="amt">₹58,900</div></div>
               <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">May 2026</div><div class="m">54 loans · paid 05 Jun</div><span class="px-chip green">paid</span></div><div class="amt">₹51,200</div></div>
+            </div>
+
+            <div class="px-card" data-goto="b-history" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
+              <span style="width:36px;height:36px;border-radius:50%;background:#FFF3D6;color:#B45309;display:grid;place-items:center;font-size:15px;flex:none">⚑</span>
+              <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My complaints</div><div style="font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px">1 being checked · 1 fixed (+₹3,400) · 1 answered with reason</div></div>
+              <span style="color:#94A3B8;font-size:18px">›</span>
             </div>
           </div>
         </div></div>
@@ -1151,6 +1167,29 @@ textarea{resize:vertical;min-height:88px}
         </div></div>
         <div class="note-block" style="max-width:320px;margin-top:0">
           <b>Try it.</b> Approve a new SP incentive on the office side, then come back — it appears here as <b>changing soon</b>. Past earnings never change.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== APP 1b · ONE INCENTIVE, OPENED UP ===== -->
+    <section class="screen" id="b-inc">
+      <div class="screen-head"><span class="id">App · 1b</span><div><h2>One incentive, opened up</h2><div class="sub">Every loan that earned it, the slab you're in, and every rate change — dated, with its reason.</div></div></div>
+      <div class="phone-stage">
+        <div class="phone"><div class="notch"></div><div class="screenview">
+          <div class="px-head">
+            <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+            <div class="px-topline">
+              <button class="px-back" data-goto="b-home">‹</button>
+              <div style="flex:1"><div class="px-id" id="inc-title">Finding customers</div><div class="px-sub" id="inc-sub">July 2026</div></div>
+              <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
+            </div>
+          </div>
+          <div class="px-banner amber" id="inc-banner" style="display:none"></div>
+          <div class="px-body" id="inc-body"></div>
+          <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Something looks wrong</button></div>
+        </div></div>
+        <div class="note-block" style="max-width:320px;margin-top:0">
+          <b>Why this page.</b> A number is only trusted if it opens up: which loans earned it, which slab you're in, and every rate change with a date and a reason — the same record the office sees.
         </div>
       </div>
     </section>
@@ -1397,12 +1436,15 @@ function show(id){
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
   if(id==='a-staged'||id==='a-published') fillConfirmation();
   if(id==='b-rates') renderRateCard();
+  if(id==='b-inc') renderIncDetail();
   if(id==='a-disputes') renderDisputes();
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelector('.stage').scrollTop=0;
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('.msdd')) document.querySelectorAll('.msdd.open').forEach(m=>m.classList.remove('open'));
+  const incEl=e.target.closest('[data-inc]');
+  if(incEl && !e.target.closest('[data-goto]')){ openInc(incEl.dataset.inc); return; }
   const openEl = e.target.closest('[data-open]');
   if(openEl){ e.stopPropagation(); openRule(openEl.dataset.open, openEl.tagName==='BUTTON'); return; }
   const ruleBtn = e.target.closest('[data-rule]');
@@ -2119,6 +2161,82 @@ function rcRow(r,chip,chipCls,extra){
   return '<div class="px-row"><div class="main"><div class="t">'+(RC_LOAN[r.loan]||'Loan')+' — '+(RC_EVENT[r.event]||'')+cty+'</div>'+
     '<div class="m">'+r.pay+' · '+(r.sched||'')+(extra?' · '+extra:'')+'</div>'+
     '<span class="px-chip '+chipCls+'">'+chip+'</span></div></div>';
+}
+/* ---- Px: one incentive opened up — its loans, slab position, and rate history ----
+   The partner-facing mirror of the admin model: category cards on the home page,
+   and per-incentive drill-down. Every rate/slab change is a dated line with a reason
+   (versions publish at the office; each loan keeps the rate live on its own date). */
+const PX_CATS={
+ sourcing:{
+  title:'Finding customers', sub:'July 2026 · 18 loans · still adding up',
+  banner:'★ July push — +0.10% extra on every fresh loan · ends 31 Jul',
+  amt:'28,400', note:'0.35% of each loan you source · Fresh &amp; Takeover gold loans',
+  prog:{pct:40,left:'<b>2 of 5</b> fresh loans this month',right:'₹175 unlocks at 5'},
+  gatenote:'One of your sourcing incentives has a gate: <b>at least 5 fresh loans in the month</b>. The ₹175 is yours from day one — it shows as waiting, and the moment loan 5 lands, all of it firms up together.',
+  rows:[
+   {t:'OML000482 · Fresh',m:'12 Jul · 0.35% of ₹5,00,000',c:['green','locked'],a:'₹1,750'},
+   {t:'OML000471 · Fresh',m:'10 Jul · 0.35% + 0.10% July push',c:['amber','+ bonus'],a:'₹2,240'},
+   {t:'OML000488 · Fresh',m:'09 Jul · gate: 5 fresh loans a month',c:['amber','waiting · 3 more'],a:'₹175'},
+   {t:'OML000455 · Takeover',m:'06 Jul · 0.175% — half rate, low-value loan',c:['green','locked'],a:'₹1,410'},
+   {t:'OML000459 · Takeover',m:'02 Jul · closed within 60 days',c:['red','taken back · shown'],a:'−₹1,120'},
+   {t:'OML000431 · Fresh',m:'28 May · 0.30% — the rate on its loan date',c:['grey','old rate · kept'],a:'₹1,290'}
+  ], more:'+ 13 more loans · your total is the sum of your lines',
+  hist:[
+   {d:'01 Jul 2026',t:'July push started · +0.10% on top',m:'a limited-time boost the office added for July — ends 31 Jul and comes off on its own',c:['amber','adds on top']},
+   {d:'01 Jun 2026',t:'Rate went up · 0.30% → 0.35%',m:'the office approved a new version of this incentive — loans given before 01 Jun keep 0.30%, like OML000431 above',c:['green','approved change']},
+   {d:'01 Apr 2026',t:'Rate set · 0.30%',m:'where this incentive started for Sales Partners',c:['grey','start']}
+  ]
+ },
+ funnel:{
+  title:'New customers · slab', sub:'July 2026 · 41 new customers',
+  amt:'4,125', note:'Counted every time you bring a brand-new customer — the slab you\'re in decides what each one pays',
+  prog:{pct:67,left:'<b>41 done</b> · in slab 2',right:'next slab at 61 → ₹150 each'},
+  slabs:[
+   {t:'Slab 1 · customers 1–40',m:'₹100 each · 40 done',c:['green','filled'],a:'₹4,000'},
+   {t:'Slab 2 · customers 41–60',m:'₹125 each · 1 so far',c:['blue','you are here'],a:'₹125'},
+   {t:'Slab 3 · 61 and above',m:'₹150 each · 20 more to reach it',c:['grey','next'],a:'—'}
+  ],
+  rows:[
+   {t:'Customer · R. Meena',m:'today · your 41st — first at the ₹125 rate',c:['blue','slab 2 · ₹125'],a:'₹125'},
+   {t:'Customer · S. Kumar',m:'11 Jul · your 40th — filled slab 1',c:['green','slab 1 · ₹100'],a:'₹100'},
+   {t:'Customer · A. Farhan',m:'11 Jul',c:['green','slab 1 · ₹100'],a:'₹100'}
+  ], more:'+ 38 more this month',
+  hist:[
+   {d:'01 Jun 2026',t:'Slab rates raised',m:'₹90 / ₹110 / ₹130 became ₹100 / ₹125 / ₹150 — approved at the office; June started fresh on the new rates, May was paid out on the old ones',c:['green','approved change']},
+   {d:'01 Mar 2026',t:'Slabs set · ₹90 / ₹110 / ₹130',m:'where this incentive started',c:['grey','start']}
+  ]
+ },
+ convincing:{
+  title:'Convincing customers', sub:'July 2026 · 12 loans',
+  amt:'9,775', note:'0.20% of each loan where you convinced the customer — one rate for every loan, no slabs',
+  rows:[
+   {t:'OML000448 · Takeover',m:'13 Jul · 0.20% of ₹4,90,000',c:['green','locked'],a:'₹980'},
+   {t:'OML000463 · Fresh',m:'08 Jul · you also found this customer — that pays separately under Finding',c:['green','2 jobs · 2 pays'],a:'₹600'},
+   {t:'OML000440 · Fresh',m:'05 Jul · 0.20% of ₹3,80,000',c:['green','locked'],a:'₹760'}
+  ], more:'+ 9 more loans',
+  hist:[
+   {d:'12 May 2026',t:'Rate set · 0.20%',m:'no changes since — the day anything changes, it appears here and on your rate card first',c:['grey','start']}
+  ]
+ }
+};
+let CUR_CAT='sourcing';
+function openInc(k){ if(PX_CATS[k]) CUR_CAT=k; show('b-inc'); }
+function renderIncDetail(){
+  const c=PX_CATS[CUR_CAT]; if(!c) return;
+  document.getElementById('inc-title').textContent=c.title;
+  document.getElementById('inc-sub').textContent=c.sub;
+  const bn=document.getElementById('inc-banner');
+  if(c.banner){ bn.style.display='flex'; bn.textContent=c.banner; } else bn.style.display='none';
+  const row=r=>'<div class="px-row"'+(r.t.startsWith('OML')?' data-goto="b-firm" style="cursor:pointer"':'')+'><div class="main"><div class="t">'+r.t+'</div><div class="m">'+r.m+'</div><span class="px-chip '+r.c[0]+'">'+r.c[1]+'</span></div><div class="amt'+(r.a&&r.a.startsWith('−')?' red':'')+'">'+r.a+'</div></div>';
+  let h='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div"><div class="px-big"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:6px">'+c.note+'</div>'
+   +(c.prog?'<div class="px-track"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div><div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>':'')
+   +'</div>';
+  if(c.slabs) h+='<div class="px-card"><div class="px-label">Slab by slab — where you are</div><hr class="px-div">'+c.slabs.map(row).join('')+'</div>';
+  if(c.gatenote) h+='<div class="px-card" style="background:linear-gradient(150deg,#FFF7E8,#fff)"><div class="px-label" style="color:#B45309">Waiting to unlock</div><hr class="px-div"><div class="px-note12" style="padding:4px 0">'+c.gatenote+'</div></div>';
+  h+='<div class="px-card"><div class="px-label">'+(c.slabs?'Counted this month':'Loans in this incentive · July')+'</div><hr class="px-div">'+c.rows.map(row).join('')+(c.more?'<div class="px-more">'+c.more+'</div>':'')+'</div>';
+  h+='<div class="px-card"><div class="px-label">Your rate — every change, dated, with the reason</div><hr class="px-div">'+c.hist.map(x=>'<div class="px-row"><div class="main"><div class="t">'+x.t+'</div><div class="m">'+x.d+' · '+x.m+'</div><span class="px-chip '+x.c[0]+'">'+x.c[1]+'</span></div></div>').join('')+'</div>';
+  h+='<div class="px-note12" style="padding:0 4px">A change never touches a loan you already earned — <b>every loan keeps the rate that was live on its own date</b>.</div>';
+  document.getElementById('inc-body').innerHTML=h;
 }
 function renderRateCard(){
   const body=document.getElementById('rc-body'); if(!body) return;
