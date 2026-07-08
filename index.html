@@ -187,6 +187,9 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .slab-table.compact th:last-child,.slab-table.compact td:last-child{display:none}
 .slab-table.compact{width:auto}
 .slab-table.compact .s-pay{width:110px}
+.slab-table .pwrap b,.slab-table .pwrap .u{color:var(--muted);font-weight:700;font-size:12.5px}
+.slab-table input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.slab-table input::-webkit-outer-spin-button,.slab-table input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .slab-table td.pcell{white-space:nowrap}
 .slab-table td.pcell .pwrap{display:inline-flex;align-items:center;gap:5px}
 .slab-table td.act{width:36px;text-align:center;padding:6px}
@@ -807,12 +810,12 @@ textarea{resize:vertical;min-height:88px}
               <option>Every 3 months</option>
             </select>
           </div>
-          <div class="field"><label>Take-back <span class="tip" data-tip="If the customer closes the loan very early, the pay (bonus included) is taken back.">?</span></label>
+          <div class="field"><label>If the loan closes early <span class="tip" data-tip="Customer returns the gold within the window → the pay (bonus included) reverses. Parts not yet paid are simply never paid.">?</span></label>
             <select id="f-claw">
-              <option>Closed within 60 days → all of it</option>
-              <option>Closed within 60 days → part of it</option>
-              <option>Less, the later it closes</option>
-              <option>Never</option>
+              <option>Within 60 days → take back the full pay</option>
+              <option>Within 60 days → take back part of it</option>
+              <option>The later it closes, the less we take back</option>
+              <option>Never take back</option>
             </select>
           </div>
         </div>
@@ -1398,7 +1401,7 @@ function renderSlabs(){
     let cells='';
     cols.forEach(c=>{
       const v = single ? (row.pay ?? '') : (row.pays?.[c] ?? row.pay ?? '');
-      cells+='<td class="pcell"><span class="pwrap">'+(isMoney()?'<b>₹</b>':'')+'<input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="'+ph+'" value="'+v+'">'+(isMoney()?'each':'%')+'</span></td>';
+      cells+='<td class="pcell"><span class="pwrap">'+(isMoney()?'<b>₹</b>':'')+'<input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="'+ph+'" value="'+v+'"><span class="u">'+(isMoney()?'each':'%')+'</span></span></td>';
     });
     return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'"></td>'+
       '<td><input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="and above"></td>'+
