@@ -182,11 +182,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .slab-table td{vertical-align:middle}
 .slab-table input{width:100%;padding:7px 9px;font-size:13px}
 .slab-table .s-pay{width:64px}
-.slab-table.compact th:nth-child(1),.slab-table.compact td:nth-child(1),
-.slab-table.compact th:nth-child(2),.slab-table.compact td:nth-child(2),
-.slab-table.compact th:last-child,.slab-table.compact td:last-child{display:none}
-.slab-table.compact{width:auto}
-.slab-table.compact .s-pay{width:110px}
+.slab-table .s-to:disabled{background:var(--card-2);color:var(--muted);border-style:dashed}
 .slab-table .pwrap .u{color:var(--muted);font-weight:700;font-size:12.5px}
 .slab-table .amt-wrap .rupee{font-size:13px}
 .slab-table .amt-wrap.money input{padding-left:24px}
@@ -239,8 +235,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .modrow{background:var(--card-2);border:none;border-radius:10px;padding:10px 12px}
 .mtag{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:3px 9px;flex:none}
 .mtag.gate{background:#E8F0FF;color:#1D4ED8}
-.modrow .mod-txt{flex:1;border:none;background:transparent;font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--ink);padding:4px 6px;border-bottom:1px dashed transparent;border-radius:0}
-.modrow .mod-txt:focus{outline:none;border-bottom-color:var(--indigo-line)}
+.modrow .mod-body{flex:1;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink);flex-wrap:wrap}
+.modrow .mod-n{width:62px;padding:5px 8px;text-align:center;font-weight:800;font-size:13px;color:var(--indigo-2);border:1px solid var(--indigo-line);border-radius:8px;background:var(--indigo-soft)}
 .mtag.scale{background:#FFF4E0;color:#B45309}
 .amt-wrap{position:relative;display:inline-block}
 .amt-wrap .rupee{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--muted);display:none;pointer-events:none}
@@ -799,7 +795,13 @@ textarea{resize:vertical;min-height:88px}
             </select>
           </div>
           <div class="field"><label>How much <span class="tip" data-tip="One row = the same rate for everyone. Add rows to pay by level — e.g. loans of ₹1L–₹2L at one rate, above ₹2L at another.">?</span></label>
-            <div style="margin-bottom:10px"><span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span></div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+              <div class="seg seg-sm" id="unit-mode">
+                <button class="on" data-u="pct" onclick="setUnitMode('pct')">Percentage %</button>
+                <button data-u="amt" onclick="setUnitMode('amt')">Flat ₹</button>
+              </div>
+              <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
+            </div>
             <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
             <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab — higher level, higher rate</button>
           </div>
@@ -823,11 +825,13 @@ textarea{resize:vertical;min-height:88px}
         </div>
 
         <div class="fcard"><div class="fsect">When</div>
-          <div class="field"><label>Starts from</label>
-            <input type="date" id="f-start" value="2026-08-01">
-          </div>
-          <div class="field"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
-            <input type="date" id="flash-date">
+          <div style="display:flex;gap:14px">
+            <div class="field" style="flex:1"><label>Starts from</label>
+              <input type="date" id="f-start" value="2026-08-01">
+            </div>
+            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
+              <input type="date" id="flash-date">
+            </div>
           </div>
         </div>
 
@@ -839,15 +843,13 @@ textarea{resize:vertical;min-height:88px}
               <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
               <div class="msdd-menu">
                 <div class="mm-t">Gates — they must meet this</div>
-                <button type="button" class="mm-i" onclick="addModPick('gate','At least 10 new customers in the month')">At least 10 new customers in the month</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','At least 5 loans in the month')">At least 5 loans in the month</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','More than 90% of the month&#39;s customers are new')">More than 90% of the month's customers are new</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','At least |10| new customers in the month')">At least 10 new customers in the month</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','At least |5| loans in the month')">At least 5 loans in the month</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','More than |90| % of the month&#39;s customers are new')">More than 90% of the month's customers are new</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member&#39;s name')">Fraud check — loan not in a family member's name</button>
-                <button type="button" class="mm-i" style="color:var(--indigo-2)" onclick="addModPick('gate','')">＋ Write your own gate…</button>
                 <div class="mm-t">Scalers — pay more or less</div>
-                <button type="button" class="mm-i" onclick="addModPick('scale','Pay by loan value band — full / 70% / half (LTV)')">Pay by loan value band — full / 70% / half (LTV)</button>
+                <button type="button" class="mm-i" onclick="addModPick('scale','Pay |50| % of the rate for low-value loans')">Pay less for low-value loans</button>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Adjust by loan tenure')">Adjust by loan tenure</button>
-                <button type="button" class="mm-i" style="color:var(--indigo-2)" onclick="addModPick('scale','')">＋ Write your own scaler…</button>
               </div>
             </div>
           </div>
@@ -1355,7 +1357,19 @@ function updateSums(){
   set('sum-E',document.getElementById('f-sched').value);
 }
 function setRuleType(rt){ if(document.querySelector('#f-ruletype')){document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));} updatePreview(); }
+function setUnitMode(u){
+  document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));
+  const bs=document.getElementById('f-basis');
+  if(u==='amt'){ if(!bs.value.toLowerCase().includes('count')) bs.value='Loan count — this month'; }
+  else { if(bs.value.toLowerCase().includes('count')) bs.value='The loan amount'; }
+  basisChanged();
+}
+function syncUnitSeg(){
+  const isAmt=isMoney();
+  document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',(b.dataset.u==='amt')===isAmt));
+}
 function basisChanged(){
+  syncUnitSeg();
   const help=document.getElementById('basis-tip');
   const b=document.getElementById('f-basis').value;
   if(b.includes('count')){ if(help) help.dataset.tip='The partner gets a fixed ₹ amount for each one.'; }
@@ -1399,24 +1413,28 @@ function renderSlabs(){
   cols.forEach(c=>head+='<th>'+(single?payLab:ROLE_NAMES[c])+'</th>');
   head+='<th></th></tr>';
   document.getElementById('slab-head').innerHTML=head;
-  document.getElementById('slab-body').innerHTML=slabState.map(row=>{
+  const nRows=slabState.length;
+  document.getElementById('slab-body').innerHTML=slabState.map((row,idx)=>{
     let cells='';
     cols.forEach(c=>{
       const v = single ? (row.pay ?? '') : (row.pays?.[c] ?? row.pay ?? '');
       cells+='<td class="pcell"><span class="pwrap"><span class="amt-wrap'+(isMoney()?' money':'')+'"><span class="rupee">₹</span><input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="'+ph+'" value="'+v+'"></span><span class="u">'+(isMoney()?'each':'%')+'</span></span></td>';
     });
-    return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'"></td>'+
-      '<td><input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="and above"></td>'+
-      cells+'<td class="act"><button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button></td></tr>';
+    const last = idx===nRows-1;
+    const upto = last
+      ? '<input type="text" class="s-to" value="" placeholder="No limit" disabled>'
+      : '<input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="enter">';
+    return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'" placeholder="enter"></td>'+
+      '<td>'+upto+'</td>'+cells+
+      '<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
   }).join('');
-  document.getElementById('slab-table').classList.toggle('compact', slabState.length===1);
 }
 function refreshSlabs(){ captureSlabs(); renderSlabs(); }   // keep edits when roles change
 function addSlab(){
   captureSlabs();
-  const lastTo=slabState.length?parseInt(slabState[slabState.length-1].to||0):0;
-  slabState.push({from:lastTo?lastTo+1:1,to:'',pay:0.20,pays:{}});
-  renderSlabs(); toast('Slab row added');
+  slabState.push({from:'',to:'',pay:'',pays:{}});
+  renderSlabs(); toast('Enter where the previous level ends, and the new level starts');
+  updatePreview();
 }
 function rmSlab(btn){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
@@ -1790,7 +1808,11 @@ function addMod(kind,silent,auto){
 function addModPick(kind,label){
   document.getElementById('mods-empty').style.display='none';
   const row=document.createElement('div'); row.className='modrow';
-  row.innerHTML='<span class="mtag '+kind+'">'+(kind==='gate'?'Gate':'Scale')+'</span><input type="text" class="mod-txt" value="'+label.replace(/"/g,'&quot;')+'" placeholder="Type your condition…"><button class="x" onclick="rmMod(this)" title="Remove">✕</button>';
+  const parts=label.split('|');
+  let inner='';
+  if(parts.length===3){ inner='<span>'+parts[0]+'</span><input type="number" class="mod-n" value="'+parts[1]+'" min="0"><span>'+parts[2]+'</span>'; }
+  else { inner='<span>'+label+'</span>'; }
+  row.innerHTML='<span class="mtag '+kind+'">'+(kind==='gate'?'Gate':'Scale')+'</span><span class="mod-body">'+inner+'</span><button class="x" onclick="rmMod(this)" title="Remove">✕</button>';
   document.getElementById('mods').appendChild(row);
   document.getElementById('mod-add').classList.remove('open');
   updatePreview();
