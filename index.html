@@ -1179,25 +1179,24 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-headrow" style="margin-top:2px">
               <div style="flex:1"><div class="nm" style="font-size:18px">My incentives</div></div>
             </div>
-            <div class="px-months">
-              <button class="mchip on">This month</button>
-              <button class="mchip" data-goto="b-final">Last month</button>
-              <button class="mchip" data-goto="b-final">June</button>
-              <button class="mchip" onclick="toast('May is closed — ₹51,200, paid 05 Jun')">May</button>
-              <button class="mchip" onclick="toast('April is closed — ₹46,300, paid 05 May')">April</button>
+            <div class="px-months" id="h-months">
+              <button class="mchip on" onclick="selMonth('jul',this)">This month</button>
+              <button class="mchip" onclick="selMonth('jun',this)">Last month</button>
+              <button class="mchip" onclick="selMonth('may',this)">May</button>
+              <button class="mchip" onclick="selMonth('apr',this)">April</button>
             </div>
             <div class="px-hero">
-              <div class="hl">Earned this month</div>
-              <div class="hn"><span class="ru">₹</span>42,300</div>
-              <div class="hs">locks when July closes</div>
+              <div class="hl" id="h-hl">Earned this month</div>
+              <div class="hn"><span class="ru">₹</span><span id="h-total">42,300</span></div>
+              <div class="hs" id="h-sub">locks when July closes</div>
             </div>
             <div class="px-minis">
-              <div class="px-mini" data-goto="b-firm"><div class="ml">Payment pending</div><div class="mn">₹32,075</div><div class="md">most of it 05 Aug ›</div></div>
-              <div class="px-mini" onclick="toast('Paid into your account on 05 Jul — June\'s second half and July\'s first releases.')"><div class="ml">Paid this month</div><div class="mn green">₹29,450</div><div class="md">on 05 Jul</div></div>
+              <div class="px-mini"><div class="ml">Payment pending</div><div class="mn" id="h-pend">₹32,075</div><div class="md" id="h-pendnote">most of it 05 Aug</div></div>
+              <div class="px-mini"><div class="ml">Paid</div><div class="mn green" id="h-paid">₹29,450</div><div class="md" id="h-paidnote">on 05 Jul</div></div>
             </div>
           </div>
           <div class="px-body">
-            <div class="bnr-row">
+            <div class="bnr-row" id="h-banners">
               <div class="px-bnr gold" data-inc="sourcing">
                 <div class="bnr-top"><span class="bnr-tag">★ LIVE BOOST · ENDS 31 JUL</span><span class="bnr-amt">+0.10%</span></div>
                 <div class="bnr-title">July fresh-loan push</div>
@@ -1208,32 +1207,8 @@ textarea{resize:vertical;min-height:88px}
               </div>
             </div>
 
-            <div class="px-label" style="padding:2px 4px 0">Your incentives · July</div>
-
-            <div class="px-card" style="cursor:pointer" data-inc="sourcing">
-              <div class="px-label" style="display:flex;align-items:center;justify-content:space-between">Finding customers <span class="px-chip amber" style="margin:0">★ July push +0.10%</span></div>
-              <hr class="px-div">
-              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>28,400</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">18 loans · latest +₹1,750</div>
-              <div class="px-track"><div class="px-fill" style="width:40%"></div></div>
-              <div class="px-caps"><span><b>2 of 5</b> fresh loans this month</span><span>🎁 ₹175 at 5 fresh</span></div>
-            </div>
-
-            <div class="px-card" style="cursor:pointer" data-inc="funnel">
-              <div class="px-label">New customers · slab</div>
-              <hr class="px-div">
-              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>4,125</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">41 customers · ₹125 each</div>
-              <div class="px-track"><div class="px-fill" style="width:67%"></div></div>
-              <div class="px-caps"><span>Level 2 · <b>41 done</b></span><span>⬆ Level 3 at 61 · ₹150</span></div>
-            </div>
-
-            <div class="px-card" style="cursor:pointer" data-inc="convincing">
-              <div class="px-label">Convincing customers</div>
-              <hr class="px-div">
-              <div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>9,775</div><span style="color:#94A3B8;font-size:18px">›</span></div>
-              <div class="px-note12" style="margin-top:2px">12 loans · latest +₹980</div>
-            </div>
+            <div class="px-label" id="h-cardslabel" style="padding:2px 4px 0">Your incentives · July</div>
+            <div id="h-cards"></div>
 
             <div class="px-card">
               <div class="px-label">Past months — closed &amp; paid</div>
@@ -1474,6 +1449,7 @@ function show(id){
   if(id==='a-published' && !DETAIL_R){ const r=RULES.find(x=>x.status==='working'); if(r){ renderDetail(r); } }
   if(id==='b-inc') renderIncDetail();
   if(id==='b-history') renderMyIssues();
+  if(id==='b-home') renderHome();
   if(id==='a-disputes') renderDisputes();
   if(id==='a-earners') renderEarnersTable();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -2420,6 +2396,52 @@ const PX_CATS={
 };
 let CUR_CAT='sourcing';
 function openInc(k){ if(PX_CATS[k]) CUR_CAT=k; show('b-inc'); }
+
+/* ---- month-aware home ---- */
+const MONTHS={
+ jul:{hl:'Earned this month',total:'42,300',sub:'locks when July closes',pend:'₹32,075',pendNote:'most of it 05 Aug',paid:'₹29,450',paidNote:'on 05 Jul',open:true,label:'July',cards:[
+   {inc:'sourcing',name:'Finding customers',chip:'★ July push +0.10%',val:'28,400',sub:'18 loans · latest +₹1,750',prog:{pct:40,left:'<b>2 of 5</b> fresh loans this month',right:'🎁 ₹175 at 5 fresh'}},
+   {inc:'funnel',name:'New customers · slab',val:'4,125',sub:'41 customers · ₹125 each',prog:{pct:67,left:'Level 2 · <b>41 done</b>',right:'⬆ Level 3 at 61 · ₹150'}},
+   {inc:'convincing',name:'Convincing customers',val:'9,775',sub:'12 loans · latest +₹980'}
+ ]},
+ jun:{hl:'Earned in June',total:'58,900',sub:'closed · paid 05 Jul',pend:'₹0',pendNote:'fully paid',paid:'₹58,900',paidNote:'on 05 Jul',open:false,label:'June',cards:[
+   {inc:'sourcing',name:'Finding customers',val:'41,300',sub:'44 fresh loans · 0.35%'},
+   {inc:'convincing',name:'Convincing customers',val:'14,200',sub:'12 loans · 0.20%'},
+   {inc:'sourcing',name:'Added later — correction',chip:'correction',chipc:'blue',val:'3,400',sub:'issue accepted · added 06 Jul'}
+ ]},
+ may:{hl:'Earned in May',total:'51,200',sub:'closed · paid 05 Jun',pend:'₹0',pendNote:'fully paid',paid:'₹51,200',paidNote:'on 05 Jun',open:false,label:'May',cards:[
+   {inc:'sourcing',name:'Finding customers',val:'38,000',sub:'40 fresh loans · 0.30%'},
+   {inc:'convincing',name:'Convincing customers',val:'13,200',sub:'11 loans · 0.20%'}
+ ]},
+ apr:{hl:'Earned in April',total:'46,300',sub:'closed · paid 05 May',pend:'₹0',pendNote:'fully paid',paid:'₹46,300',paidNote:'on 05 May',open:false,label:'April',cards:[
+   {inc:'sourcing',name:'Finding customers',val:'34,000',sub:'36 fresh loans · 0.30%'},
+   {inc:'convincing',name:'Convincing customers',val:'12,300',sub:'10 loans · 0.20%'}
+ ]}
+};
+let CUR_MONTH='jul';
+function selMonth(key,btn){
+  if(!MONTHS[key]) return;
+  CUR_MONTH=key;
+  document.querySelectorAll('#h-months .mchip').forEach(c=>c.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderHome();
+}
+function setTxt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+function renderHome(){
+  const m=MONTHS[CUR_MONTH]; if(!m) return;
+  setTxt('h-hl',m.hl); setTxt('h-total',m.total); setTxt('h-sub',m.sub);
+  setTxt('h-pend',m.pend); setTxt('h-pendnote',m.pendNote);
+  setTxt('h-paid',m.paid); setTxt('h-paidnote',m.paidNote);
+  const bn=document.getElementById('h-banners'); if(bn) bn.style.display=m.open?'flex':'none';
+  setTxt('h-cardslabel','Your incentives · '+m.label);
+  const cards=document.getElementById('h-cards'); if(!cards) return;
+  cards.innerHTML=m.cards.map(c=>{
+    const chip=c.chip?'<span class="px-chip '+(c.chipc||'amber')+'" style="margin:0">'+c.chip+'</span>':'';
+    const label=chip?'<div class="px-label" style="display:flex;align-items:center;justify-content:space-between">'+c.name+' '+chip+'</div>':'<div class="px-label">'+c.name+'</div>';
+    const prog=c.prog?'<div class="px-track"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div><div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>':'';
+    return '<div class="px-card" style="cursor:pointer" data-inc="'+c.inc+'">'+label+'<hr class="px-div"><div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>'+c.val+'</div><span style="color:#94A3B8;font-size:18px">›</span></div><div class="px-note12" style="margin-top:2px">'+c.sub+'</div>'+prog+'</div>';
+  }).join('');
+}
 function renderIncDetail(){
   const c=PX_CATS[CUR_CAT]; if(!c) return;
   document.getElementById('inc-title').textContent=c.title;
