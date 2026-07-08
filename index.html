@@ -233,6 +233,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fld-block:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
 .fcard .field label{font-size:9.5px;min-height:15px}
 .fcard .field{margin-bottom:0}
+.fcard .field .msdd-menu label{font-size:15px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--ink);min-height:0;margin:0}
 .fcard .tip{width:13px;height:13px;font-size:8.5px}
 .fcard .field:has(> input[type=date]){height:72px}
 .fcard .field:has(> select),.fcard .field:has(> input[type=text]){min-height:72px}
@@ -241,13 +242,13 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .msdd{position:relative}
 .msdd-btn{width:100%;text-align:left;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;background:var(--card);font-weight:700;font-size:14px;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;font-family:inherit}
 .msdd-btn:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
-.msdd-menu{position:absolute;z-index:40;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--line-2);border-radius:12px;box-shadow:var(--shadow-pop);padding:8px;display:none;max-height:250px;overflow:auto}
+.msdd-menu{position:absolute;z-index:40;top:calc(100% + 10px);left:-14px;right:-14px;background:var(--card);border:1px solid var(--line-2);border-radius:12px;box-shadow:var(--shadow-pop);padding:8px;display:none;max-height:380px;overflow:auto}
 .msdd.open .msdd-menu{display:block}
-.msdd-menu label{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;margin:0;text-transform:none;letter-spacing:0}
+.msdd-menu label{display:flex;gap:12px;align-items:center;padding:11px 12px;border-radius:9px;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;margin:0;text-transform:none;letter-spacing:0;min-height:auto}
 .msdd-menu label:hover{background:var(--card-2)}
-.msdd-menu input[type=checkbox]{width:auto;accent-color:var(--indigo)}
+.msdd-menu input[type=checkbox]{width:17px;height:17px;accent-color:var(--indigo);flex:none}
 .mm-t{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);padding:8px 10px 4px}
-.mm-i{display:block;width:100%;text-align:left;padding:8px 10px;border:none;background:none;border-radius:8px;font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+.mm-i{display:block;width:100%;text-align:left;padding:10px 12px;border:none;background:none;border-radius:9px;font-family:var(--font-ui);font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .mm-i:hover{background:var(--card-2)}
 .modrow{background:var(--card-2);border:none;border-radius:10px;padding:10px 12px}
 .mtag{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:3px 9px;flex:none}
