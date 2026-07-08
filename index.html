@@ -229,6 +229,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .modrow{background:var(--card-2);border:none;border-radius:10px;padding:10px 12px}
 .mtag{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:3px 9px;flex:none}
 .mtag.gate{background:#E8F0FF;color:#1D4ED8}
+.modrow .mod-txt{flex:1;border:none;background:transparent;font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--ink);padding:4px 6px;border-bottom:1px dashed transparent;border-radius:0}
+.modrow .mod-txt:focus{outline:none;border-bottom-color:var(--indigo-line)}
 .mtag.scale{background:#FFF4E0;color:#B45309}
 .amt-wrap{position:relative;display:inline-block}
 .amt-wrap .rupee{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--muted);display:none;pointer-events:none}
@@ -783,23 +785,17 @@ textarea{resize:vertical;min-height:88px}
               <option disabled>Company profit (after v1)</option>
             </select>
           </div>
-          <div class="field"><label>How much <span class="tip" data-tip="Same rate for everyone — or slabs, where doing more earns a higher rate.">?</span></label>
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="field"><label>How much <span class="tip" data-tip="One row = the same rate for everyone. Add rows to pay a higher rate at higher levels.">?</span></label>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
               <div class="seg seg-sm" id="unit-mode">
                 <button class="on" data-u="pct" onclick="setUnitMode('pct')">% of loan</button>
                 <button data-u="amt" onclick="setUnitMode('amt')">₹ fixed</button>
               </div>
-              <div class="seg seg-sm" id="rate-mode">
-                <button class="on" data-m="flat" onclick="setRateMode('flat')">Same rate</button>
-                <button data-m="slab" onclick="setRateMode('slab')">Slabs — rate grows</button>
-              </div>
-              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><span class="amt-wrap" id="amt-wrap"><span class="rupee">₹</span><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:130px;text-align:right"></span><b id="unit-suf">%</b></span>
-              <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
               <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
             </div>
-          </div>
-          <div class="field" id="rate-slab" style="display:none"><label>Slab table</label>
             <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
+            <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab — higher level, higher rate</button>
+          </div>
             <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
           </div>
           <div class="field"><label>Paid out as <span class="tip" data-tip="In how many parts the money reaches them.">?</span></label>
@@ -821,16 +817,10 @@ textarea{resize:vertical;min-height:88px}
           </div>
           </div>
 <div class="fcard"><div class="fsect">When</div>
-          <div class="field"><label>Type <span class="tip" data-tip="Flash = a short-time extra on top of normal pay; it switches off on its end date.">?</span></label>
-            <div class="seg seg-sm" id="f-ruletype">
-              <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
-              <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
-            </div>
-          </div>
           <div class="field"><label>Starts from</label>
             <input type="date" id="f-start" value="2026-08-01">
           </div>
-          <div class="field"><label>Ends on <span class="tip" data-tip="Optional for a normal incentive (a retirement date). A flash switches off on this date.">?</span></label>
+          <div class="field"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
             <input type="date" id="flash-date">
           </div>
           </div>
@@ -846,9 +836,11 @@ textarea{resize:vertical;min-height:88px}
                 <button type="button" class="mm-i" onclick="addModPick('gate','At least 5 loans in the month')">At least 5 loans in the month</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','More than 90% of the month\'s customers are new')">More than 90% of the month's customers are new</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member\'s name')">Fraud check — loan not in a family member's name</button>
+                <button type="button" class="mm-i" style="color:var(--indigo-2)" onclick="addModPick('gate','')">＋ Write your own gate…</button>
                 <div class="mm-t">Scalers — pay more or less</div>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Pay by loan value band — full / 70% / half (LTV)')">Pay by loan value band — full / 70% / half (LTV)</button>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Adjust by loan tenure')">Adjust by loan tenure</button>
+                <button type="button" class="mm-i" style="color:var(--indigo-2)" onclick="addModPick('scale','')">＋ Write your own scaler…</button>
               </div>
             </div>
           </div>
@@ -1353,12 +1345,7 @@ function updateSums(){
   set('sum-D',mods?mods+' added':'None');
   set('sum-E',document.getElementById('f-sched').value);
 }
-function setRuleType(rt){
-  document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
-  const e=document.getElementById('flash-date');
-  if(rt==='flash' && !e.value) e.value='2026-08-31';
-  updatePreview();
-}
+function setRuleType(rt){ if(document.querySelector('#f-ruletype')){document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));} updatePreview(); }
 function setUnitMode(u){
   document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));
   const bs=document.getElementById('f-basis');
@@ -1372,33 +1359,23 @@ function syncUnitSeg(){
 }
 function basisChanged(){
   syncUnitSeg();
-  const b=document.getElementById('f-basis').value;
-  const wrap=document.getElementById('amt-wrap'), suf=document.getElementById('unit-suf');
   const help=document.getElementById('basis-tip');
-  if(b.includes('count')){
-    wrap.classList.add('money'); suf.textContent='each'; setRateMode('flat');
-    if(help) help.dataset.tip='The partner gets a fixed ₹ amount for each one.';
-  } else if(b.includes('A2NU')||b.includes('conversions')){
-    wrap.classList.remove('money'); suf.textContent='%'; setRateMode('slab');
-    if(help) help.dataset.tip='The monthly total decides which slab row applies — set the rows below.';
-  } else {
-    wrap.classList.remove('money'); suf.textContent='%';
-    if(help) help.dataset.tip="The partner gets a % of each loan's amount.";
-  }
+  const b=document.getElementById('f-basis').value;
+  if(b.includes('count')){ if(help) help.dataset.tip='The partner gets a fixed ₹ amount for each one.'; }
+  else if(b.includes('A2NU')||b.includes('conversions')){ if(help) help.dataset.tip='The monthly total decides which slab row applies.'; }
+  else { if(help) help.dataset.tip="The partner gets a % of each loan's amount."; }
+  refreshSlabs();
   updatePreview();
 }
-function setRateMode(m){
-  document.querySelectorAll('#rate-mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
-  document.getElementById('s-rate-wrap').style.display = m==='flat'?'inline':'none';
-  document.getElementById('s-slab-word').style.display = m==='slab'?'inline':'none';
-  document.getElementById('rate-slab').style.display = m==='slab'?'block':'none';
-  updatePreview();
-}
+function setRateMode(m){}
 
 /* ---- editable rates-by-level table (a rate per role at each level) ---- */
-const DEFAULT_BANDS=[{from:1,to:25,pay:0.20},{from:26,to:50,pay:0.35},{from:51,to:'',pay:0.50}];
+const DEFAULT_BANDS=[{from:1,to:'',pay:''}];
 let slabState=[];  // [{from,to,pay,pays:{roleKey:val}}]
 
+function isMoney(){ return document.getElementById('f-basis').value.toLowerCase().includes('count'); }
+function firstPay(){ const i=document.querySelector('#slab-body .s-pay'); return i?i.value:''; }
+function slabCount(){ return document.querySelectorAll('#slab-body .slab-r').length; }
 function captureSlabs(){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
   if(!rows.length) return;                       // nothing rendered yet — keep model
@@ -1418,14 +1395,14 @@ function renderSlabs(){
   const single=roles.length<=1;
   const cols=single?['ALL']:roles;
   let head='<tr><th>From (count)</th><th>Up to</th>';
-  cols.forEach(c=>head+='<th>'+(single?'Pays %':ROLE_NAMES[c]+' %')+'</th>');
+  cols.forEach(c=>head+='<th>'+(single?(isMoney()?'Pays ₹':'Pays %'):ROLE_NAMES[c])+'</th>');
   head+='<th></th></tr>';
   document.getElementById('slab-head').innerHTML=head;
   document.getElementById('slab-body').innerHTML=slabState.map(row=>{
     let cells='';
     cols.forEach(c=>{
       const v = single ? (row.pay ?? 0.20) : (row.pays?.[c] ?? row.pay ?? 0.20);
-      cells+='<td class="pcell"><span class="pwrap"><input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" value="'+v+'">%</span></td>';
+      cells+='<td class="pcell"><span class="pwrap">'+(isMoney()?'<b>₹</b>':'')+'<input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="0.00" value="'+v+'">'+(isMoney()?'each':'%')+'</span></td>';
     });
     return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'"></td>'+
       '<td><input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="and above"></td>'+
@@ -1481,9 +1458,8 @@ function renderRoleRates(){}
 function ratePreview(){
   const el=document.getElementById('rate-eg'); if(!el) return;
   const basis=document.getElementById('f-basis').value;
-  const r=parseFloat((document.getElementById('s-rate')||{}).value);
-  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
-  if(slabOn||!basis.startsWith('The loan amount')||!(r>0)){ el.textContent=''; return; }
+  const r=parseFloat(firstPay());
+  if(slabCount()>1||!basis.startsWith('The loan amount')||!(r>0)){ el.textContent=''; return; }
   el.textContent='≈ ₹'+Math.round(100000*r/100).toLocaleString('en-IN')+' on a ₹1,00,000 loan';
 }
 function setAuto(fieldWrap, tagId, isAuto){
@@ -1509,21 +1485,18 @@ function roleList(plural){
   return names.slice(0,-1).join(', ')+' and '+names[names.length-1];
 }
 function payText(){
-  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
-  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   const basis=document.getElementById('f-basis').value;
   const on = basis.includes('A2NU') ? 'by A2NU% slab' : (basis.includes('count')||basis.includes('conversions')) ? 'on '+basis.toLowerCase().replace(' — ',' ') : basis.includes('profit') ? 'on the profit metric' : 'of the loan amount';
-  if(slabOn){
-    if(selectedActors().length>1) return 'a slab rate '+on+', set per payee type';
-    const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value||0)).filter(n=>!isNaN(n));
-    if(pays.length) return 'a slab rate '+on+' ('+Math.min(...pays)+'% up to '+Math.max(...pays)+'%)';
+  const v=firstPay(), n=slabCount();
+  if(n>1){
+    const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value||0)).filter(x=>x>0);
+    const u=isMoney()?'₹':'%';
+    if(pays.length) return 'a slab rate '+on+' ('+(isMoney()?'₹':'')+Math.min(...pays)+(isMoney()?'':'%')+' up to '+(isMoney()?'₹':'')+Math.max(...pays)+(isMoney()?'':'%')+')';
     return 'a slab rate '+on;
   }
-  const v0=(document.getElementById('s-rate')||{}).value||'';
-  if(!v0) return 'a rate you\'ll set';
-  if(basis.includes('count')) return '₹'+v0+' for every '+(basis.toLowerCase().includes('customer')?'new customer':'loan')+' this month';
-  return v0+'% '+on;
-  return 'a rate per payee type — '+inputs.map(i=>ROLE_NAMES[i.dataset.role]+' '+i.value+'%').join(', ')+' '+on;
+  if(!v) return 'a rate you\'ll set';
+  if(isMoney()) return '₹'+v+' for every '+(basis.toLowerCase().includes('customer')?'new customer':'loan')+' this month';
+  return v+'% '+on;
 }
 function buildSummary(){
   const event=document.getElementById('f-event').value;
@@ -1533,11 +1506,11 @@ function buildSummary(){
   let html='For <em>'+roleList(true)+'</em>, when they <em>'+(EVENT_TEXT[event]||'work')+' '+(LOAN_TEXT[loan]||'a loan')+cityText()+'</em>, pay <em>'+payText()+'</em>'+(mods?', adjusted by <em>'+mods+' modifier'+(mods>1?'s':'')+'</em>':'')+', given as <em>'+sched+'</em>.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   // the same facts, on every rule view
-  const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
+  const flash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
   const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
   const basisShort=document.getElementById('f-basis').value.split(' (')[0].split(' — ')[0];
-  const slabOn2=document.querySelector('#rate-mode button.on').dataset.m==='slab';
-  const r0=parseFloat((document.getElementById('s-rate')||{}).value);
+  const slabOn2=slabCount()>1;
+  const r0=parseFloat(firstPay());
   const ps=payShort();
   let gets = ps==='—' ? '—' : ps + (basisShort==='The loan amount' ? '' : ' · on '+basisShort.toLowerCase());
   if(!slabOn2 && basisShort==='The loan amount' && r0>0){
@@ -1550,7 +1523,6 @@ function buildSummary(){
     ['Does what', (ev?ev.textContent:'—')+' · '+(lo?lo.textContent:'')+' loan', ''],
     ['Given as', document.getElementById('f-sched').value, ''],
     ['Kind of pay', EVENT_CAT[event]||'—', ''],
-    ['Type', flash?'Flash':'Normal', ''],
     ['Extra conditions', mods? mods+' added':'None', ''],
     ['Cities', cl2.length? cl2.join(', ') : 'All cities', ''],
     ['Starts', fmtDate(document.getElementById('f-start').value), '']
@@ -1564,15 +1536,12 @@ function buildSummary(){
 /* ---- live preview panel on the create screen ---- */
 function setFact(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 function payShort(){
-  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
-  const roles=selectedActors();
-  if(slabOn) return roles.length>1?'Slab table, per payee':'Slab table';
-  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
   const b=document.getElementById('f-basis').value;
-  const v0=(document.getElementById('s-rate')||{}).value||'';
-  if(!v0) return '—';
-  if(b.includes('count')) return '₹'+v0+' per '+(b.toLowerCase().includes('customer')?'customer':'loan');
-  return v0+'% of loan';
+  const v=firstPay(), n=slabCount();
+  if(n>1) return 'Slab · '+n+' levels';
+  if(!v) return '—';
+  if(isMoney()) return '₹'+v+' per '+(b.toLowerCase().includes('customer')?'customer':'loan');
+  return v+'% of loan';
 }
 function updatePreview(){
   const roles=selectedActors();
@@ -1603,6 +1572,7 @@ function updatePreview(){
   setFact('pv-pay', payShort());
   setFact('pv-extra', mods? (mods+' modifier'+(mods>1?'s':'')) : 'None');
   setFact('pv-when', sched);
+  ratePreview();
   updateSums();
   runValidation();
 }
@@ -1612,8 +1582,7 @@ function validate(){
   const errs=[], warns=[];
   if(!document.getElementById('f-name').value.trim()) errs.push('Give the incentive a name');
   if(!document.getElementById('f-start').value) errs.push('A start date is required — "immediately" means today\'s date, stated');
-  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
-  if(slabOn){
+  {
     const rows=[...document.querySelectorAll('#slab-body .slab-r')];
     let prevTo=0;
     rows.forEach((r,i)=>{
@@ -1628,14 +1597,14 @@ function validate(){
       prevTo = (to===null? from : to);
       r.querySelectorAll('.s-pay').forEach(p=>{ if(!(parseFloat(p.value)>0)) errs.push('Every slab row needs a rate above 0%'); });
     });
-  } else {
-    const v=parseFloat((document.getElementById('s-rate')||{}).value);
-    if(!(v>0)) errs.push('The rate must be more than 0%');
-    else if(v>2 && !document.getElementById('f-basis').value.includes('count')) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
+  }
+  if(!isMoney()){
+    const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)).filter(v=>v>2);
+    if(pays.length) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
   }
   {
     const st=document.getElementById('f-start').value, en=document.getElementById('flash-date').value;
-    const isFlash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
+    const isFlash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
     if(isFlash && !en) errs.push('A flash needs an end date');
     if(en && st && en<=st) errs.push('The end date must be after the start date');
   }
@@ -1680,7 +1649,7 @@ function loadRule(o){
   applyAutofill();
   if(o.mode) setRateMode(o.mode);
   if(o.sched) document.getElementById('f-sched').value=o.sched;
-  if(o.mode!=='slab' && o.rate!=null){ const inp=document.getElementById('s-rate'); if(inp){ inp.value=o.rate; ratePreview(); } }
+  if(o.rate!=null){ const inp=document.querySelector('#slab-body .s-pay'); if(inp){ inp.value=o.rate; ratePreview(); } }
   updatePreview();
 }
 
@@ -1730,9 +1699,9 @@ function nextVersion(r){
 }
 function currentRuleObj(){
   const event=document.getElementById('f-event').value;
-  const mode=document.querySelector('#rate-mode button.on').dataset.m;
-  const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
-  const firstRate=parseFloat((document.getElementById('s-rate')||{}).value);
+  const mode=slabCount()>1?'slab':'flat';
+  const flash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
+  const firstRate=parseFloat(firstPay());
   return {
     id:ruleNoFor(),
     name:(document.getElementById('f-name').value.trim()||'Untitled rule'),
@@ -1770,10 +1739,9 @@ function computeCost(){
   const roles=selectedActors();
   const event=document.getElementById('f-event').value;
   const cat=EVENT_CAT[event]||'sourcing';
-  const mode=document.querySelector('#rate-mode button.on').dataset.m;
   let ratePct;
-  if(mode==='slab'){ const p=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)||0); ratePct=p.length?(Math.min(...p)+Math.max(...p))/2:0.3; }
-  else { ratePct=parseFloat((document.getElementById('s-rate')||{}).value)||0.3; }
+  if(slabCount()>1){ const p=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)||0); ratePct=p.length?(Math.min(...p)+Math.max(...p))/2:0.3; }
+  else { ratePct=parseFloat(firstPay())||0.3; }
   /* Baseline current rate: the live flat rule for these payees if one exists,
      else the category's typical rate — keeps slab-based payees (no flat rate) from inflating the delta. */
   const CAT_RATE={'sourcing':0.35,'convincing':0.20,'funnel/A2NU':0.35,'collection':0.50,'scope-bonus':0.15};
@@ -1819,7 +1787,7 @@ function addMod(kind,silent,auto){
 function addModPick(kind,label){
   document.getElementById('mods-empty').style.display='none';
   const row=document.createElement('div'); row.className='modrow';
-  row.innerHTML='<span class="mtag '+kind+'">'+(kind==='gate'?'Gate':'Scale')+'</span><span style="flex:1;font-size:13px;font-weight:600">'+label+'</span><button class="x" onclick="rmMod(this)" title="Remove">✕</button>';
+  row.innerHTML='<span class="mtag '+kind+'">'+(kind==='gate'?'Gate':'Scale')+'</span><input type="text" class="mod-txt" value="'+label.replace(/"/g,'&quot;')+'" placeholder="Type your condition…"><button class="x" onclick="rmMod(this)" title="Remove">✕</button>';
   document.getElementById('mods').appendChild(row);
   document.getElementById('mod-add').classList.remove('open');
   updatePreview();
@@ -1835,7 +1803,6 @@ function resetForm(){
   document.getElementById('f-basis').selectedIndex=0;
   basisChanged();
   document.getElementById('f-sched').selectedIndex=0;
-  document.getElementById('s-rate').value='';
   document.getElementById('flash-date').value='';
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked = b.dataset.val==='all');
   document.getElementById('city-btn-label').textContent='All cities';
