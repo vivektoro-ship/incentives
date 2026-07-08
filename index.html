@@ -65,10 +65,11 @@ a{color:inherit}
 .screen{display:none;animation:fade .28s ease}
 .screen.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.screen-head{display:flex;align-items:flex-end;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.screen-head{display:block;margin-bottom:22px}
+.screen-head .id{display:inline-block;margin-bottom:12px}
 .screen-head .id{font-family:var(--font-mono);font-size:12px;color:var(--cyan);letter-spacing:.06em;padding:4px 9px;border:1px solid var(--shell-line);border-radius:7px}
 .screen-head h2{font-size:26px;font-weight:700;color:#fff}
-.screen-head .sub{color:var(--shell-muted);font-size:14px;margin-top:5px;max-width:660px}
+.screen-head .sub{color:var(--shell-muted);font-size:14px;margin-top:7px;max-width:660px}
 .breadcrumb{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--shell-muted);margin-bottom:18px;flex-wrap:wrap}
 .breadcrumb b{color:var(--cyan);font-weight:600}
 .breadcrumb .sep{opacity:.4}
@@ -413,6 +414,25 @@ textarea{resize:vertical;min-height:88px}
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;box-shadow:var(--shadow-pop);opacity:0;pointer-events:none;transition:.3s;z-index:100;max-width:340px;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* sentence-first builder */
+.sent-card{padding:30px 32px 20px}
+.sentence-build{font-family:var(--font-display);font-size:23px;font-weight:600;line-height:2.15;color:var(--ink);letter-spacing:-.01em}
+.sentence-build select,.sentence-build input{display:inline-block;width:auto;font-family:inherit;font-weight:700;font-size:18px;color:var(--indigo-2);background:var(--indigo-soft);border:1px solid var(--indigo-line);border-radius:10px;padding:5px 10px;vertical-align:baseline;cursor:pointer}
+.sentence-build select:focus,.sentence-build input:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.sentence-build input[type=number]{width:86px;text-align:right;cursor:text}
+.sentence-build input[type=date]{font-size:16px;cursor:text}
+.s-blank{white-space:nowrap}
+.s-blank b{color:var(--indigo-2);font-size:18px;margin-left:2px}
+.fine{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:16px;padding-top:14px;font-size:13px}
+.fl2{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2);flex:none}
+.seg-sm button{padding:6px 13px;font-size:12.5px}
+.sel-sm{width:auto;padding:8px 11px;font-size:13px}
+.fine .eg{margin-left:auto;color:var(--muted);font-size:12.5px}
+.sent-foot{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);margin-top:16px;padding-top:16px;flex-wrap:wrap}
+.sent-foot #f-name{max-width:280px;padding:10px 12px;font-size:13.5px}
+@media(max-width:900px){.sentence-build{font-size:18px;line-height:2.3}.sentence-build select,.sentence-build input{font-size:15px}.fine .eg{margin-left:0;width:100%}}
+
+
 /* flat single-card form (accordion removed) */
 .wizard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 26px 14px;box-shadow:var(--shadow-card);gap:0}
 .wizard .fsection,.wizard .fsection.collapsed{background:none;border:none;box-shadow:none;border-radius:0;overflow:visible}
@@ -660,190 +680,117 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
     <section class="screen" id="a-form">
-      <div class="breadcrumb"><b>Create an incentive</b><span class="sep">›</span> Who<span class="sep">›</span> On what<span class="sep">›</span> How much<span class="sep">›</span> Conditions<span class="sep">›</span> When paid</div>
-      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive — fill five blanks</h2><div class="sub">Answer five simple questions. Nothing is paid until it's approved.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive</h2><div class="sub">Say it as one sentence — every blank is clickable. Nothing is paid until it's approved.</div></div></div>
 
-      <div class="create-grid">
-      <div class="wizard">
-        
-        <!-- Step 1 -->
-        <div class="fsection done" id="secA">
-          <div class="fsec-head" onclick="accOpen('secA')"><span class="fsec-tag">1</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>Who gets paid, and for what <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Condition</span></h4><div class="hint">The people, the loan type, and what they must do.</div></div><span class="fsec-sum" id="sum-A"></span><span class="fsec-chev">▾</span></div></div>
-          <div class="fsec-body">
-            <div class="fgrid">
-            <div class="field"><label>Incentive name</label>
-              <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
-            </div>
-            </div>
-            <div class="field"><label>Who gets paid <span class="desc">— one role per incentive</span></label>
-              <div class="chipselect" id="f-actor">
-                <button type="button" class="pchip on" data-val="SP" onclick="toggleActor(this)">Sales Partner (SP)</button>
-                <button type="button" class="pchip" data-val="AP" onclick="toggleActor(this)">Appraisal Partner (AP)</button>
-                <button type="button" class="pchip" data-val="Caller" onclick="toggleActor(this)">Caller</button>
-                <button type="button" class="pchip" data-val="Collection Partner" onclick="toggleActor(this)">Collection Partner</button>
-                <button type="button" class="pchip" data-val="City Lead" onclick="toggleActor(this)">City Lead</button>
-                <button type="button" class="pchip" data-val="Digital Manager" onclick="toggleActor(this)">Digital Manager</button>
-                <button type="button" class="pchip" data-val="Internal DB" onclick="toggleActor(this)">Internal DB</button>
-                <button type="button" class="pchip" data-val="Business Partner" onclick="toggleActor(this)">Business Partner</button>
-                <button type="button" class="pchip" data-val="TPF" onclick="toggleActor(this)">TPF</button>
-              </div>
-            </div>
-            <div class="fgrid">
-            <div class="field"><label>Loan type</label>
-              <select id="f-loan" onchange="applyAutofill()">
-                <option value="fresh">Fresh</option>
-                <option value="continuation">Continuation (renewal · top-up · part-release · merge)</option>
-                <option value="takeover">Takeover</option>
-                <option value="attached">Attached</option>
-              </select>
-            </div>
-            <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
-              <select id="f-event" onchange="applyAutofill()">
-                <option value="self-source">Find the customer themselves → sourcing</option>
-                <option value="convincing">Convince the customer → convincing</option>
-                <option value="funnel-a2nu">Bring new customers this month (A2NU) → funnel/A2NU</option>
-                <option value="closure-bucket">Get the loan repaid → collection</option>
-                <option value="net-conversion">Their city or channel performs → scope-bonus</option>
-              </select>
-            </div>
-            </div><!-- /.fgrid -->
-            <div class="field"><label>Cities <span class="desc">— “All cities” = everywhere</span></label>
-              <div class="chipselect" id="f-city">
-                <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
-                <button type="button" class="pchip" data-val="Chennai" onclick="toggleCity(this)">Chennai</button>
-                <button type="button" class="pchip" data-val="Madurai" onclick="toggleCity(this)">Madurai</button>
-                <button type="button" class="pchip" data-val="Coimbatore" onclick="toggleCity(this)">Coimbatore</button>
-                <button type="button" class="pchip" data-val="Trichy" onclick="toggleCity(this)">Trichy</button>
-                <button type="button" class="pchip" data-val="Salem" onclick="toggleCity(this)">Salem</button>
-                <button type="button" class="pchip" data-val="Hyderabad" onclick="toggleCity(this)">Hyderabad</button>
-                <button type="button" class="pchip" data-val="Bengaluru" onclick="toggleCity(this)">Bengaluru</button>
-              </div>
-            </div>
-            <div class="fgrid">
-            <div class="field"><label>Incentive type</label>
-              <div class="seg" id="f-ruletype">
-                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
-                <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
-              </div>
-              <div class="minihint">Flash = short extra on top of normal pay; ends on its own.</div>
-            </div>
-            <div class="field"><label id="date-label">Starts from</label>
-              <div class="dates">
-                <input type="date" id="f-start" value="2026-08-01">
-                <input type="date" id="flash-date" value="2026-07-31" style="display:none">
-              </div>
-            </div>
-            </div><!-- /.fgrid -->
+      <div class="console" style="max-width:980px">
+        <div class="panel sent-card">
+          <div class="sentence-build">
+            Pay <select id="f-role">
+              <option value="SP">Sales Partners</option>
+              <option value="AP">Appraisal Partners</option>
+              <option value="Caller">Callers</option>
+              <option value="Collection Partner">Collection Partners</option>
+              <option value="City Lead">City Leads</option>
+              <option value="Digital Manager">Digital Managers</option>
+              <option value="Internal DB">the Internal DB team</option>
+              <option value="Business Partner">Business Partners</option>
+              <option value="TPF">TPF partners</option>
+            </select>
+            <span id="s-rate-wrap"><span class="s-blank"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00"><b>%</b></span> of</span><span id="s-slab-word" style="display:none">a slab rate on</span>
+            <select id="f-basis">
+              <option>the loan amount</option>
+              <option>loan count this month</option>
+              <option>customer count this month</option>
+              <option>A2NU % (period)</option>
+              <option>net conversions (period)</option>
+              <option disabled>company profit (after v1)</option>
+            </select>
+            when they <select id="f-event">
+              <option value="self-source">find the customer themselves</option>
+              <option value="convincing">convince the customer</option>
+              <option value="funnel-a2nu">bring new customers (A2NU)</option>
+              <option value="closure-bucket">get the loan repaid</option>
+              <option value="net-conversion">hit their city or channel numbers</option>
+            </select>
+            on a <select id="f-loan">
+              <option value="fresh">Fresh</option>
+              <option value="continuation">Continuation</option>
+              <option value="takeover">Takeover</option>
+              <option value="attached">Attached</option>
+            </select> loan<span id="s-citysum"> in all cities</span>,
+            given as <select id="f-sched">
+              <option>Half next month + half the month after</option>
+              <option>Full amount next month</option>
+              <option>Same month</option>
+              <option>When the loan closes</option>
+              <option>Every 3 months</option>
+            </select>,
+            starting <input type="date" id="f-start" value="2026-08-01"><span id="s-ends" style="display:none">, ending <input type="date" id="flash-date" value="2026-07-31"></span>.
           </div>
-        </div>
 
-        <!-- Step 2 -->
-        <div class="fsection collapsed" id="secB">
-          <div class="fsec-head" onclick="accOpen('secB')"><span class="fsec-tag">2</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>On what amount <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Basis</span></h4><div class="hint">The amount the percentage is taken on.</div></div><span class="fsec-sum" id="sum-B"></span><span class="fsec-chev">▾</span></div></div>
-          <div class="fsec-body">
-            <div class="fgrid">
-            <div class="field" id="fw-basis"><label>Basis</label>
-              <select id="f-basis">
-                <option>The loan amount (net disbursal)</option>
-                <option>Loan count — this month</option>
-                <option>Customer count — this month</option>
-                <option>A2NU % — period aggregate</option>
-                <option>Net conversions — period aggregate</option>
-                <option disabled>Company profit (finance — after v1)</option>
-              </select>
-              <div class="note" id="basis-note" style="display:none"><span class="i">⚠</span> Pay based on company profit (City Lead's PAT / EBITDA parts) comes a little later — it is not in the first version.</div>
+          <div class="fine">
+            <span class="fl2">Type</span>
+            <div class="seg seg-sm" id="f-ruletype">
+              <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
+              <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
             </div>
-            </div><!-- /.fgrid -->
+            <span class="fl2">Rate</span>
+            <div class="seg seg-sm" id="rate-mode">
+              <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
+              <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
+            </div>
+            <span class="fl2">Take-back</span>
+            <select id="f-claw" class="sel-sm">
+              <option>Closed within 60 days → all of it</option>
+              <option>Closed within 60 days → part of it</option>
+              <option>Less, the later it closes</option>
+              <option>Never</option>
+            </select>
+            <span class="eg" id="rate-eg"></span>
           </div>
-        </div>
 
-        <!-- Step 3 -->
-        <div class="fsection collapsed" id="secC">
-          <div class="fsec-head" onclick="accOpen('secC')"><span class="fsec-tag">3</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>How much <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Rate / slab</span></h4><div class="hint">A fixed % — or a slab table.</div></div><span class="fsec-sum" id="sum-C"></span><span class="fsec-chev">▾</span></div></div>
-          <div class="fsec-body">
-            <div class="seg" id="rate-mode">
-              <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat rate</button>
-              <button data-m="slab" onclick="setRateMode('slab')">Slab table</button>
-            </div>
-            <div id="rate-flat" style="margin-top:14px">
-              <label class="sameall" id="same-rate-wrap" style="display:none"><input type="checkbox" id="same-rate" checked onchange="renderRoleRates()"> Same rate for every payee type</label>
-              <div id="role-rates"></div>
-              <input type="hidden" id="f-rate" value="0.35">
-              <div class="rate-preview" id="rate-prev">For example — on ₹50,000 ND, this accrues <b>₹175</b></div>
-            </div>
-            <div id="rate-slab" style="display:none;margin-top:14px">
-              <div style="overflow-x:auto">
-                <table class="slab-table" id="slab-table">
-                  <thead id="slab-head"></thead>
-                  <tbody id="slab-body"></tbody>
-                </table>
-              </div>
-              <button class="add-row" onclick="addSlab()" style="margin-top:10px">+ Add a slab row</button>
-              <div class="note"><span class="i">✦</span> Leave the last <b>Up to</b> empty = “and above”.</div>
+          <div class="fine">
+            <span class="fl2">Cities</span>
+            <div class="chipselect" id="f-city">
+              <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
+              <button type="button" class="pchip" data-val="Chennai" onclick="toggleCity(this)">Chennai</button>
+              <button type="button" class="pchip" data-val="Madurai" onclick="toggleCity(this)">Madurai</button>
+              <button type="button" class="pchip" data-val="Coimbatore" onclick="toggleCity(this)">Coimbatore</button>
+              <button type="button" class="pchip" data-val="Trichy" onclick="toggleCity(this)">Trichy</button>
+              <button type="button" class="pchip" data-val="Salem" onclick="toggleCity(this)">Salem</button>
+              <button type="button" class="pchip" data-val="Hyderabad" onclick="toggleCity(this)">Hyderabad</button>
+              <button type="button" class="pchip" data-val="Bengaluru" onclick="toggleCity(this)">Bengaluru</button>
             </div>
           </div>
-        </div>
 
-        <!-- Step 4 -->
-        <div class="fsection collapsed" id="secD">
-          <div class="fsec-head" onclick="accOpen('secD')"><span class="fsec-tag">4</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>Extra conditions <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Modifiers · optional</span></h4><div class="hint">Gates switch the incentive on/off; scalers pay more or less.</div></div><span class="fsec-sum" id="sum-D"></span><span class="fsec-chev">▾</span></div></div>
-          <div class="fsec-body">
-            <div id="mods"></div>
-            <div class="note empty" id="mods-empty">No extra conditions — everyone who matches gets the full incentive.</div>
-            <button class="add-row" onclick="addMod('gate')" style="margin-top:10px">+ Add a gate — a condition they must meet</button>
-            <button class="add-row" onclick="addMod('scaler')" style="margin-top:8px">+ Add a scaler — pay more or less in some cases</button>
+          <div class="fine" id="rate-slab" style="display:none">
+            <span class="fl2">Slab</span>
+            <div style="flex:1;min-width:0">
+              <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
+              <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
+            </div>
+          </div>
+
+          <div class="fine">
+            <span class="fl2">Conditions</span>
+            <div style="flex:1;min-width:0">
+              <div id="mods"></div>
+              <div class="note empty" id="mods-empty" style="margin:0 0 8px">None — everyone who matches gets the full incentive.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="add-row" style="width:auto" onclick="addMod('gate')">+ gate — must meet</button>
+                <button class="add-row" style="width:auto" onclick="addMod('scaler')">+ scaler — pay more/less</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sent-foot">
+            <input type="text" id="f-name" placeholder="Name this incentive" maxlength="60">
+            <div class="rp-status" id="resolve-status" style="margin:0;flex:1"><span>✓</span></div>
+            <button class="btn ghost" data-goto="a-list">Cancel</button>
+            <button class="btn primary" id="to-review" data-goto="a-review">Check the cost →</button>
           </div>
         </div>
-
-        <!-- Step 5 -->
-        <div class="fsection collapsed" id="secE">
-          <div class="fsec-head" onclick="accOpen('secE')"><span class="fsec-tag">5</span><div style="flex:1;display:flex;align-items:flex-start"><div style="flex:1"><h4>When they get the money <span style="color:var(--muted-2);font-weight:400;font-size:12px">· Schedule</span></h4><div class="hint">In how many parts, and when.</div></div><span class="fsec-sum" id="sum-E"></span><span class="fsec-chev">▾</span></div></div>
-          <div class="fsec-body">
-            <div class="fgrid">
-            <div class="field" id="fw-sched"><label>Release plan</label>
-              <select id="f-sched">
-                <option>Half next month + half the month after</option>
-                <option>Full amount next month</option>
-                <option>Same month</option>
-                <option>When the loan closes</option>
-                <option>Every 3 months</option>
-              </select>
-            </div>
-            <div class="field"><label>Taking money back <span class="desc">— if the loan closes very early</span></label>
-              <select id="f-claw">
-                <option>Closed within 60 days → take back all of it</option>
-                <option>Closed within 60 days → take back part of it</option>
-                <option>Take back less, the later it closes</option>
-                <option>Never take back</option>
-              </select>
-            </div>
-            </div><!-- /.fgrid -->
-          </div>
-        </div>
-      </div><!-- /.wizard -->
-
-      <aside class="rule-preview">
-        <div class="rp-head"><span class="rp-dot"></span> Your incentive so far — updates as you fill</div>
-        <div class="rp-sentence" id="preview-sentence"></div>
-        <div class="rp-facts">
-          <div class="rp-fact"><span>Payee type</span><b id="pv-who">—</b></div>
-          <div class="rp-fact"><span>Loan type</span><b id="pv-loan">—</b></div>
-          <div class="rp-fact"><span>Cities</span><b id="pv-city">All cities</b></div>
-          <div class="rp-fact"><span>If they do</span><b id="pv-did">—</b></div>
-          <div class="rp-fact"><span>Category</span><b id="pv-cat">—</b></div>
-          <div class="rp-fact"><span>Incentive type</span><b id="pv-kind">—</b></div>
-          <div class="rp-fact"><span>Basis</span><b id="pv-basis">—</b></div>
-          <div class="rp-fact"><span>Rate / slab</span><b id="pv-pay">—</b></div>
-          <div class="rp-fact"><span>Modifiers</span><b id="pv-extra">—</b></div>
-          <div class="rp-fact"><span>Schedule</span><b id="pv-when">—</b></div>
-        </div>
-        <div class="rp-status" id="resolve-status"><span>✓</span> All filled — ready to check the cost</div>
-        <div class="rp-actions">
-          <button class="btn primary full" id="to-review" data-goto="a-review">Check the cost →</button>
-          <button class="btn ghost full" data-goto="a-list">Cancel</button>
-        </div>
-      </aside>
-      </div><!-- /.create-grid -->
+      </div>
     </section>
 
     <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
@@ -1359,7 +1306,7 @@ document.addEventListener('click',e=>{
 let toastT;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
 
-function unlock(){ ['secB','secC','secD','secE'].forEach(id=>document.getElementById(id).classList.remove('locked')); }
+function unlock(){}
 function accOpen(id){}
 function updateSums(){
   const roles=selectedActors().map(r=>ROLE_NAMES[r]);
@@ -1375,14 +1322,14 @@ function updateSums(){
 }
 function setRuleType(rt){
   document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
-  document.getElementById('flash-date').style.display = rt==='flash'?'block':'none';
-  document.getElementById('date-label').textContent = rt==='flash' ? 'Starts · ends' : 'Starts from';
+  document.getElementById('s-ends').style.display = rt==='flash'?'inline':'none';
   updatePreview();
 }
 function setRateMode(m){
   document.querySelectorAll('#rate-mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
-  document.getElementById('rate-flat').style.display = m==='flat'?'block':'none';
-  document.getElementById('rate-slab').style.display = m==='slab'?'block':'none';
+  document.getElementById('s-rate-wrap').style.display = m==='flat'?'inline':'none';
+  document.getElementById('s-slab-word').style.display = m==='slab'?'inline':'none';
+  document.getElementById('rate-slab').style.display = m==='slab'?'flex':'none';
   updatePreview();
 }
 
@@ -1443,7 +1390,7 @@ const ROLE_PLURAL={SP:'Sales Partners',AP:'Appraisal Partners','Caller':'Callers
 const ROLE_RATE={SP:0.35,AP:0.20,'Caller':0.25,'City Lead':0.10,'Digital Manager':0.15,'Collection Partner':0.50,'Internal DB':0.10,'Business Partner':0.50,TPF:0.25};
 let rateStore={};
 
-function selectedActors(){ return [...document.querySelectorAll('#f-actor .pchip.on')].map(b=>b.dataset.val); }
+function selectedActors(){ const el=document.getElementById('f-role'); return el?[el.value]:['SP']; }
 function selectedCities(){ return [...document.querySelectorAll('#f-city .pchip.on')].map(b=>b.dataset.val); }
 function toggleCity(btn){
   const all=document.querySelector('#f-city .pchip[data-val="all"]');
@@ -1465,51 +1412,14 @@ function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
     '<span class="rin"><input type="number" class="role-rate" data-role="'+key+'" value="'+val+'" placeholder="0.35" step="0.01" min="0" oninput="ratePreview()"><span class="pct">%</span></span></div>';
 }
-function renderRoleRates(){
-  const roles=selectedActors();
-  const wrap=document.getElementById('role-rates');
-  const sameWrap=document.getElementById('same-rate-wrap');
-  const same=document.getElementById('same-rate');
-  document.querySelectorAll('#role-rates .role-rate').forEach(i=>{ rateStore[i.dataset.role]=i.value; });
-  sameWrap.style.display = roles.length>1 ? 'inline-flex' : 'none';
-  let html='';
-  if(roles.length<=1 || same.checked){
-    if(roles.length===1){
-      const k=roles[0]; html=rateRow('Rate for '+ROLE_NAMES[k], k, rateStore[k]??'');
-    } else {
-      // carry the first role's rate into the shared value instead of resetting to a default
-      const shared = rateStore[roles[0]] ?? rateStore.ALL ?? ROLE_RATE[roles[0]] ?? 0.35;
-      html=rateRow('Rate for every role','ALL', shared);
-    }
-  } else {
-    roles.forEach(r=>{ html+=rateRow('Rate for '+ROLE_NAMES[r], r, rateStore[r]??ROLE_RATE[r]); });
-  }
-  wrap.innerHTML=html;
-  ratePreview();
-}
+function renderRoleRates(){}
 function ratePreview(){
-  const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
-  const prev=document.getElementById('rate-prev');
-  if(!inputs.length){ prev.innerHTML=''; return; }
-  document.getElementById('f-rate').value=inputs[0].value;
+  const el=document.getElementById('rate-eg'); if(!el) return;
   const basis=document.getElementById('f-basis').value;
-  if(!basis.startsWith('The loan amount')){
-    prev.innerHTML='This rate reads <b>'+basis.toLowerCase()+'</b> — a period aggregate computed inside this engine, not the loan amount.';
-    return;
-  }
-  if(inputs.length===1){
-    const r=parseFloat(inputs[0].value);
-    if(!(r>0)){ prev.innerHTML='Enter a rate to see an example.'; return; }
-    const amt=Math.round(50000*r/100);
-    prev.innerHTML='On a ₹50,000 loan this pays <b>₹'+amt.toLocaleString('en-IN')+'</b> — locked the moment the loan is given.';
-  } else {
-    let html='<div style="margin-bottom:4px">On a ₹50,000 loan, each one earns:</div>';
-    inputs.forEach(i=>{
-      const r=parseFloat(i.value||0), amt=Math.round(50000*r/100);
-      html+='<div style="display:flex;justify-content:space-between;margin-top:5px"><span>'+(ROLE_NAMES[i.dataset.role]||i.dataset.role)+' · '+r+'%</span><b>₹'+amt.toLocaleString('en-IN')+'</b></div>';
-    });
-    prev.innerHTML=html;
-  }
+  const r=parseFloat((document.getElementById('s-rate')||{}).value);
+  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  if(slabOn||basis!=='the loan amount'||!(r>0)){ el.textContent=''; return; }
+  el.textContent='≈ ₹'+Math.round(500000*r/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan';
 }
 function setAuto(fieldWrap, tagId, isAuto){
   document.getElementById(fieldWrap).classList.toggle('autofilled', isAuto);
@@ -1537,15 +1447,15 @@ function payText(){
   const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
   const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   const basis=document.getElementById('f-basis').value;
-  const on = basis.includes('A2NU') ? 'by A2NU% slab' : basis.includes('count')||basis.includes('conversions') ? 'on '+basis.toLowerCase() : basis.startsWith('Company profit') ? 'on the profit metric' : 'of the loan amount';
+  const on = basis.includes('A2NU') ? 'by A2NU% slab' : (basis.includes('count')||basis.includes('conversions')) ? 'on '+basis : basis.includes('profit') ? 'on the profit metric' : 'of the loan amount';
   if(slabOn){
     if(selectedActors().length>1) return 'a slab rate '+on+', set per payee type';
     const pays=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value||0)).filter(n=>!isNaN(n));
     if(pays.length) return 'a slab rate '+on+' ('+Math.min(...pays)+'% up to '+Math.max(...pays)+'%)';
     return 'a slab rate '+on;
   }
-  const v0=inputs[0]?inputs[0].value:'';
-  if(inputs.length<=1) return v0? v0+'% '+on : 'a rate you\'ll set';
+  const v0=(document.getElementById('s-rate')||{}).value||'';
+  return v0? v0+'% '+on : 'a rate you\'ll set';
   return 'a rate per payee type — '+inputs.map(i=>ROLE_NAMES[i.dataset.role]+' '+i.value+'%').join(', ')+' '+on;
 }
 function buildSummary(){
@@ -1561,8 +1471,8 @@ function buildSummary(){
   const basisShort=document.getElementById('f-basis').value.split(' (')[0].split(' — ')[0];
   let gets=payShort()+(basisShort==='The loan amount'?'':' · on '+basisShort.toLowerCase());
   const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
-  const r0=parseFloat((document.querySelector('#role-rates .role-rate')||{}).value);
-  if(!slabOn && basisShort==='The loan amount' && r0>0){
+  const r0=parseFloat((document.getElementById('s-rate')||{}).value);
+  if(!slabOn && basisShort==='the loan amount' && r0>0){
     gets+='<div class="fv-ex">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</div>';
   }
   const tiles=[
@@ -1583,9 +1493,8 @@ function payShort(){
   const roles=selectedActors();
   if(slabOn) return roles.length>1?'Slab table, per payee':'Slab table';
   const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
-  const v0=inputs[0]?inputs[0].value:'';
-  if(inputs.length<=1) return v0? v0+'% of loan' : '—';
-  return 'Per payee: '+inputs.map(i=>i.value+'%').join(' / ');
+  const v0=(document.getElementById('s-rate')||{}).value||'';
+  return v0? v0+'% of loan' : '—';
 }
 function updatePreview(){
   const roles=selectedActors();
@@ -1606,6 +1515,7 @@ function updatePreview(){
   setFact('pv-who', roles.map(r=>ROLE_NAMES[r]).join(', ')||'—');
   const lo=document.querySelector('#f-loan option:checked'); setFact('pv-loan', lo?lo.textContent.split(' (')[0]:'—');
   const cl=cityList(); setFact('pv-city', cl.length? cl.join(', ') : 'All cities');
+  const cs=document.getElementById('s-citysum'); if(cs) cs.textContent = cl.length? cityText() : ' in all cities';
   const ev=document.querySelector('#f-event option:checked'); setFact('pv-did', ev?ev.textContent.split(' → ')[0]:'—');
   setFact('pv-cat', EVENT_CAT[event]||'—');
   setFact('pv-kind', flash?'Flash · additive · auto-expiring':'Normal');
@@ -1639,11 +1549,9 @@ function validate(){
       r.querySelectorAll('.s-pay').forEach(p=>{ if(!(parseFloat(p.value)>0)) errs.push('Every slab row needs a rate above 0%'); });
     });
   } else {
-    [...document.querySelectorAll('#role-rates .role-rate')].forEach(i=>{
-      const v=parseFloat(i.value);
-      if(!(v>0)) errs.push('The rate must be more than 0%');
-      else if(v>2) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
-    });
+    const v=parseFloat((document.getElementById('s-rate')||{}).value);
+    if(!(v>0)) errs.push('The rate must be more than 0%');
+    else if(v>2) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
   }
   if(document.querySelector('#f-ruletype button.on').dataset.rt==='flash'){
     const s=document.getElementById('f-start').value, e=document.getElementById('flash-date').value;
@@ -1679,7 +1587,7 @@ function fillConfirmation(){
 function loadRule(o){
   resetForm();
   document.getElementById('f-name').value=o.name||'';
-  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on',(o.roles||['SP']).includes(b.dataset.val)));
+  document.getElementById('f-role').value=(o.roles&&o.roles[0])||'SP';
   if(o.loan) document.getElementById('f-loan').value=o.loan;
   if(o.event) document.getElementById('f-event').value=o.event;
   if(o.start) document.getElementById('f-start').value=o.start;
@@ -1689,7 +1597,7 @@ function loadRule(o){
   applyAutofill();
   if(o.mode) setRateMode(o.mode);
   if(o.sched) document.getElementById('f-sched').value=o.sched;
-  if(o.mode!=='slab' && o.rate!=null){ const inp=document.querySelector('#role-rates .role-rate'); if(inp){ inp.value=o.rate; ratePreview(); } }
+  if(o.mode!=='slab' && o.rate!=null){ const inp=document.getElementById('s-rate'); if(inp){ inp.value=o.rate; ratePreview(); } }
   updatePreview();
 }
 
@@ -1743,7 +1651,7 @@ function currentRuleObj(){
   const event=document.getElementById('f-event').value;
   const mode=document.querySelector('#rate-mode button.on').dataset.m;
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
-  const firstRate=parseFloat((document.querySelector('#role-rates .role-rate')||{}).value);
+  const firstRate=parseFloat((document.getElementById('s-rate')||{}).value);
   return {
     id:ruleNoFor(),
     name:(document.getElementById('f-name').value.trim()||'Untitled rule'),
@@ -1784,7 +1692,7 @@ function computeCost(){
   const mode=document.querySelector('#rate-mode button.on').dataset.m;
   let ratePct;
   if(mode==='slab'){ const p=[...document.querySelectorAll('#slab-body .s-pay')].map(i=>parseFloat(i.value)||0); ratePct=p.length?(Math.min(...p)+Math.max(...p))/2:0.3; }
-  else { const rs=[...document.querySelectorAll('#role-rates .role-rate')].map(i=>parseFloat(i.value)||0); ratePct=rs.length?rs.reduce((a,b)=>a+b,0)/rs.length:0.3; }
+  else { ratePct=parseFloat((document.getElementById('s-rate')||{}).value)||0.3; }
   /* Baseline current rate: the live flat rule for these payees if one exists,
      else the category's typical rate — keeps slab-based payees (no flat rate) from inflating the delta. */
   const CAT_RATE={'sourcing':0.35,'convincing':0.20,'funnel/A2NU':0.35,'collection':0.50,'scope-bonus':0.15};
@@ -1826,15 +1734,17 @@ function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector
 function resetForm(){
   document.getElementById('f-name').value='';
   document.getElementById('f-start').value='2026-08-01';
-  document.querySelectorAll('#f-actor .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='SP'));
+  document.getElementById('f-role').value='SP';
   document.getElementById('f-loan').value='fresh';
   document.getElementById('f-event').value='self-source';
+  document.getElementById('f-basis').selectedIndex=0;
+  document.getElementById('f-sched').selectedIndex=0;
+  document.getElementById('s-rate').value='';
   document.querySelectorAll('#f-city .pchip').forEach(b=>b.classList.toggle('on', b.dataset.val==='all'));
   document.getElementById('mods').innerHTML='';
   document.getElementById('mods-empty').style.display='flex';
-  document.getElementById('same-rate').checked=true;
-  rateStore={};
   initSlabs();
+  setRateMode('flat');
   setRuleType('standard'); applyAutofill();
 }
 
