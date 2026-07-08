@@ -182,6 +182,11 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .slab-table td{vertical-align:middle}
 .slab-table input{width:100%;padding:7px 9px;font-size:13px}
 .slab-table .s-pay{width:64px}
+.slab-table.compact th:nth-child(1),.slab-table.compact td:nth-child(1),
+.slab-table.compact th:nth-child(2),.slab-table.compact td:nth-child(2),
+.slab-table.compact th:last-child,.slab-table.compact td:last-child{display:none}
+.slab-table.compact{width:auto}
+.slab-table.compact .s-pay{width:110px}
 .slab-table td.pcell{white-space:nowrap}
 .slab-table td.pcell .pwrap{display:inline-flex;align-items:center;gap:5px}
 .slab-table td.act{width:36px;text-align:center;padding:6px}
@@ -1381,20 +1386,25 @@ function renderSlabs(){
   const roles=selectedActors();
   const single=roles.length<=1;
   const cols=single?['ALL']:roles;
-  let head='<tr><th>From (count)</th><th>Up to</th>';
-  cols.forEach(c=>head+='<th>'+(single?(isMoney()?'Pays ₹':'Pays %'):ROLE_NAMES[c])+'</th>');
+  const b=document.getElementById('f-basis').value.toLowerCase();
+  const lvl = b.includes('a2nu') ? 'A2NU %' : b.includes('customer') ? 'new customers' : b.includes('conversions') ? 'conversions' : 'loans in the month';
+  const payLab = isMoney() ? 'Pays ₹ each' : 'Pays % of loan';
+  const ph = isMoney() ? '50' : '0.35';
+  let head='<tr><th>From ('+lvl+')</th><th>Up to</th>';
+  cols.forEach(c=>head+='<th>'+(single?payLab:ROLE_NAMES[c])+'</th>');
   head+='<th></th></tr>';
   document.getElementById('slab-head').innerHTML=head;
   document.getElementById('slab-body').innerHTML=slabState.map(row=>{
     let cells='';
     cols.forEach(c=>{
-      const v = single ? (row.pay ?? 0.20) : (row.pays?.[c] ?? row.pay ?? 0.20);
-      cells+='<td class="pcell"><span class="pwrap">'+(isMoney()?'<b>₹</b>':'')+'<input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="0.00" value="'+v+'">'+(isMoney()?'each':'%')+'</span></td>';
+      const v = single ? (row.pay ?? '') : (row.pays?.[c] ?? row.pay ?? '');
+      cells+='<td class="pcell"><span class="pwrap">'+(isMoney()?'<b>₹</b>':'')+'<input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="'+ph+'" value="'+v+'">'+(isMoney()?'each':'%')+'</span></td>';
     });
     return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'"></td>'+
       '<td><input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="and above"></td>'+
       cells+'<td class="act"><button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button></td></tr>';
   }).join('');
+  document.getElementById('slab-table').classList.toggle('compact', slabState.length===1);
 }
 function refreshSlabs(){ captureSlabs(); renderSlabs(); }   // keep edits when roles change
 function addSlab(){
