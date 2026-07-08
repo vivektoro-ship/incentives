@@ -247,7 +247,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .sent-build{font-family:var(--font-display),Georgia,serif;font-size:24px;line-height:2.05;color:var(--ink);font-weight:700;letter-spacing:-.01em}
 .sent-pick,.sent-num{appearance:none;-webkit-appearance:none;border:none;font-family:inherit;font-size:inherit;font-weight:700;color:var(--indigo-2);background:var(--indigo-soft);border-radius:8px;cursor:pointer;width:auto;max-width:100%;display:inline-block;vertical-align:middle;box-sizing:border-box;min-height:0;height:auto}
 .sent-pick{padding:3px 25px 3px 11px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' stroke='%232F6BFF' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 9px center}
-.sent-card .sent-num{width:70px;background:var(--indigo-soft);border:none;color:var(--indigo-2);font-weight:700;text-align:center;padding:3px 8px;border-radius:8px;cursor:text}
+.sent-card .sent-num{width:92px;background:var(--indigo-soft);border:none;color:var(--indigo-2);font-family:inherit;font-size:inherit;font-weight:700;text-align:center;padding:3px 8px;border-radius:8px;cursor:text}
+.sent-card .sent-unit{font-size:inherit;font-weight:700;color:var(--indigo-2)}
 .sent-pick:hover,.sent-num:hover{filter:brightness(.97)}
 .sent-pick:focus,.sent-num:focus{outline:none;box-shadow:0 0 0 3px var(--indigo-soft)}
 .sent-unit{color:var(--indigo-2);font-weight:700}
@@ -861,12 +862,7 @@ textarea{resize:vertical;min-height:88px}
               <option value="takeover">Takeover</option>
               <option value="attached">Attached</option>
             </select>
-            <select class="sent-pick" id="s-prod" onchange="sentSet('prod')">
-              <option value="any">loan</option>
-              <option value="GL">gold loan</option>
-              <option value="PL">personal loan</option>
-            </select>
-            in
+            gold or personal loan in
             <select class="sent-pick" id="s-city" onchange="sentSet('city')">
               <option value="all">any city</option>
               <option value="Chennai">Chennai</option>
@@ -946,7 +942,7 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
           <div style="display:flex;gap:14px">
-            <div class="field" style="flex:1"><label>Product</label>
+            <div class="field" style="flex:1;display:none"><label>Product</label>
               <select id="f-product">
                 <option value="any">GL + PL</option>
                 <option value="GL">Gold Loan (GL)</option>
@@ -1843,27 +1839,27 @@ function sentSet(f){
   if(f==='role') g('f-role').value=g('s-role').value;
   else if(f==='event') g('f-event').value=g('s-event').value;
   else if(f==='loan') g('f-loan').value=g('s-loan').value;
-  else if(f==='prod') g('f-product').value=g('s-prod').value;
   else if(f==='sched') g('f-sched').value=g('s-sched').value;
   else if(f==='city'){ const v=g('s-city').value; document.querySelectorAll('#f-city .cty').forEach(c=>c.checked=(v==='all'?c.dataset.val==='all':c.dataset.val===v)); const _c=cityList(); g('city-btn-label').textContent=_c.length?(_c.length>3?_c.length+' cities':_c.join(', ')):'All cities'; }
   else if(f==='rate'){ const inp=document.querySelector('#slab-body .s-pay'); if(inp) inp.value=g('s-rate').value; }
   if(f==='loan'||f==='event') applyAutofill();
   updatePreview();
 }
+/* form → sentence, but never clobber the control the user is actively editing
+   (select fires 'input' before 'change'; without this guard the input phase resets the pick) */
 function syncSentence(){
   const g=id=>document.getElementById(id); if(!g('s-role')) return;
-  g('s-role').value=g('f-role').value;
-  g('s-event').value=g('f-event').value;
-  g('s-loan').value=g('f-loan').value;
-  g('s-prod').value=g('f-product').value;
-  const cl=cityList(); g('s-city').value=cl.length===1?cl[0]:'all';
-  g('s-sched').value=g('f-sched').value;
-  const inp=document.querySelector('#slab-body .s-pay'); if(inp && inp.value!=='' && document.activeElement!==g('s-rate')) g('s-rate').value=inp.value;
+  const ae=document.activeElement, put=(id,v)=>{ const el=g(id); if(el && el!==ae) el.value=v; };
+  put('s-role',g('f-role').value);
+  put('s-event',g('f-event').value);
+  put('s-loan',g('f-loan').value);
+  const cl=cityList(); put('s-city', cl.length===1?cl[0]:'all');
+  put('s-sched',g('f-sched').value);
+  const inp=document.querySelector('#slab-body .s-pay'); if(inp && inp.value!=='') put('s-rate',inp.value);
   const u=g('s-unit'); if(u) u.textContent=isMoney()?'₹':'%';
 }
 function updatePreview(){
   renderRoleMode();
-  syncSentence();
   const roles=selectedActors();
   const event=document.getElementById('f-event').value;
   const loan=document.getElementById('f-loan').value;
@@ -1977,7 +1973,7 @@ function loadRule(o){
   if(o.mode) setRateMode(o.mode);
   if(o.sched) document.getElementById('f-sched').value=o.sched;
   if(o.rate!=null){ const inp=document.querySelector('#slab-body .s-pay'); if(inp){ inp.value=o.rate; ratePreview(); } }
-  updatePreview();
+  updatePreview(); syncSentence();
 }
 
 /* ---- The rulebook: data-driven, category precedence, versioned publish, backtest ---- */
@@ -2247,6 +2243,7 @@ function resetForm(){
   initSlabs();
   setRateMode('flat');
   setRuleType('standard'); applyAutofill();
+  syncSentence();
 }
 
 function toggleReject(){
@@ -2599,10 +2596,14 @@ function renderRateCard(){
 }
 
 ['change','input'].forEach(ev=>document.getElementById('a-form').addEventListener(ev, updatePreview));
+/* form → sentence: only when the edit came from the detailed form, never from the sentence itself
+   (a sentence <select> fires input→change; syncing on its own events would revert the pick) */
+['change','input'].forEach(ev=>document.getElementById('a-form').addEventListener(ev, e=>{ if(!e.target.closest('.sent-build')) syncSentence(); }));
 initSlabs();
 applyAutofill();
 basisChanged();
 updatePreview();
+syncSentence();
 renderRulesTable();
 </script>
 </body>
