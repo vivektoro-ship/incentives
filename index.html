@@ -601,17 +601,21 @@ textarea{resize:vertical;min-height:88px}
 .px-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#4C8DFF,#2563EB)}
 .px-caps{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#5B6472;margin-top:8px}
 .px-caps b{color:#0B1220;font-weight:800}
-/* featured incentive card — reused gradient treatment for a real live incentive */
-.px-feature{background:linear-gradient(135deg,#1D3A8A,#2563EB);color:#fff;box-shadow:0 10px 26px rgba(37,99,235,.32)}
-.px-feature .px-track{background:rgba(255,255,255,.22);margin-top:14px}
-.px-feature .px-fill{background:linear-gradient(90deg,#FFD68A,#FFB020)}
-.px-feature .px-caps{color:rgba(255,255,255,.82)}
-.px-feature .px-caps b{color:#fff}
-.lvl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.lvl-tag{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#FFD68A}
-.lvl-name{font-size:19px;font-weight:800;margin-top:3px;line-height:1.15}
-.lvl-rank{font-size:14px;font-weight:800;background:rgba(255,255,255,.18);border-radius:99px;padding:6px 12px;white-space:nowrap}
-.feat-sub{font-size:12px;font-weight:500;color:rgba(255,255,255,.86);margin-top:12px;line-height:1.5}
+/* month filter chips (dark header) */
+.px-months{display:flex;gap:8px;overflow-x:auto;margin-top:14px;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.mchip{flex:none;padding:7px 15px;border-radius:99px;font-size:12px;font-weight:700;font-family:inherit;background:rgba(255,255,255,.1);color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.16);cursor:pointer;white-space:nowrap}
+.mchip.on{background:#fff;color:#0B1220;border-color:#fff}
+/* multi-colour incentive banners */
+.bnr-row{display:flex;flex-direction:column;gap:10px}
+.px-bnr{border-radius:16px;padding:14px 16px;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(13,26,64,.16)}
+.px-bnr.gold{background:linear-gradient(135deg,#B45309,#F59E0B)}
+.px-bnr.blue{background:linear-gradient(135deg,#1D3A8A,#2563EB)}
+.px-bnr.green{background:linear-gradient(135deg,#15803D,#22A857)}
+.bnr-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.bnr-tag{font-size:10px;font-weight:800;letter-spacing:.1em;opacity:.92}
+.bnr-amt{font-size:15px;font-weight:800;background:rgba(255,255,255,.18);border-radius:99px;padding:5px 11px;white-space:nowrap}
+.bnr-title{font-size:16px;font-weight:800;margin-top:5px;line-height:1.15}
+.bnr-sub{font-size:12px;font-weight:500;opacity:.9;margin-top:4px;line-height:1.45}
 .px-kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0F3F8;font-size:13px}
 .px-kv:last-child{border-bottom:none}
 .px-kv .k{color:#64748B;font-weight:600}
@@ -1123,7 +1127,13 @@ textarea{resize:vertical;min-height:88px}
             <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
             <div class="px-headrow" style="margin-top:2px">
               <div style="flex:1"><div class="nm" style="font-size:18px">My incentives</div></div>
-              <button class="px-hbtn" onclick="toast('Pick a month — this one or a closed one')">July ▾</button>
+            </div>
+            <div class="px-months">
+              <button class="mchip on">This month</button>
+              <button class="mchip" data-goto="b-final">Last month</button>
+              <button class="mchip" data-goto="b-final">June</button>
+              <button class="mchip" onclick="toast('May is closed — ₹51,200, paid 05 Jun')">May</button>
+              <button class="mchip" onclick="toast('April is closed — ₹46,300, paid 05 May')">April</button>
             </div>
             <div class="px-hero">
               <div class="hl">Earned this month</div>
@@ -1136,12 +1146,17 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
           <div class="px-body">
-            <div class="px-card px-feature" data-inc="sourcing" style="cursor:pointer">
-              <div class="lvl-top">
-                <div><div class="lvl-tag">★ LIVE BOOST · ENDS 31 JUL</div><div class="lvl-name">July fresh-loan push</div></div>
-                <div class="lvl-rank">+0.10%</div>
+            <div class="bnr-row">
+              <div class="px-bnr gold" data-inc="sourcing">
+                <div class="bnr-top"><span class="bnr-tag">★ LIVE BOOST · ENDS 31 JUL</span><span class="bnr-amt">+0.10%</span></div>
+                <div class="bnr-title">July fresh-loan push</div>
+                <div class="bnr-sub">Extra on every fresh loan you bring — on top of your normal pay</div>
               </div>
-              <div class="feat-sub">Extra pay on every fresh loan you bring this month — on top of your normal rate. Already added to the loans below.</div>
+              <div class="px-bnr blue" data-inc="sourcing">
+                <div class="bnr-top"><span class="bnr-tag">🎁 ALMOST THERE</span><span class="bnr-amt">₹175</span></div>
+                <div class="bnr-title">3 more fresh loans unlocks ₹175</div>
+                <div class="bnr-sub">A gate the office set — hit 5 this month and it all firms up</div>
+              </div>
             </div>
 
             <div class="px-label" style="padding:2px 4px 0">Your incentives · July</div>
@@ -2299,6 +2314,7 @@ const PX_CATS={
   banner:'★ July push — +0.10% extra on every fresh loan · ends 31 Jul',
   amt:'28,400', note:'0.35% of each loan you source · Fresh &amp; Takeover gold loans',
   prog:{pct:40,left:'<b>2 of 5</b> fresh loans this month',right:'₹175 unlocks at 5'},
+  pay:{how:'Half comes next month, half the month after · a 60-day take-back window applies',sched:[{t:'Coming to you · 05 Aug',a:'₹14,200'},{t:'Then · 05 Sep',a:'₹14,200'}]},
   gatenote:'₹175 is waiting — <b>3 more fresh loans</b> this month and all of it is yours.',
   rows:[
    {t:'OML000482 · Fresh',m:'12 Jul · 0.35% of ₹5,00,000',c:['green','locked'],a:'₹1,750'},
@@ -2318,6 +2334,7 @@ const PX_CATS={
   title:'New customers · slab', sub:'July 2026 · 41 new customers',
   amt:'4,125', note:'Counted every time you bring a brand-new customer — the slab you\'re in decides what each one pays',
   prog:{pct:67,left:'<b>41 done</b> · in slab 2',right:'next slab at 61 → ₹150 each'},
+  pay:{how:'Paid in full the next month — new-customer counts settle at month close',sched:[{t:'Coming to you · 05 Aug',a:'₹4,125'}]},
   slabs:[
    {t:'Slab 1 · customers 1–40',m:'₹100 each · 40 done',c:['green','filled'],a:'₹4,000'},
    {t:'Slab 2 · customers 41–60',m:'₹125 each · 1 so far',c:['blue','you are here'],a:'₹125'},
@@ -2336,6 +2353,7 @@ const PX_CATS={
  convincing:{
   title:'Convincing customers', sub:'July 2026 · 12 loans',
   amt:'9,775', note:'0.20% of each loan where you convinced the customer — one rate for every loan, no slabs',
+  pay:{how:'Half comes next month, half the month after',sched:[{t:'Coming to you · 05 Aug',a:'₹4,890'},{t:'Then · 05 Sep',a:'₹4,885'}]},
   rows:[
    {t:'OML000448 · Takeover',m:'13 Jul · 0.20% of ₹4,90,000',c:['green','locked'],a:'₹980'},
    {t:'OML000463 · Fresh',m:'08 Jul · you also found this customer — that pays separately under Finding',c:['green','2 jobs · 2 pays'],a:'₹600'},
@@ -2358,6 +2376,7 @@ function renderIncDetail(){
   let h='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div"><div class="px-big"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:6px">'+c.note+'</div>'
    +(c.prog?'<div class="px-track"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div><div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>':'')
    +'</div>';
+  if(c.pay) h+='<div class="px-card"><div class="px-label">How &amp; when you get paid</div><hr class="px-div"><div class="px-note12" style="margin:2px 0 8px">'+c.pay.how+'</div>'+c.pay.sched.map(x=>'<div class="px-row"><div class="main"><div class="t">'+x.t+'</div></div><div class="amt">'+x.a+'</div></div>').join('')+'</div>';
   if(c.slabs) h+='<div class="px-card"><div class="px-label">Slab by slab — where you are</div><hr class="px-div">'+c.slabs.map(row).join('')+'</div>';
   if(c.gatenote) h+='<div class="px-card" style="background:linear-gradient(150deg,#FFF7E8,#fff)"><div class="px-label" style="color:#B45309">Waiting to unlock</div><hr class="px-div"><div class="px-note12" style="padding:4px 0">'+c.gatenote+'</div></div>';
   h+='<div class="px-card"><div class="px-label">'+(c.slabs?'Counted this month':'Loans in this incentive · July')+'</div><hr class="px-div">'+c.rows.map(row).join('')+(c.more?'<div class="px-more">'+c.more+'</div>':'')+'</div>';
