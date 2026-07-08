@@ -225,7 +225,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fcard .field > select,.fcard .field > input[type=text],.fcard .field > input[type=date]{border:none;background:transparent;padding:5px 0;font-size:15px;border-radius:0}
 .fcard .field > select:focus,.fcard .field > input[type=text]:focus,.fcard .field > input[type=date]:focus{box-shadow:none;outline:none}
 .fcard .field:has(> select):focus-within,.fcard .field:has(> input[type=text]):focus-within,.fcard .field:has(> input[type=date]):focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
-.fld-block{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:9px 14px 9px}
+.fld-block{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:9px 14px;min-height:72px;display:flex;align-items:center}
+.fld-block .msdd{width:100%}
 .fld-block .msdd-flat{border:none;background:transparent;padding:0;width:100%}
 .fld-block .inlbl{font-size:9.5px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);display:inline-flex;gap:6px;align-items:center}
 .fld-block:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
