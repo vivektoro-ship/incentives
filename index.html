@@ -1446,6 +1446,7 @@ function renderSlabs(){
   }).join('');
 }
 function refreshSlabs(){ captureSlabs(); renderSlabs(); }   // keep edits when roles change
+function setRuleType(rt){}
 function syncFroms(){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
   const isVal=document.getElementById('f-basis').value.startsWith('The loan amount');
