@@ -230,6 +230,10 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .mtag{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:3px 9px;flex:none}
 .mtag.gate{background:#E8F0FF;color:#1D4ED8}
 .mtag.scale{background:#FFF4E0;color:#B45309}
+.amt-wrap{position:relative;display:inline-block}
+.amt-wrap .rupee{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--muted);display:none;pointer-events:none}
+.amt-wrap.money .rupee{display:block}
+.amt-wrap.money input{padding-left:26px}
 .pchip{padding:7px 13px;font-size:12.5px}
 .field{margin-bottom:15px}
 .dates{display:flex;gap:10px}
@@ -783,7 +787,7 @@ textarea{resize:vertical;min-height:88px}
                 <button class="on" data-m="flat" onclick="setRateMode('flat')">Same rate</button>
                 <button data-m="slab" onclick="setRateMode('slab')">Slabs — rate grows</button>
               </div>
-              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><b id="unit-pre" style="display:none">₹</b><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b id="unit-suf">%</b></span>
+              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><span class="amt-wrap" id="amt-wrap"><span class="rupee">₹</span><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:130px;text-align:right"></span><b id="unit-suf">%</b></span>
               <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
               <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
             </div>
@@ -1351,16 +1355,18 @@ function setRuleType(rt){
 }
 function basisChanged(){
   const b=document.getElementById('f-basis').value;
-  const pre=document.getElementById('unit-pre'), suf=document.getElementById('unit-suf');
+  const wrap=document.getElementById('amt-wrap'), suf=document.getElementById('unit-suf');
   const help=document.getElementById('basis-help');
-  if(b.includes('count')){ pre.style.display='inline'; suf.textContent='each'; setRateMode('flat');
-    if(help) help.textContent='The partner gets a fixed ₹ amount for each one.'; }
-  else if(b.includes('A2NU')||b.includes('conversions')){ setRateMode('slab');
-    if(help) help.textContent='The monthly total decides which slab row applies — set the rows below.'; }
-  else { pre.style.display='none'; suf.textContent='%';
-    if(help) help.textContent="The partner gets a % of each loan's amount."; }
-  if(b.includes('count')) return updatePreview();
-  if(!(b.includes('A2NU')||b.includes('conversions'))){ pre.style.display='none'; suf.textContent='%'; }
+  if(b.includes('count')){
+    wrap.classList.add('money'); suf.textContent='each'; setRateMode('flat');
+    if(help) help.textContent='The partner gets a fixed ₹ amount for each one.';
+  } else if(b.includes('A2NU')||b.includes('conversions')){
+    wrap.classList.remove('money'); suf.textContent='%'; setRateMode('slab');
+    if(help) help.textContent='The monthly total decides which slab row applies — set the rows below.';
+  } else {
+    wrap.classList.remove('money'); suf.textContent='%';
+    if(help) help.textContent="The partner gets a % of each loan's amount.";
+  }
   updatePreview();
 }
 function setRateMode(m){
