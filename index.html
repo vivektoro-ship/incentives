@@ -196,6 +196,12 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fsec-head h4{font-size:16px}
 .fsec-body{padding-top:12px}
 #f-name{max-width:380px;padding:9px 12px;font-size:13.5px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:900px){.fgrid{grid-template-columns:1fr}}
+.pchip{padding:7px 13px;font-size:12.5px}
+.field{margin-bottom:15px}
+.dates{display:flex;gap:10px}
+.dates input{min-width:0}
 /* live preview */
 .rule-preview{position:sticky;top:74px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:18px}
 .rp-head{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:13px}
@@ -655,8 +661,8 @@ textarea{resize:vertical;min-height:88px}
                 <button type="button" class="pchip" data-val="Business Partner" onclick="toggleActor(this)">Business Partner</button>
                 <button type="button" class="pchip" data-val="TPF" onclick="toggleActor(this)">TPF</button>
               </div>
-              <div class="minihint" id="actor-hint">1 payee type selected</div>
             </div>
+            <div class="fgrid">
             <div class="field"><label>Loan type</label>
               <select id="f-loan" onchange="applyAutofill()">
                 <option value="fresh">Fresh</option>
@@ -664,14 +670,17 @@ textarea{resize:vertical;min-height:88px}
                 <option value="takeover">Takeover</option>
                 <option value="attached">Attached</option>
               </select>
-              <div class="minihint">Sub-types come from reference data. LTV / new-customer are conditions, not loan types.</div>
             </div>
-            <div class="field"><label>Product</label>
-              <select id="f-prod">
-                <option>Gold loan (GL)</option>
-                <option>Personal loan (PL)</option>
+            <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
+              <select id="f-event" onchange="applyAutofill()">
+                <option value="self-source">Find the customer themselves → sourcing</option>
+                <option value="convincing">Convince the customer → convincing</option>
+                <option value="funnel-a2nu">Bring new customers this month (A2NU) → funnel/A2NU</option>
+                <option value="closure-bucket">Get the loan repaid → collection</option>
+                <option value="net-conversion">Their city or channel performs → scope-bonus</option>
               </select>
             </div>
+            </div><!-- /.fgrid -->
             <div class="field"><label>Cities <span class="desc">— pick one or more; “All cities” means everywhere</span></label>
               <div class="chipselect" id="f-city">
                 <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
@@ -684,28 +693,21 @@ textarea{resize:vertical;min-height:88px}
                 <button type="button" class="pchip" data-val="Bengaluru" onclick="toggleCity(this)">Bengaluru</button>
               </div>
             </div>
-            <div class="field"><label>If they do this <span class="desc">— decides the category</span></label>
-              <select id="f-event" onchange="applyAutofill()">
-                <option value="self-source">Find the customer themselves → sourcing</option>
-                <option value="convincing">Convince the customer → convincing</option>
-                <option value="funnel-a2nu">Bring new customers this month (A2NU) → funnel/A2NU</option>
-                <option value="closure-bucket">Get the loan repaid → collection</option>
-                <option value="net-conversion">Their city or channel performs → scope-bonus</option>
-              </select>
-            </div>
+            <div class="fgrid">
             <div class="field"><label>Incentive type</label>
               <div class="seg" id="f-ruletype">
                 <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
-                <button data-rt="flash" onclick="setRuleType('flash')">Flash · short-time bonus</button>
+                <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
               </div>
-              <div id="flash-inline" style="display:none;margin-top:12px">
-                <div class="field" style="margin:0"><label>Expiry <span class="auto-tag">flash</span></label><input type="date" id="flash-date" value="2026-07-31"></div>
+              <div class="minihint">Flash = short extra on top of normal pay; ends on its own.</div>
+            </div>
+            <div class="field"><label id="date-label">Starts from</label>
+              <div class="dates">
+                <input type="date" id="f-start" value="2026-08-01">
+                <input type="date" id="flash-date" value="2026-07-31" style="display:none">
               </div>
-              <div class="note"><span class="i">✦</span> Flash = short extra on top of normal pay; switches off at expiry.</div>
             </div>
-            <div class="field"><label>Starts from <span class="desc">— mid-month changes wait for next month</span></label>
-              <input type="date" id="f-start" value="2026-08-01">
-            </div>
+            </div><!-- /.fgrid -->
           </div>
         </div>
 
@@ -722,7 +724,6 @@ textarea{resize:vertical;min-height:88px}
                 <option>Net conversions — period aggregate</option>
                 <option disabled>Company profit (finance — after v1)</option>
               </select>
-              <div class="minihint">Only facts from the maintained list can be used.</div>
               <div class="note" id="basis-note" style="display:none"><span class="i">⚠</span> Pay based on company profit (City Lead's PAT / EBITDA parts) comes a little later — it is not in the first version.</div>
             </div>
           </div>
@@ -1353,7 +1354,8 @@ function updateSums(){
 }
 function setRuleType(rt){
   document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
-  document.getElementById('flash-inline').style.display = rt==='flash'?'block':'none';
+  document.getElementById('flash-date').style.display = rt==='flash'?'block':'none';
+  document.getElementById('date-label').textContent = rt==='flash' ? 'Starts · ends' : 'Starts from';
   updatePreview();
 }
 function setRateMode(m){
@@ -1436,7 +1438,7 @@ function toggleActor(btn){
   applyAutofill();
 }
 function updateActorHint(){
-  document.getElementById('actor-hint').textContent = 'One incentive pays one role.';
+  const el=document.getElementById('actor-hint'); if(el) el.textContent='One incentive pays one role.';
 }
 function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
