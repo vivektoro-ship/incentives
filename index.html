@@ -89,13 +89,12 @@ a{color:inherit}
 
 #a-list .console{max-width:1220px}
 .rule-table{width:100%;border-collapse:collapse;table-layout:fixed}
-.rule-table th:nth-child(1){width:22%}
+.rule-table th:nth-child(1){width:23%}
 .rule-table th:nth-child(2){width:12%}
-.rule-table th:nth-child(3){width:14%}
+.rule-table th:nth-child(3){width:15%}
 .rule-table th:nth-child(4){width:11%}
-.rule-table th:nth-child(5){width:22%}
-.rule-table th:nth-child(6){width:12%}
-.rule-table th:nth-child(7){width:7%}
+.rule-table th:nth-child(5){width:25%}
+.rule-table th:nth-child(6){width:14%}
 .rule-table th{text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:6px 12px;border-bottom:1px solid var(--line)}
 .rule-table td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #a-list .panel{overflow-x:auto}
@@ -671,7 +670,7 @@ textarea{resize:vertical;min-height:88px}
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
           </div>
           <table class="rule-table">
-            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th></tr></thead>
             <tbody id="rules-body"></tbody>
           </table>
         </div>
@@ -680,77 +679,110 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
     <section class="screen" id="a-form">
-      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive</h2><div class="sub">Say it as one sentence — every blank is clickable. Nothing is paid until it's approved.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive</h2><div class="sub">Fill the fields — nothing is paid until it's approved.</div></div></div>
 
       <div class="console" style="max-width:980px">
-        <div class="panel sent-card">
-          <div class="sentence-build">
-            Pay <select id="f-role">
-              <option value="SP">Sales Partners</option>
-              <option value="AP">Appraisal Partners</option>
-              <option value="Caller">Callers</option>
-              <option value="Collection Partner">Collection Partners</option>
-              <option value="City Lead">City Leads</option>
-              <option value="Digital Manager">Digital Managers</option>
-              <option value="Internal DB">the Internal DB team</option>
-              <option value="Business Partner">Business Partners</option>
-              <option value="TPF">TPF partners</option>
-            </select>
-            <span id="s-rate-wrap"><span class="s-blank"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00"><b>%</b></span> of</span><span id="s-slab-word" style="display:none">a slab rate on</span>
-            <select id="f-basis">
-              <option>the loan amount</option>
-              <option>loan count this month</option>
-              <option>customer count this month</option>
-              <option>A2NU % (period)</option>
-              <option>net conversions (period)</option>
-              <option disabled>company profit (after v1)</option>
-            </select>
-            when they <select id="f-event">
-              <option value="self-source">find the customer themselves</option>
-              <option value="convincing">convince the customer</option>
-              <option value="funnel-a2nu">bring new customers (A2NU)</option>
-              <option value="closure-bucket">get the loan repaid</option>
-              <option value="net-conversion">hit their city or channel numbers</option>
-            </select>
-            on a <select id="f-loan">
-              <option value="fresh">Fresh</option>
-              <option value="continuation">Continuation</option>
-              <option value="takeover">Takeover</option>
-              <option value="attached">Attached</option>
-            </select> loan<span id="s-citysum"> in all cities</span>,
-            given as <select id="f-sched">
-              <option>Half next month + half the month after</option>
-              <option>Full amount next month</option>
-              <option>Same month</option>
-              <option>When the loan closes</option>
-              <option>Every 3 months</option>
-            </select>,
-            starting <input type="date" id="f-start" value="2026-08-01"><span id="s-ends" style="display:none">, ending <input type="date" id="flash-date" value="2026-07-31"></span>.
+        <div class="panel" style="padding:26px 30px 20px">
+
+          <div class="fgrid">
+            <div class="field"><label>Incentive name</label>
+              <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
+            </div>
+            <div class="field"><label>Who gets paid <span class="desc">— one role per incentive</span></label>
+              <select id="f-role">
+                <option value="SP">Sales Partner (SP)</option>
+                <option value="AP">Appraisal Partner (AP)</option>
+                <option value="Caller">Caller</option>
+                <option value="Collection Partner">Collection Partner</option>
+                <option value="City Lead">City Lead</option>
+                <option value="Digital Manager">Digital Manager</option>
+                <option value="Internal DB">Internal DB</option>
+                <option value="Business Partner">Business Partner</option>
+                <option value="TPF">TPF</option>
+              </select>
+            </div>
           </div>
 
-          <div class="fine">
-            <span class="fl2">Type</span>
-            <div class="seg seg-sm" id="f-ruletype">
-              <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
-              <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
+          <div class="fgrid">
+            <div class="field"><label>If they do this</label>
+              <select id="f-event">
+                <option value="self-source">Find the customer themselves</option>
+                <option value="convincing">Convince the customer</option>
+                <option value="funnel-a2nu">Bring new customers (A2NU)</option>
+                <option value="closure-bucket">Get the loan repaid</option>
+                <option value="net-conversion">Hit their city or channel numbers</option>
+              </select>
             </div>
-            <span class="fl2">Rate</span>
-            <div class="seg seg-sm" id="rate-mode">
-              <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
-              <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
+            <div class="field"><label>Loan type</label>
+              <select id="f-loan">
+                <option value="fresh">Fresh</option>
+                <option value="continuation">Continuation</option>
+                <option value="takeover">Takeover</option>
+                <option value="attached">Attached</option>
+              </select>
             </div>
-            <span class="fl2">Take-back</span>
-            <select id="f-claw" class="sel-sm">
-              <option>Closed within 60 days → all of it</option>
-              <option>Closed within 60 days → part of it</option>
-              <option>Less, the later it closes</option>
-              <option>Never</option>
-            </select>
-            <span class="eg" id="rate-eg"></span>
           </div>
 
-          <div class="fine">
-            <span class="fl2">Cities</span>
+          <div class="fgrid">
+            <div class="field"><label>On what amount</label>
+              <select id="f-basis">
+                <option>the loan amount</option>
+                <option>loan count this month</option>
+                <option>customer count this month</option>
+                <option>A2NU % (period)</option>
+                <option>net conversions (period)</option>
+                <option disabled>company profit (after v1)</option>
+              </select>
+            </div>
+            <div class="field"><label>How much</label>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <div class="seg seg-sm" id="rate-mode">
+                  <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
+                  <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
+                </div>
+                <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b>%</b></span>
+                <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
+                <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fgrid">
+            <div class="field"><label>Given as</label>
+              <select id="f-sched">
+                <option>Half next month + half the month after</option>
+                <option>Full amount next month</option>
+                <option>Same month</option>
+                <option>When the loan closes</option>
+                <option>Every 3 months</option>
+              </select>
+            </div>
+            <div class="field"><label>Starts from</label>
+              <div style="display:flex;gap:10px;align-items:center">
+                <input type="date" id="f-start" value="2026-08-01">
+                <span id="s-ends" style="display:none;flex:1;min-width:0;display:none"><span style="font-size:12px;color:var(--muted);margin-right:6px">ends</span><input type="date" id="flash-date" value="2026-07-31" style="width:auto"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fgrid">
+            <div class="field"><label>Type <span class="desc">— flash = short extra on top, ends on its own</span></label>
+              <div class="seg seg-sm" id="f-ruletype">
+                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
+                <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
+              </div>
+            </div>
+            <div class="field"><label>Take-back <span class="desc">— if the loan closes very early</span></label>
+              <select id="f-claw">
+                <option>Closed within 60 days → all of it</option>
+                <option>Closed within 60 days → part of it</option>
+                <option>Less, the later it closes</option>
+                <option>Never</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field"><label>Cities <span class="desc">— "All cities" = everywhere</span></label>
             <div class="chipselect" id="f-city">
               <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
               <button type="button" class="pchip" data-val="Chennai" onclick="toggleCity(this)">Chennai</button>
@@ -763,28 +795,21 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
 
-          <div class="fine" id="rate-slab" style="display:none">
-            <span class="fl2">Slab</span>
-            <div style="flex:1;min-width:0">
-              <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
-              <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
-            </div>
+          <div class="field" id="rate-slab" style="display:none"><label>Slab table</label>
+            <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
+            <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
           </div>
 
-          <div class="fine">
-            <span class="fl2">Conditions</span>
-            <div style="flex:1;min-width:0">
-              <div id="mods"></div>
-              <div class="note empty" id="mods-empty" style="margin:0 0 8px">None — everyone who matches gets the full incentive.</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="add-row" style="width:auto" onclick="addMod('gate')">+ gate — must meet</button>
-                <button class="add-row" style="width:auto" onclick="addMod('scaler')">+ scaler — pay more/less</button>
-              </div>
+          <div class="field"><label>Extra conditions <span class="desc">— optional</span></label>
+            <div id="mods"></div>
+            <div class="note empty" id="mods-empty" style="margin-top:0">None — everyone who matches gets the full incentive.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <button class="add-row" style="width:auto" onclick="addMod('gate')">+ gate — a condition they must meet</button>
+              <button class="add-row" style="width:auto" onclick="addMod('scaler')">+ scaler — pay more or less</button>
             </div>
           </div>
 
           <div class="sent-foot">
-            <input type="text" id="f-name" placeholder="Name this incentive" maxlength="60">
             <div class="rp-status" id="resolve-status" style="margin:0;flex:1"><span>✓</span></div>
             <button class="btn ghost" data-goto="a-list">Cancel</button>
             <button class="btn primary" id="to-review" data-goto="a-review">Check the cost →</button>
@@ -1322,14 +1347,14 @@ function updateSums(){
 }
 function setRuleType(rt){
   document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));
-  document.getElementById('s-ends').style.display = rt==='flash'?'inline':'none';
+  document.getElementById('s-ends').style.display = rt==='flash'?'inline-flex':'none';
   updatePreview();
 }
 function setRateMode(m){
   document.querySelectorAll('#rate-mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   document.getElementById('s-rate-wrap').style.display = m==='flat'?'inline':'none';
   document.getElementById('s-slab-word').style.display = m==='slab'?'inline':'none';
-  document.getElementById('rate-slab').style.display = m==='slab'?'flex':'none';
+  document.getElementById('rate-slab').style.display = m==='slab'?'block':'none';
   updatePreview();
 }
 
@@ -1626,14 +1651,12 @@ function renderRulesTable(){
   body.innerHTML = rows.length ? rows.map(r=>{
     const sp=STATUS_PILL[r.status]||['draft',r.status];
     const flash=r.flash?' <span class="pill flash" style="margin-left:6px">flash · additive</span>':'';
-    const label=(r.status==='draft'||r.status==='staged')?'Edit':'Update';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
       '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
       '<td class="rate-sum">'+r.pay+'</td>'+
-      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
-      '<td><button class="row-edit" data-open="'+r.id+'" data-stop>'+label+'</button></td></tr>';
-  }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
+      '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td></tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
 }
 function openRule(id,btn){
   const r=RULES.find(x=>x.id===id); if(!r) return;
