@@ -183,6 +183,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .slab-table input{width:100%;padding:7px 9px;font-size:13px}
 .slab-table .s-pay{width:64px}
 .slab-table .s-to:disabled{background:var(--card-2);color:var(--muted);border-style:dashed}
+.slab-table .s-from[readonly]{color:var(--muted);background:var(--card-2);pointer-events:none;border-style:dashed}
 .slab-table .pwrap .u{color:var(--muted);font-weight:700;font-size:12.5px}
 .slab-table .amt-wrap .rupee{font-size:13px}
 .slab-table .amt-wrap.money input{padding-left:24px}
@@ -1457,23 +1458,34 @@ function renderSlabs(){
     });
     const last = idx===nRows-1;
     const isVal = lvl==='loan value ₹';
-    const fmtAttr = isVal ? ' inputmode="numeric" oninput="fmtIN(this)"' : ' min="0"';
+    const toIn = isVal ? ' inputmode="numeric" oninput="fmtIN(this);syncFroms()"' : ' min="0" oninput="syncFroms()"';
     const fType = isVal ? 'text' : 'number';
     const wrapO = isVal ? '<span class="amt-wrap money"><span class="rupee">₹</span>' : '';
     const wrapC = isVal ? '</span>' : '';
     const upto = last
       ? '<input type="text" class="s-to" value="" placeholder="No limit" disabled>'
-      : '<td-x>'.replace('<td-x>', wrapO+'<input type="'+fType+'" class="s-to"'+fmtAttr+' value="'+(row.to??'')+'" placeholder="'+(isVal?'2,00,000':'enter')+'">'+wrapC);
-    return '<tr class="slab-r"><td>'+wrapO+'<input type="'+fType+'" class="s-from"'+fmtAttr+' value="'+row.from+'" placeholder="'+(isVal?'1':'enter')+'">'+wrapC+'</td>'+
+      : wrapO+'<input type="'+fType+'" class="s-to"'+toIn+' value="'+(row.to??'')+'" placeholder="'+(isVal?'2,00,000':'enter')+'">'+wrapC;
+    const fromVal = idx===0 ? '1' : (row.from??'');
+    return '<tr class="slab-r"><td>'+wrapO+'<input type="text" class="s-from" value="'+fromVal+'" readonly tabindex="-1" placeholder="auto">'+wrapC+'</td>'+
       '<td>'+upto+'</td>'+cells+
       '<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
   }).join('');
 }
 function refreshSlabs(){ captureSlabs(); renderSlabs(); }   // keep edits when roles change
+function syncFroms(){
+  const rows=[...document.querySelectorAll('#slab-body .slab-r')];
+  const isVal=document.getElementById('f-basis').value.startsWith('The loan amount');
+  rows.forEach((r,i)=>{
+    const f=r.querySelector('.s-from');
+    if(i===0){ f.value='1'; return; }
+    const t=numOf(rows[i-1].querySelector('.s-to').value);
+    f.value = t ? (isVal ? (t+1).toLocaleString('en-IN') : String(t+1)) : '';
+  });
+}
 function addSlab(){
   captureSlabs();
   slabState.push({from:'',to:'',pay:'',pays:{}});
-  renderSlabs(); toast('Enter where the previous level ends, and the new level starts');
+  renderSlabs(); syncFroms(); toast('Enter where the previous level ends — the next level starts automatically');
   updatePreview();
 }
 function rmSlab(btn){
