@@ -210,7 +210,6 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fsec-tag{border-radius:50%;width:26px;height:26px;font-size:12px;flex:none;margin-top:1px}
 .fsec-head h4{font-size:16px}
 .fsec-body{padding-top:12px}
-#f-name{padding:9px 12px;font-size:13.5px}
 .modrow .mtype{width:44px;flex:none}
 .chipselect{gap:7px}
 #rate-flat .role-rate-row{max-width:calc(50% - 10px)}
@@ -226,6 +225,16 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fcard .field > select,.fcard .field > input[type=text],.fcard .field > input[type=date]{border:none;background:transparent;padding:5px 0;font-size:15px;border-radius:0}
 .fcard .field > select:focus,.fcard .field > input[type=text]:focus,.fcard .field > input[type=date]:focus{box-shadow:none;outline:none}
 .fcard .field:has(> select):focus-within,.fcard .field:has(> input[type=text]):focus-within,.fcard .field:has(> input[type=date]):focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.fld-block{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:9px 14px 9px}
+.fld-block .msdd-flat{border:none;background:transparent;padding:0;width:100%}
+.fld-block .inlbl{font-size:9.5px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);display:inline-flex;gap:6px;align-items:center}
+.fld-block:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.fcard .field label{font-size:9.5px;min-height:15px}
+.fcard .tip{width:13px;height:13px;font-size:8.5px}
+.fcard .field:has(> input[type=date]){height:72px}
+.fcard .field:has(> select),.fcard .field:has(> input[type=text]){min-height:72px}
+.slab-table td .amt-wrap{display:block}
+.slab-table td .amt-wrap input{width:100%}
 .msdd{position:relative}
 .msdd-btn{width:100%;text-align:left;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;background:var(--card);font-weight:700;font-size:14px;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;font-family:inherit}
 .msdd-btn:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
@@ -779,9 +788,9 @@ textarea{resize:vertical;min-height:88px}
               <option value="attached">Attached</option>
             </select>
           </div>
-          <div class="field"><label>Cities <span class="tip" data-tip="Pick one or more. All cities means everywhere.">?</span></label>
+          <div class="field fld-block">
             <div class="msdd" id="f-city">
-              <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span id="city-btn-label">All cities</span><span style="color:var(--muted-2)">▾</span></button>
+              <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Cities <span class="tip" data-tip="Pick one or more. All cities means everywhere.">?</span></span><span id="city-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">All cities</span></span><span style="color:var(--muted-2)">▾</span></button>
               <div class="msdd-menu">
                 <label><input type="checkbox" class="cty" data-val="all" checked onchange="cityChange(this)"> All cities</label>
                 <label><input type="checkbox" class="cty" data-val="Chennai" onchange="cityChange(this)"> Chennai</label>
@@ -1389,6 +1398,8 @@ let slabState=[];  // [{from,to,pay,pays:{roleKey:val}}]
 function isMoney(){ return document.getElementById('f-basis').value.toLowerCase().includes('count'); }
 function firstPay(){ const i=document.querySelector('#slab-body .s-pay'); return i?i.value:''; }
 function slabCount(){ return document.querySelectorAll('#slab-body .slab-r').length; }
+function fmtIN(el){ const d=(el.value||'').replace(/[^0-9]/g,''); el.value = d? Number(d).toLocaleString('en-IN') : ''; }
+function numOf(v){ const n=parseInt((v??'').toString().replace(/,/g,'')); return n; }
 function captureSlabs(){
   const rows=[...document.querySelectorAll('#slab-body .slab-r')];
   if(!rows.length) return;                       // nothing rendered yet — keep model
@@ -1423,10 +1434,15 @@ function renderSlabs(){
       cells+='<td class="pcell"><span class="pwrap"><span class="amt-wrap'+(isMoney()?' money':'')+'"><span class="rupee">₹</span><input type="number" class="s-pay" data-role="'+c+'" step="0.01" min="0" placeholder="'+ph+'" value="'+v+'"></span><span class="u">'+(isMoney()?'each':'%')+'</span></span></td>';
     });
     const last = idx===nRows-1;
+    const isVal = lvl==='loan value ₹';
+    const fmtAttr = isVal ? ' inputmode="numeric" oninput="fmtIN(this)"' : ' min="0"';
+    const fType = isVal ? 'text' : 'number';
+    const wrapO = isVal ? '<span class="amt-wrap money"><span class="rupee">₹</span>' : '';
+    const wrapC = isVal ? '</span>' : '';
     const upto = last
       ? '<input type="text" class="s-to" value="" placeholder="No limit" disabled>'
-      : '<input type="number" class="s-to" min="0" value="'+(row.to??'')+'" placeholder="enter">';
-    return '<tr class="slab-r"><td><input type="number" class="s-from" min="0" value="'+row.from+'" placeholder="enter"></td>'+
+      : '<td-x>'.replace('<td-x>', wrapO+'<input type="'+fType+'" class="s-to"'+fmtAttr+' value="'+(row.to??'')+'" placeholder="'+(isVal?'2,00,000':'enter')+'">'+wrapC);
+    return '<tr class="slab-r"><td>'+wrapO+'<input type="'+fType+'" class="s-from"'+fmtAttr+' value="'+row.from+'" placeholder="'+(isVal?'1':'enter')+'">'+wrapC+'</td>'+
       '<td>'+upto+'</td>'+cells+
       '<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
   }).join('');
@@ -1609,9 +1625,9 @@ function validate(){
     const rows=[...document.querySelectorAll('#slab-body .slab-r')];
     let prevTo=0;
     rows.forEach((r,i)=>{
-      const from=parseInt(r.querySelector('.s-from').value);
+      const from=numOf(r.querySelector('.s-from').value);
       const toRaw=r.querySelector('.s-to').value.trim();
-      const to=toRaw===''?null:parseInt(toRaw);
+      const to=toRaw===''?null:numOf(toRaw);
       if(isNaN(from)) errs.push('Slab row '+(i+1)+' needs a “From” value');
       if(i===0 && from!==1) errs.push('The first slab row must start at 1');
       if(to!==null && to<from) errs.push('Slab row '+(i+1)+': “Up to” is less than “From”');
