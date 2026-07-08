@@ -139,10 +139,11 @@ a{color:inherit}
 .fsec-body{padding:2px 20px 20px}
 .field{margin-bottom:16px}
 .field:last-child{margin-bottom:0}
-.field label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);font-weight:600;margin-bottom:6px}
+.field label{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:6px}
 .field .desc{font-weight:400;color:var(--muted);font-size:12px}
 .auto-tag{font-family:var(--font-ui);font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--indigo-2);background:var(--indigo-soft);border:1px solid var(--indigo-line);padding:2px 7px;border-radius:99px}
-select,input[type=text],input[type=date],input[type=number],textarea{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;font-size:14px;font-family:var(--font-ui);color:var(--ink);background:var(--card);transition:.13s}
+select,input[type=text],input[type=date],input[type=number],textarea{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;font-size:14px;font-weight:700;font-family:var(--font-ui);color:var(--ink);background:var(--card);transition:.13s}
+input::placeholder,textarea::placeholder{font-weight:500;color:var(--muted-2)}
 select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
 .field.autofilled input,.field.autofilled select{background:var(--indigo-soft);border-color:var(--indigo-line)}
 .seg{display:inline-flex;background:var(--card-2);border:1px solid var(--line-2);border-radius:10px;padding:3px}
@@ -209,6 +210,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 #rate-flat .role-rate-row{max-width:calc(50% - 10px)}
 @media(max-width:900px){#rate-flat .role-rate-row{max-width:100%}}
 .fgrid{display:grid;grid-template-columns:1fr}
+.fsect{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);margin:6px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+.fsect:first-child{border-top:none;padding-top:0;margin-top:0}
 .pchip{padding:7px 13px;font-size:12.5px}
 .field{margin-bottom:15px}
 .dates{display:flex;gap:10px}
@@ -239,6 +242,15 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .j-arr{color:var(--line-2);margin:0 12px;font-size:14px;flex:none}
 @media(max-width:900px){.j-arr{display:none}.journey{gap:12px}}
 
+.bill{margin-top:14px}
+.bill-row{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:12px 0;border-bottom:1px solid var(--line)}
+.bill-row:last-child{border-bottom:none}
+.bill-row .k{color:var(--muted);font-size:13px;font-weight:600;flex:none}
+.bill-row .v{font-weight:700;font-size:14.5px;color:var(--ink);text-align:right;min-width:0}
+.bill-row.big{padding:14px 0}
+.bill-row.big .v{font-size:21px;font-weight:800;color:var(--indigo-2)}
+.bill-row .sub{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:4px}
+.bill-row.money .v{font-variant-numeric:tabular-nums}
 .dt-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin-top:14px}
 .dt{padding:12px 0;border-bottom:1px solid var(--line)}
 .dt .k{font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px}
@@ -663,9 +675,8 @@ textarea{resize:vertical;min-height:88px}
               <select class="fsel" id="flt-status" onchange="renderRulesTable()">
                 <option value="all">Status · all</option>
                 <option value="working">Live</option>
-                <option value="staged">Waiting for approval</option>
-                <option value="draft">Draft</option>
-                <option value="ended">Replaced</option>
+                <option value="staged">Waiting</option>
+                <option value="ended">Inactive</option>
               </select>
             </div>
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
@@ -685,104 +696,42 @@ textarea{resize:vertical;min-height:88px}
       <div class="console" style="max-width:640px">
         <div class="panel" style="padding:26px 30px 20px">
 
-          <div class="fgrid">
-            <div class="field"><label>Incentive name</label>
-              <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
-            </div>
-            <div class="field"><label>Who gets paid <span class="desc">— one role per incentive</span></label>
-              <select id="f-role">
-                <option value="SP">Sales Partner (SP)</option>
-                <option value="AP">Appraisal Partner (AP)</option>
-                <option value="Caller">Caller</option>
-                <option value="Collection Partner">Collection Partner</option>
-                <option value="City Lead">City Lead</option>
-                <option value="Digital Manager">Digital Manager</option>
-                <option value="Internal DB">Internal DB</option>
-                <option value="Business Partner">Business Partner</option>
-                <option value="TPF">TPF</option>
-              </select>
-            </div>
+          <div class="fsect">Who</div>
+          <div class="field"><label>Incentive name</label>
+            <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
+          </div>
+          <div class="field"><label>Who gets paid <span class="desc">— one role per incentive</span></label>
+            <select id="f-role">
+              <option value="SP">Sales Partner (SP)</option>
+              <option value="AP">Appraisal Partner (AP)</option>
+              <option value="Caller">Caller</option>
+              <option value="Collection Partner">Collection Partner</option>
+              <option value="City Lead">City Lead</option>
+              <option value="Digital Manager">Digital Manager</option>
+              <option value="Internal DB">Internal DB</option>
+              <option value="Business Partner">Business Partner</option>
+              <option value="TPF">TPF</option>
+            </select>
           </div>
 
-          <div class="fgrid">
-            <div class="field"><label>If they do this</label>
-              <select id="f-event">
-                <option value="self-source">Find the customer themselves</option>
-                <option value="convincing">Convince the customer</option>
-                <option value="funnel-a2nu">Bring new customers (A2NU)</option>
-                <option value="closure-bucket">Get the loan repaid</option>
-                <option value="net-conversion">Hit their city or channel numbers</option>
-              </select>
-            </div>
-            <div class="field"><label>Loan type</label>
-              <select id="f-loan">
-                <option value="fresh">Fresh</option>
-                <option value="continuation">Continuation</option>
-                <option value="takeover">Takeover</option>
-                <option value="attached">Attached</option>
-              </select>
-            </div>
+          <div class="fsect">What earns it</div>
+          <div class="field"><label>If they do this</label>
+            <select id="f-event">
+              <option value="self-source">Find the customer themselves</option>
+              <option value="convincing">Convince the customer</option>
+              <option value="funnel-a2nu">Bring new customers (A2NU)</option>
+              <option value="closure-bucket">Get the loan repaid</option>
+              <option value="net-conversion">Hit their city or channel numbers</option>
+            </select>
           </div>
-
-          <div class="fgrid">
-            <div class="field"><label>On what amount</label>
-              <select id="f-basis">
-                <option>the loan amount</option>
-                <option>loan count this month</option>
-                <option>customer count this month</option>
-                <option>A2NU % (period)</option>
-                <option>net conversions (period)</option>
-                <option disabled>company profit (after v1)</option>
-              </select>
-            </div>
-            <div class="field"><label>How much</label>
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-                <div class="seg seg-sm" id="rate-mode">
-                  <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
-                  <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
-                </div>
-                <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b>%</b></span>
-                <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
-                <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
-              </div>
-            </div>
+          <div class="field"><label>Loan type</label>
+            <select id="f-loan">
+              <option value="fresh">Fresh</option>
+              <option value="continuation">Continuation</option>
+              <option value="takeover">Takeover</option>
+              <option value="attached">Attached</option>
+            </select>
           </div>
-
-          <div class="fgrid">
-            <div class="field"><label>Given as</label>
-              <select id="f-sched">
-                <option>Half next month + half the month after</option>
-                <option>Full amount next month</option>
-                <option>Same month</option>
-                <option>When the loan closes</option>
-                <option>Every 3 months</option>
-              </select>
-            </div>
-            <div class="field"><label>Starts from</label>
-              <div style="display:flex;gap:10px;align-items:center">
-                <input type="date" id="f-start" value="2026-08-01">
-                <span id="s-ends" style="display:none;flex:1;min-width:0;display:none"><span style="font-size:12px;color:var(--muted);margin-right:6px">ends</span><input type="date" id="flash-date" value="2026-07-31" style="width:auto"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="fgrid">
-            <div class="field"><label>Type <span class="desc">— flash = short extra on top, ends on its own</span></label>
-              <div class="seg seg-sm" id="f-ruletype">
-                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
-                <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
-              </div>
-            </div>
-            <div class="field"><label>Take-back <span class="desc">— if the loan closes very early</span></label>
-              <select id="f-claw">
-                <option>Closed within 60 days → all of it</option>
-                <option>Closed within 60 days → part of it</option>
-                <option>Less, the later it closes</option>
-                <option>Never</option>
-              </select>
-            </div>
-          </div>
-
           <div class="field"><label>Cities <span class="desc">— "All cities" = everywhere</span></label>
             <div class="chipselect" id="f-city">
               <button type="button" class="pchip on" data-val="all" onclick="toggleCity(this)">All cities</button>
@@ -796,12 +745,66 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
 
+          <div class="fsect">The pay</div>
+          <div class="field"><label>On what amount</label>
+            <select id="f-basis">
+              <option>the loan amount</option>
+              <option>loan count this month</option>
+              <option>customer count this month</option>
+              <option>A2NU % (period)</option>
+              <option>net conversions (period)</option>
+              <option disabled>company profit (after v1)</option>
+            </select>
+          </div>
+          <div class="field"><label>How much</label>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div class="seg seg-sm" id="rate-mode">
+                <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
+                <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
+              </div>
+              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b>%</b></span>
+              <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
+              <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
+            </div>
+          </div>
           <div class="field" id="rate-slab" style="display:none"><label>Slab table</label>
             <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
             <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add a slab row</button>
           </div>
+          <div class="field"><label>Given as</label>
+            <select id="f-sched">
+              <option>Half next month + half the month after</option>
+              <option>Full amount next month</option>
+              <option>Same month</option>
+              <option>When the loan closes</option>
+              <option>Every 3 months</option>
+            </select>
+          </div>
+          <div class="field"><label>Take-back <span class="desc">— if the loan closes very early</span></label>
+            <select id="f-claw">
+              <option>Closed within 60 days → all of it</option>
+              <option>Closed within 60 days → part of it</option>
+              <option>Less, the later it closes</option>
+              <option>Never</option>
+            </select>
+          </div>
 
-          <div class="field"><label>Extra conditions <span class="desc">— optional</span></label>
+          <div class="fsect">When</div>
+          <div class="field"><label>Type <span class="desc">— flash = short extra on top, ends on its own</span></label>
+            <div class="seg seg-sm" id="f-ruletype">
+              <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
+              <button data-rt="flash" onclick="setRuleType('flash')">Flash</button>
+            </div>
+          </div>
+          <div class="field"><label>Starts from</label>
+            <div style="display:flex;gap:10px;align-items:center">
+              <input type="date" id="f-start" value="2026-08-01">
+              <span id="s-ends" style="display:none"><span style="font-size:12px;color:var(--muted);margin-right:6px">ends</span><input type="date" id="flash-date" value="2026-07-31" style="width:auto"></span>
+            </div>
+          </div>
+
+          <div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
+          <div class="field">
             <div id="mods"></div>
             <div class="note empty" id="mods-empty" style="margin-top:0">None — everyone who matches gets the full incentive.</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
@@ -821,46 +824,23 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
     <section class="screen" id="a-review">
-      <div class="breadcrumb"><span data-goto="a-form" style="cursor:pointer">Create an incentive</span><span class="sep">›</span><b>Check the cost</b></div>
-      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost — before it goes anywhere</h2><div class="sub">Replayed over the last 3 months of real loans, projected for next month. Nothing goes live from here.</div></div></div>
-      <div class="console">
+      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost</h2><div class="sub">A best guess before it goes anywhere. Nothing goes live from here.</div></div></div>
+      <div class="console" style="max-width:640px">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The incentive, in one sentence:</div>
-          <div class="summary-sentence">For <em>Sales Partners</em>, when they <em>find the customer themselves for a Fresh loan</em>, pay <em>0.35% of the loan amount</em>, given as <em>half next month + half the month after</em>.</div>
+          <div class="summary-sentence" style="font-size:16px"></div>
           <div id="rv-facts"></div>
-                  </div>
+        </div>
         <div class="panel">
-          <h3>What it would have cost</h3>
-          <div class="p-sub">If this had been live the last 3 months (₹ lakh).</div>
-          <div class="sim-grid">
-            <div class="sim-card">
-              <h5>Cost by category</h5>
-              <div class="cap">current rulebook vs candidate (₹ lakh)</div>
-              <div class="bars">
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:86%" id="bt-c1"></div><div class="bar new" style="height:96%" id="bt-n1"></div></div><div class="lbl">sourcing<br>12.0 → <b id="bt-v1">13.5</b></div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:43%" id="bt-c2"></div><div class="bar new" style="height:43%" id="bt-n2"></div></div><div class="lbl">convincing<br>6.0 → <b id="bt-v2">6.0</b></div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:57%" id="bt-c3"></div><div class="bar new" style="height:75%" id="bt-n3"></div></div><div class="lbl">funnel A2NU<br>8.0 → <b id="bt-v3">10.5</b></div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:29%" id="bt-c4"></div><div class="bar new" style="height:25%" id="bt-n4"></div></div><div class="lbl">collection<br>4.0 → <b id="bt-v4">3.5</b></div></div>
-              </div>
-              <div class="legend-mini"><span><i style="background:#b6b6cf"></i> current</span><span><i style="background:var(--indigo)"></i> candidate</span></div>
-              <div class="delta-line"><span>Total delta vs current</span><span class="val" id="cost-delta">+ ₹3.5 lakh / period</span></div>
-            </div>
-            <div class="sim-card">
-              <h5>What it may cost next month</h5>
-              <div class="cap">assumes next month’s volume looks like the last 3 months’ average — swap in the volume plan when finance shares one</div>
-              <div class="bars">
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:38%"></div></div><div class="lbl">Week 1</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:56%"></div></div><div class="lbl">Week 2</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:72%"></div></div><div class="lbl">Week 3</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Week 4</div></div>
-              </div>
-              <div class="legend-mini"><span><i style="background:var(--indigo)"></i> projected accrual</span></div>
-              <div class="delta-line"><span>Projected next month <span style="color:var(--muted-2);font-weight:400">· estimate, not a promise</span></span><span class="val" style="color:var(--indigo-2)" id="cost-next">₹33.5 lakh</span></div>
-            </div>
+          <h3>What it may cost</h3>
+          <div class="bill">
+            <div class="bill-row big money"><span class="k">Expected payout next month</span><span class="v" id="cost-next">₹—</span></div>
+            <div class="bill-row money"><span class="k">Change vs today's incentive</span><span class="v" id="cost-delta">—</span></div>
+            <div class="bill-row"><span class="k" style="font-weight:500">How this is guessed</span><span class="v" style="font-weight:500;color:var(--muted);font-size:12.5px">assumes next month looks like the last 3 months' work</span></div>
           </div>
         </div>
         <div class="sticky-foot">
-          <button class="btn ghost" data-goto="a-form">← Back to the rule</button>
+          <button class="btn ghost" data-goto="a-form">← Back to the form</button>
           <div class="spacer"></div>
           <button class="btn primary" data-goto="a-staged">Send for approval</button>
         </div>
@@ -902,27 +882,9 @@ textarea{resize:vertical;min-height:88px}
         </div>
         <div class="panel">
           <h3>The cost check, attached <span class="readonly-flag" style="margin-left:8px">👁 view only</span></h3>
-          <div class="sim-grid">
-            <div class="sim-card">
-              <h5>Backtest by category</h5><div class="cap">current vs candidate, last 3 months (₹ lakh)</div>
-              <div class="bars">
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:86%"></div><div class="bar new" style="height:96%"></div></div><div class="lbl">sourcing</div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:43%"></div><div class="bar new" style="height:43%"></div></div><div class="lbl">convincing</div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:57%"></div><div class="bar new" style="height:75%"></div></div><div class="lbl">funnel A2NU</div></div>
-                <div class="barpair"><div class="cols"><div class="bar cur" style="height:29%"></div><div class="bar new" style="height:25%"></div></div><div class="lbl">collection</div></div>
-              </div>
-              <div class="delta-line"><span>Total delta vs current</span><span class="val" id="cost-delta2">+ ₹3.5 lakh / period</span></div>
-            </div>
-            <div class="sim-card">
-              <h5>What it may cost next month</h5><div class="cap">from the work we expect</div>
-              <div class="bars">
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:38%"></div></div><div class="lbl">Wk 1</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:56%"></div></div><div class="lbl">Wk 2</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:72%"></div></div><div class="lbl">Wk 3</div></div>
-                <div class="barpair"><div class="cols"><div class="bar new" style="height:90%"></div></div><div class="lbl">Wk 4</div></div>
-              </div>
-              <div class="delta-line"><span>Projected next month</span><span class="val" style="color:var(--indigo-2)">₹33.5 lakh</span></div>
-            </div>
+          <div class="bill">
+            <div class="bill-row big money"><span class="k">Expected payout next month</span><span class="v" id="cost-next2">₹—</span></div>
+            <div class="bill-row money"><span class="k">Change vs today's incentive</span><span class="v" id="cost-delta2">—</span></div>
           </div>
         </div>
         <div id="reject-box" class="panel" style="display:none">
@@ -951,7 +913,7 @@ textarea{resize:vertical;min-height:88px}
             <span class="meta-chip"><b>effective</b> <span id="live-starts">01 Aug 2026</span></span>
             <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">RUL-2026-0714</span></span>
           </div>
-          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Replaced, not deleted</b> — the old incentive stays on the record. Monthly-target changes wait for next month.</div>
+          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Inactive, not deleted</b> — the old incentive stays on the record. Monthly-target changes wait for next month.</div>
           <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
         </div>
       </div>
@@ -1500,7 +1462,7 @@ function buildSummary(){
   const ps=payShort();
   let gets = ps==='—' ? '—' : ps + (basisShort==='the loan amount' ? '' : ' · on '+basisShort);
   if(!slabOn2 && basisShort==='the loan amount' && r0>0){
-    gets+='<div style="font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</div>';
+    gets+='<span class="sub">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</span>';
   }
   const cl2=cityList();
   const rows=[
@@ -1514,7 +1476,7 @@ function buildSummary(){
     ['Cities', cl2.length? cl2.join(', ') : 'All cities', ''],
     ['Starts', fmtDate(document.getElementById('f-start').value), '']
   ];
-  const fhtml='<div class="dt-grid">'+rows.map(t=>'<div class="dt '+t[2]+'"><div class="k">'+t[0]+'</div><div class="v">'+t[1]+'</div></div>').join('')+'</div>';
+  const fhtml='<div class="bill">'+rows.map(t=>'<div class="bill-row '+t[2]+'"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
 
@@ -1635,7 +1597,7 @@ function loadRule(o){
 
 /* ---- The rulebook: data-driven, category precedence, versioned publish, backtest ---- */
 const EVENT_CAT={'self-source':'sourcing','convincing':'convincing','funnel-a2nu':'funnel/A2NU','closure-bucket':'collection','net-conversion':'scope-bonus'};
-const STATUS_PILL={working:['live','live'],staged:['staged','waiting'],draft:['draft','draft'],ended:['expired','replaced']};
+const STATUS_PILL={working:['live','live'],staged:['staged','waiting'],draft:['staged','waiting'],ended:['expired','inactive']};
 let RULES=[
   {id:'RUL-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v7',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan · half for Low-LTV',mode:'flat',rate:0.35,sched:'Half next month + half the month after'},
   {id:'RUL-AP-CNV',name:'AP convincing · all types',cat:'convincing',ver:'v4',roles:['AP'],loan:'fresh',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20,sched:'Half next month + half the month after'},
@@ -1742,6 +1704,7 @@ function computeCost(){
   const d=candTotal-curTotal, sign=d>=0?'+ ':'− ';
   const dcol = Math.abs(d)<0.05 ? 'var(--muted)' : (d>0 ? 'var(--red)' : 'var(--ok)');
   setFact('cost-next','₹'+candTotal.toFixed(1)+' lakh');
+  setFact('cost-next2','₹'+candTotal.toFixed(1)+' lakh');
   ['cost-delta','cost-delta2'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.textContent=sign+'₹'+Math.abs(d).toFixed(1)+' lakh / period'; el.style.color=dcol; } });
 }
 
