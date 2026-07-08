@@ -212,6 +212,9 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fgrid{display:grid;grid-template-columns:1fr}
 .fsect{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);margin:6px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
 .fsect:first-child{border-top:none;padding-top:0;margin-top:0}
+.fstack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 10px;box-shadow:var(--shadow-card)}
+.fcard .fsect{border-top:none;padding-top:0;margin:0 0 14px}
 .pchip{padding:7px 13px;font-size:12.5px}
 .field{margin-bottom:15px}
 .dates{display:flex;gap:10px}
@@ -693,10 +696,9 @@ textarea{resize:vertical;min-height:88px}
     <section class="screen" id="a-form">
       <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive</h2><div class="sub">Fill the fields — nothing is paid until it's approved.</div></div></div>
 
-      <div class="console" style="max-width:640px">
-        <div class="panel" style="padding:26px 30px 20px">
-
-          <div class="fsect">Who</div>
+      <div class="create-grid">
+      <div class="fstack">
+<div class="fcard"><div class="fsect">Who</div>
           <div class="field"><label>Incentive name</label>
             <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
           </div>
@@ -713,8 +715,8 @@ textarea{resize:vertical;min-height:88px}
               <option value="TPF">TPF</option>
             </select>
           </div>
-
-          <div class="fsect">What earns it</div>
+          </div>
+<div class="fcard"><div class="fsect">What earns it</div>
           <div class="field"><label>If they do this</label>
             <select id="f-event">
               <option value="self-source">Find the customer themselves</option>
@@ -744,8 +746,8 @@ textarea{resize:vertical;min-height:88px}
               <button type="button" class="pchip" data-val="Bengaluru" onclick="toggleCity(this)">Bengaluru</button>
             </div>
           </div>
-
-          <div class="fsect">The pay</div>
+          </div>
+<div class="fcard"><div class="fsect">The pay</div>
           <div class="field"><label>On what amount</label>
             <select id="f-basis">
               <option>the loan amount</option>
@@ -788,8 +790,8 @@ textarea{resize:vertical;min-height:88px}
               <option>Never</option>
             </select>
           </div>
-
-          <div class="fsect">When</div>
+          </div>
+<div class="fcard"><div class="fsect">When</div>
           <div class="field"><label>Type <span class="desc">— flash = short extra on top, ends on its own</span></label>
             <div class="seg seg-sm" id="f-ruletype">
               <button class="on" data-rt="standard" onclick="setRuleType('standard')">Normal</button>
@@ -802,8 +804,8 @@ textarea{resize:vertical;min-height:88px}
               <span id="s-ends" style="display:none"><span style="font-size:12px;color:var(--muted);margin-right:6px">ends</span><input type="date" id="flash-date" value="2026-07-31" style="width:auto"></span>
             </div>
           </div>
-
-          <div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
+          </div>
+<div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
           <div class="field">
             <div id="mods"></div>
             <div class="note empty" id="mods-empty" style="margin-top:0">None — everyone who matches gets the full incentive.</div>
@@ -812,13 +814,17 @@ textarea{resize:vertical;min-height:88px}
               <button class="add-row" style="width:auto" onclick="addMod('scaler')">+ scaler — pay more or less</button>
             </div>
           </div>
-
-          <div class="sent-foot">
-            <div class="rp-status" id="resolve-status" style="margin:0;flex:1"><span>✓</span></div>
-            <button class="btn ghost" data-goto="a-list">Cancel</button>
-            <button class="btn primary" id="to-review" data-goto="a-review">Check the cost →</button>
           </div>
+      </div>
+      <aside class="rule-preview">
+        <div class="rp-head"><span class="rp-dot"></span> Live preview</div>
+        <div class="rp-sentence" id="preview-sentence" style="font-size:14px"></div>
+        <div class="rp-status" id="resolve-status"><span>✓</span></div>
+        <div class="rp-actions">
+          <button class="btn primary full" id="to-review" data-goto="a-review">Check the cost →</button>
+          <button class="btn ghost full" data-goto="a-list">Cancel</button>
         </div>
+      </aside>
       </div>
     </section>
 
