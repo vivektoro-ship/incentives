@@ -1307,13 +1307,13 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
     <section class="screen" id="b-explain">
-      <div class="screen-head"><span class="id">App · 4</span><div><h2>See the working</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
+      <div class="screen-head"><span class="id">App · 4</span><div><h2>See the working</h2><div class="sub">Every loan is one line, with the reason — what Ravi sees is what the office sees.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
           <div class="px-topline">
             <button class="px-back" data-goto="b-home">‹</button>
-            <div style="flex:1"><div class="px-id">The working</div><div class="px-sub">Every rupee · one line · one reason</div></div>
+            <div style="flex:1"><div class="px-id">How my pay adds up</div><div class="px-sub">Every loan · one line · one reason</div></div>
           </div>
         </div>
         <div class="px-body">
@@ -1323,7 +1323,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000482</div><div class="m">+0.35% of loan · found the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹1,750</div></div>
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000471</div><div class="m">+0.45% of loan · with July bonus</div><span class="px-chip amber">+ bonus</span></div><div class="amt">₹2,240</div></div>
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000448</div><div class="m">+0.20% of loan · convinced the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹980</div></div>
-            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000459</div><div class="m">−0.35% · loan closed within 60 days</div><span class="px-chip red">taken back · shown</span></div><div class="amt red">−₹1,120</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000459</div><div class="m">customer repaid early — bonus returned</div><span class="px-chip red">taken back</span></div><div class="amt red">−₹1,120</div></div>
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">+0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
             <div class="px-more">+ 37 more lines · your total is the sum of your lines</div>
           </div>
@@ -1380,17 +1380,28 @@ textarea{resize:vertical;min-height:88px}
             <div style="flex:1"><div class="px-id">Reported issues</div><div class="px-sub">3 issues</div></div>
           </div>
         </div>
-        <div class="px-body">
-          <div class="px-card">
-            <div class="px-label">Today</div>
-            <hr class="px-div">
-            <div class="px-row" onclick="toast('Being checked by the office')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0338</div><div class="m">About OML000448 · 03 Jul 2026</div><span class="px-chip amber">reported</span></div></div>
+        <div class="px-body" id="myiss-body"></div>
+      </div></div>
+    </section>
+
+    <!-- ===== APP · ONE ISSUE, OPENED ===== -->
+    <section class="screen" id="b-issue">
+      <div class="screen-head"><span class="id">App · 6b</span><div><h2>What happened to my issue</h2><div class="sub">The same issue the office sees — its status, and the answer with a reason.</div></div></div>
+      <div class="phone"><div class="notch"></div><div class="screenview">
+        <div class="px-head">
+          <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+          <div class="px-topline">
+            <button class="px-back" data-goto="b-history">‹</button>
+            <div style="flex:1"><div class="px-id" id="miss-loan">About a loan</div><div class="px-sub" id="miss-id"></div></div>
           </div>
+        </div>
+        <div class="px-banner" id="miss-banner"></div>
+        <div class="px-body">
+          <div id="miss-outcome"></div>
           <div class="px-card">
-            <div class="px-label">Earlier</div>
+            <div class="px-label">What you said</div>
             <hr class="px-div">
-            <div class="px-row" onclick="toast('Accepted — ₹3,400 was added to your next month')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0310</div><div class="m">About OML000391 · 18 Jun 2026</div><span class="px-chip green">resolved · ₹3,400 added</span></div></div>
-            <div class="px-row" onclick="toast('Not accepted — the pay matched the rule on the loan date. The reason is on your record.')" style="cursor:pointer"><div class="main"><div class="t">DSP-2026-0287</div><div class="m">About OML000305 · 02 Jun 2026</div><span class="px-chip grey">not accepted · reason given</span></div></div>
+            <div style="font-size:14px;color:#0B1220;line-height:1.5" id="miss-said"></div>
           </div>
         </div>
       </div></div>
@@ -1410,6 +1421,7 @@ function show(id){
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
   if(id==='a-published' && !DETAIL_R){ const r=RULES.find(x=>x.status==='working'); if(r){ renderDetail(r); } }
   if(id==='b-inc') renderIncDetail();
+  if(id==='b-history') renderMyIssues();
   if(id==='a-disputes') renderDisputes();
   if(id==='a-earners') renderEarnersTable();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -2186,6 +2198,38 @@ function renderIssue(i){
 function upholdD(i){ DISPUTES[i].status='upheld'; renderDisputes(); renderIssue(i); toast('Adjusting accrual '+DISPUTES[i].adj+' appended — corrects forward into the next period, tagged prior-period correction. The closed period is never reopened.'); }
 function rejectD(i){ const r=(document.getElementById('issue-rr').value||'').trim(); if(!r){ toast('A rejection needs a reason — it goes on the record'); return; } DISPUTES[i].status='rejected'; DISPUTES[i].why=r; DISPUTES[i].rejecting=false; renderDisputes(); renderIssue(i); toast('Rejected with reason — the original line stands, the reasoning is on the record'); }
 function toggleBulk(){ const b=document.getElementById('bulk-panel'); b.style.display=b.style.display==='none'?'block':'none'; }
+
+/* ---- Partner: My issues list + one-issue detail (same source as the office) ---- */
+function myIssChip(d){ return d.status==='open'?'<span class="px-chip amber">being checked</span>':d.status==='upheld'?'<span class="px-chip green">accepted · '+d.adj+' added</span>':'<span class="px-chip grey">not accepted</span>'; }
+function renderMyIssues(){
+  const body=document.getElementById('myiss-body'); if(!body) return;
+  const row=(d,i)=>'<div class="px-row" onclick="openMyIssue('+i+')" style="cursor:pointer"><div class="main"><div class="t">About '+d.loan+'</div><div class="m">'+d.filed+' · '+d.id+'</div>'+myIssChip(d)+'</div><span style="color:#94A3B8;font-size:18px">›</span></div>';
+  const idx=DISPUTES.map((d,i)=>[d,i]);
+  const open=idx.filter(x=>x[0].status==='open'), done=idx.filter(x=>x[0].status!=='open');
+  let h='';
+  if(open.length) h+='<div class="px-card"><div class="px-label">Being checked</div><hr class="px-div">'+open.map(x=>row(x[0],x[1])).join('')+'</div>';
+  if(done.length) h+='<div class="px-card"><div class="px-label">Answered</div><hr class="px-div">'+done.map(x=>row(x[0],x[1])).join('')+'</div>';
+  body.innerHTML=h;
+  const sub=document.querySelector('#b-history .px-sub'); if(sub) sub.textContent=DISPUTES.length+' issue'+(DISPUTES.length>1?'s':'');
+}
+function openMyIssue(i){ renderMyIssue(i); show('b-issue'); }
+function renderMyIssue(i){
+  const d=DISPUTES[i]; if(!d) return;
+  document.getElementById('miss-loan').textContent='About '+d.loan;
+  document.getElementById('miss-id').textContent=d.id+' · filed '+d.filed;
+  document.getElementById('miss-said').textContent='“'+d.reason+'”';
+  const banner=document.getElementById('miss-banner'), out=document.getElementById('miss-outcome');
+  if(d.status==='open'){
+    banner.className='px-banner amber'; banner.textContent='● Being checked — nothing changes until the office answers.';
+    out.innerHTML='<div class="px-center"><div class="px-seal" style="background:#FFF4E0;color:#B45309">⏳</div><h4>Being checked</h4><div class="px-note12">The office is looking at it. You will get an answer — always with a reason.</div></div>';
+  } else if(d.status==='upheld'){
+    banner.className='px-banner green'; banner.textContent='✓ Accepted — '+d.adj+' added to your next month.';
+    out.innerHTML='<div class="px-center"><div class="px-seal">✓</div><h4>Accepted — you were right</h4><div class="px-note12">'+d.adj+' is added to your next payout as a correction line. Your earlier months are never changed.</div></div>';
+  } else {
+    banner.className='px-banner blue'; banner.textContent='Not accepted — here is the reason.';
+    out.innerHTML='<div class="px-center"><div class="px-seal" style="background:#EEF1F4;color:#64748B">≡</div><h4>Not accepted</h4><div class="px-note12">'+(d.why||'The pay matched the incentive that was live on the loan date.')+'</div></div>';
+  }
+}
 
 /* ---- Getting incentives: people table + per-person detail ---- */
 const PEOPLE=[
