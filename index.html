@@ -539,7 +539,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="hero">
           <div class="tagline">The Incentive Engine · Funnel Brain Layer 6 · ENG-1680</div>
           <h1>Attribution earns the money</h1>
-          <p class="lead">The system already knows who earned every loan. This engine turns that into money — on a record that can never be quietly edited, with incentives the business changes itself, and a number every field agent watches grow in real time. No more month-end hand calculation.</p>
+          <p class="lead">The system already knows who earned every loan. This engine turns that into money — incentives the business changes itself, and a number every partner watches grow in real time.</p>
           <div class="kick">Every incentive is one sentence: for this kind of actor on this kind of loan, pay this rate on this basis, adjusted by these gates, given on this schedule.</div>
         </div>
 
@@ -547,35 +547,31 @@ textarea{resize:vertical;min-height:88px}
           <div class="entry" data-goto="a-list">
             <div class="badge">Office · one drafts, another approves</div>
             <h3>Incentives the business owns</h3>
-            <p>Five simple blanks: who gets paid, on what amount, how much, any extra conditions, and when. One person drafts, the system shows what it will cost, another person approves. Old incentives are never edited — a new version replaces them.</p>
-            <div class="steps"><span>1 · All incentives</span><span>2 · Five slots</span><span>3 · Simulate</span><span>4 · Maker-checker</span><span>5 · Versioned publish</span></div>
+            <p>Five blanks: who, on what, how much, conditions, when. One drafts, the system shows the cost, another approves.</p>
             <div class="go">Open the office side →</div>
           </div>
           <div class="entry" data-goto="b-home">
             <div class="badge">Partner app · live</div>
             <h3>A number that moves as you work</h3>
-            <p>The moment a loan is given, the money shows up. Locked per-loan amounts, a monthly total that grows as you work, and every rupee traceable to one line — with its reason.</p>
-            <div class="steps"><span>1 · My earnings</span><span>2–4 · Firm · Provisional · Final</span><span>5 · Explain my payout</span><span>6–8 · Dispute as append</span></div>
+            <p>Money shows up the moment a loan is given — and every rupee is explained.</p>
             <div class="go">Open the partner app →</div>
           </div>
         </div>
 
         <div class="section-title">The three accrual states · D11</div>
         <div class="states-strip">
-          <div class="state-card"><h4><span class="chip firm"></span> Firm</h4><p>Locked the moment the loan is given. The agent sees it instantly — nothing later in the month can change it.</p></div>
-          <div class="state-card"><h4><span class="chip prov"></span> Provisional</h4><p>This month's running total — grows as you work. Always shows how close you are to the next level.</p></div>
-          <div class="state-card"><h4><span class="chip final"></span> Final</h4><p>Set when the month closes. If something is fixed later, the fix is added to next month — and always shown.</p></div>
+          <div class="state-card"><h4><span class="chip firm"></span> Firm</h4><p>Locked when the loan is given — nothing later changes it.</p></div>
+          <div class="state-card"><h4><span class="chip prov"></span> Provisional</h4><p>This month's total, still adding up — always shows the next level.</p></div>
+          <div class="state-card"><h4><span class="chip final"></span> Final</h4><p>Set when the month closes. Fixes go to next month.</p></div>
         </div>
 
-        <div class="note-block">
-          <b>About this demo.</b> A clickable walkthrough of the Incentive Engine (Funnel Brain · Layer 6, all seventeen decisions sealed). Rates, slabs and figures follow the Oro Incentive Structure; the rupee amounts are illustrative, the mechanism is not.
-        </div>
+
       </div>
     </section>
 
     <!-- ===== OFFICE 1 · ALL RULES ===== -->
     <section class="screen" id="a-list">
-      <div class="screen-head"><span class="id">Office · 1</span><div><h2>All incentives</h2><div class="sub">Every incentive is one simple sentence. Different kinds of pay can add up on one loan; within the same kind, the highest-priority incentive wins — a flash bonus adds on top. A change never edits an old incentive — it creates a new version.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 1</span><div><h2>All incentives</h2><div class="sub">One incentive = one simple sentence. Kinds of pay add up on a loan; within a kind, the highest priority wins — flash adds on top.</div></div></div>
       <div class="console">
         <div class="panel">
           <div class="toolbar">
@@ -621,7 +617,7 @@ textarea{resize:vertical;min-height:88px}
     <!-- ===== OFFICE 2 · CREATE A RULE ===== -->
     <section class="screen" id="a-form">
       <div class="breadcrumb"><b>Create an incentive</b><span class="sep">›</span> Who<span class="sep">›</span> On what<span class="sep">›</span> How much<span class="sep">›</span> Conditions<span class="sep">›</span> When paid</div>
-      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive — fill five blanks</h2><div class="sub">Five blanks, one incentive. Open a step to change it — the sentence on the right updates live. <span class="auto-tag" style="vertical-align:middle">pre-filled</span> values come from the Incentive Structure and can be changed.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 2</span><div><h2>Create an incentive — fill five blanks</h2><div class="sub">Open a step to change it — the sentence on the right updates live.</div></div></div>
 
       <div class="create-grid">
       <div class="wizard">
@@ -664,7 +660,7 @@ textarea{resize:vertical;min-height:88px}
                 <option value="takeover">Takeover</option>
                 <option value="attached">Attached</option>
               </select>
-              <div class="minihint">Sub-types come from reference data, not typed here. Facts like LTV band or new-vs-existing customer are conditions (slot 4), not loan types.</div>
+              <div class="minihint">Sub-types come from reference data. LTV / new-customer are conditions, not loan types.</div>
             </div>
             <div class="field"><label>Product</label>
               <select id="f-prod">
@@ -689,7 +685,7 @@ textarea{resize:vertical;min-height:88px}
               <div id="flash-inline" style="display:none;margin-top:12px">
                 <div class="field" style="margin:0"><label>Expiry <span class="auto-tag">flash</span></label><input type="date" id="flash-date" value="2026-07-31"></div>
               </div>
-              <div class="note"><span class="i">✦</span> Flash = short-time extra <b>on top of</b> the normal incentive. Switches itself off at expiry.</div>
+              <div class="note"><span class="i">✦</span> Flash = short extra on top of normal pay; switches off at expiry.</div>
             </div>
             <div class="field"><label>Starts from <span class="desc">— mid-month changes wait for next month</span></label>
               <input type="date" id="f-start" value="2026-08-01">
@@ -710,7 +706,7 @@ textarea{resize:vertical;min-height:88px}
                 <option>Net conversions — period aggregate</option>
                 <option disabled>Company profit (finance — after v1)</option>
               </select>
-              <div class="minihint">Reads from the maintained list of allowed facts — if a basis isn't on the list, the incentive can't be written. Period aggregates are computed inside this engine only.</div>
+              <div class="minihint">Only facts from the maintained list can be used.</div>
               <div class="note" id="basis-note" style="display:none"><span class="i">⚠</span> Pay based on company profit (City Lead's PAT / EBITDA parts) comes a little later — it is not in the first version.</div>
             </div>
           </div>
@@ -805,7 +801,7 @@ textarea{resize:vertical;min-height:88px}
     <!-- ===== OFFICE 3 · CHECK THE COST ===== -->
     <section class="screen" id="a-review">
       <div class="breadcrumb"><span data-goto="a-form" style="cursor:pointer">Create an incentive</span><span class="sep">›</span><b>Check the cost</b></div>
-      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost — before it goes anywhere</h2><div class="sub">The system replays this incentive over the last 3 months of real loans, and projects next month. It only reads — nothing is paid and nothing goes live from this screen. The approver sees this exact check.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 3</span><div><h2>Check the cost — before it goes anywhere</h2><div class="sub">Replayed over the last 3 months of real loans, projected for next month. Nothing goes live from here.</div></div></div>
       <div class="console">
         <div class="panel">
           <div class="p-sub" style="margin-bottom:12px">The incentive, in one sentence:</div>
@@ -814,7 +810,7 @@ textarea{resize:vertical;min-height:88px}
                   </div>
         <div class="panel">
           <h3>What it would have cost</h3>
-          <div class="p-sub">If this rule had been live for the last 3 months, by kind of pay (₹ lakh).</div>
+          <div class="p-sub">If this had been live the last 3 months (₹ lakh).</div>
           <div class="sim-grid">
             <div class="sim-card">
               <h5>Cost by category</h5>
@@ -841,7 +837,6 @@ textarea{resize:vertical;min-height:88px}
               <div class="delta-line"><span>Projected next month <span style="color:var(--muted-2);font-weight:400">· estimate, not a promise</span></span><span class="val" style="color:var(--indigo-2)" id="cost-next">₹33.5 lakh</span></div>
             </div>
           </div>
-          <div class="note" style="margin-top:14px"><span class="i">≡</span> Per-actor and per-category impact attach to the staged version — no rule reaches a checker without a costed simulation beside it.</div>
         </div>
         <div class="sticky-foot">
           <button class="btn ghost" data-goto="a-form">← Back to the rule</button>
@@ -853,12 +848,12 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 4 · SENT FOR APPROVAL ===== -->
     <section class="screen" id="a-staged">
-      <div class="screen-head"><span class="id">Office · 4</span><div><h2>Sent for approval</h2><div class="sub">One person drafts, another approves. Until the approver says yes, nothing changes and nothing is paid. The draft can still be edited.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 4</span><div><h2>Sent for approval</h2><div class="sub">One person drafts, another approves. Nothing is paid until then.</div></div></div>
       <div class="console">
         <div class="confirm">
           <div class="seal stage">◔</div>
           <h3>Waiting for approval — not yet live</h3>
-          <p>The draft is saved with its cost check attached. You can still change it — nothing is paid until the approver says yes.</p>
+          <p>Saved with its cost check attached. You can still change it.</p>
           <div class="meta-row">
             <span class="meta-chip"><b>status</b> staged</span>
             <span class="meta-chip"><b>maker</b> you</span>
@@ -877,7 +872,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 5 · APPROVE A RULE ===== -->
     <section class="screen" id="a-checker">
-      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve or reject</h2><div class="sub">The approver sees the incentive in plain words, with its cost check beside it. Approving makes it live as a new version — the old rule is never touched. Rejecting needs a reason, on the record.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve or reject</h2><div class="sub">Approve → live as a new version. Reject → needs a reason, on the record.</div></div></div>
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
@@ -924,19 +919,19 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 6 · LIVE ===== -->
     <section class="screen" id="a-published">
-      <div class="screen-head"><span class="id">Office · 6</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date, as a new version. Every loan keeps the rate that was live on its own date — a change never rewrites what anyone already earned.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 6</span><div><h2>The incentive is live</h2><div class="sub">Live from its start date. Every loan keeps the rate that was live on its own date.</div></div></div>
       <div class="console">
         <div class="confirm">
           <div class="seal ok">✓</div>
           <h3>Live — as a new version</h3>
-          <p>Working from <span id="live-startdate">01 Aug 2026</span>. A loan paid under the old version keeps the old rate forever — even if the maths is done later.</p>
+          <p>Working from <span id="live-startdate">01 Aug 2026</span>. Earlier loans keep their old rate.</p>
           <div class="meta-row">
             <span class="meta-chip"><b>version</b> <span id="live-version">v8</span></span>
             <span class="meta-chip"><b>status</b> live</span>
             <span class="meta-chip"><b>effective</b> <span id="live-starts">01 Aug 2026</span></span>
             <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">RUL-2026-0714</span></span>
           </div>
-          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Replaced, not deleted.</b> The old version stays on the record, marked replaced. For monthly-target rules, the change waits for next month — a running month is never disturbed.</div>
+          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Replaced, not deleted</b> — the old version stays on the record. Monthly-target changes wait for next month.</div>
           <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
         </div>
       </div>
@@ -944,7 +939,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== CONFIG 7 · RESOLVE DISPUTES ===== -->
     <section class="screen" id="a-disputes">
-      <div class="screen-head"><span class="id">Office · 7</span><div><h2>Answer complaints</h2><div class="sub">Someone checks each complaint. Accepted → the fix is added to <b>next</b> month's money. Not accepted → the reason goes on the partner's record. Nothing is hidden, and a closed month is never re-opened.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 7</span><div><h2>Answer complaints</h2><div class="sub">Accepted → fix added to next month. Not accepted → reason on the record.</div></div></div>
       <div class="console">
         <div class="panel">
           <div class="toolbar" style="margin-bottom:8px">
@@ -953,7 +948,7 @@ textarea{resize:vertical;min-height:88px}
           </div>
           <div id="bulk-panel" style="display:none;border:1px dashed var(--indigo-line);border-radius:12px;padding:14px;margin-bottom:14px;background:var(--indigo-soft)">
             <b style="font-size:13.5px">migration-recon-july.csv — 42 rows parsed</b>
-            <div class="p-sub" style="margin:4px 0 10px">Each row lands as its <b>own dispute append</b> with its own evidence. The checker reviews them <b>as a set</b> — accept most, reject the bad rows. Never a single blind all-or-nothing approval.</div>
+            <div class="p-sub" style="margin:4px 0 10px">Each row lands as its own complaint; the checker reviews them as a set — never one blind approval.</div>
             <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 1 · OML000391 · rate should be 0.35%</span><span class="v" style="color:var(--ok)">looks right</span></div>
             <div class="kv" style="border-bottom:1px solid var(--line)"><span class="k mono">row 2 · OML000305 · loan counted twice</span><span class="v" style="color:var(--ok)">looks right</span></div>
             <div class="kv"><span class="k mono">row 7 · OML000512 · duplicate of row 2</span><span class="v" style="color:var(--red)">reject · duplicate</span></div>
@@ -968,7 +963,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 1 · MY EARNINGS ===== -->
     <section class="screen" id="b-home">
-      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K, a Sales Partner in Chennai. The moment a loan is given, his money shows up. The header answers his three questions at a glance: <b>earned</b>, <b>coming</b>, <b>paid</b>.</div></div></div>
+      <div class="screen-head"><span class="id">App · 1</span><div><h2>My earnings — a number that moves</h2><div class="sub">Ravi K · Sales Partner · Chennai. <b>Earned · coming · paid</b> — at a glance.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="px-head">
@@ -1030,14 +1025,14 @@ textarea{resize:vertical;min-height:88px}
         </div></div>
 
         <div class="note-block" style="max-width:320px;margin-top:0">
-          <b>Why this works.</b> Earlier, this number arrived <b>about 20 days</b> after month end, calculated by hand. Now it shows up the moment a loan is given. A growing number always shows <b>how close you are to the next level</b> — and every rupee has one line on the record saying exactly why it exists.
+          <b>Why this works.</b> Earlier this number came <b>~20 days</b> after month end, by hand. Now it lands the instant a loan books — and always shows how close the next level is.
         </div>
       </div>
     </section>
 
     <!-- ===== APP 1b · MY RATE CARD ===== -->
     <section class="screen" id="b-rates">
-      <div class="screen-head"><span class="id">App · ★</span><div><h2>My rate card — always current</h2><div class="sub">Incentives change — the partner never reads the office list. The app shows <b>their own rate card</b>, built live from the incentives for their role. A change shows up here before it starts, and it never touches money already earned.</div></div></div>
+      <div class="screen-head"><span class="id">App · ★</span><div><h2>My rate card — always current</h2><div class="sub">The partner's own rate card, built live from the incentives for their role. Changes show up here before they start.</div></div></div>
       <div class="phone-stage">
         <div class="phone"><div class="notch"></div><div class="screenview">
           <div class="px-head">
@@ -1051,14 +1046,14 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-body" id="rc-body"></div>
         </div></div>
         <div class="note-block" style="max-width:320px;margin-top:0">
-          <b>How a changing incentive reaches a partner.</b> This card is a live read of the office list, filtered to <b>this partner's role</b>. Publish a change on the office side and it appears here instantly — as an <b>upcoming</b> entry until its start date. And because every loan pays the rate on <b>its own date</b>, a change never rewrites what was already earned. Try it: approve a new SP incentive, then come back here.
+          <b>Try it.</b> Approve a new SP incentive on the office side, then come back — it appears here as <b>changing soon</b>. Past earnings never change.
         </div>
       </div>
     </section>
 
     <!-- ===== APP 2 · CONFIRMED LOAN ===== -->
     <section class="screen" id="b-firm">
-      <div class="screen-head"><span class="id">App · 2</span><div><h2>One loan, locked</h2><div class="sub">This amount was fixed the moment the loan was given — nothing that happens later can change it. It reaches Ravi in two parts, on the dates shown.</div></div></div>
+      <div class="screen-head"><span class="id">App · 2</span><div><h2>One loan, locked</h2><div class="sub">Fixed the moment the loan was given. Reaches Ravi in two parts.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1091,7 +1086,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-kv"><span class="k">Paid as</span><span class="v">Half next month + half after</span></div>
             <div class="px-kv"><span class="k">Take-back window</span><span class="v">60 days from loan date</span></div>
           </div>
-          <div class="px-note12" style="padding:0 4px">The rate was locked the day this loan was given. Even if rates change tomorrow, this loan keeps its rate — your money is never quietly recalculated.</div>
+          <div class="px-note12" style="padding:0 4px">Locked on the loan date — later rate changes never touch this loan.</div>
         </div>
         <div class="px-foot"><button class="px-cta" data-goto="b-explain">See the working</button></div>
       </div></div>
@@ -1099,7 +1094,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 3 · THIS MONTH ===== -->
     <section class="screen" id="b-prov">
-      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month — still adding up</h2><div class="sub">This number grows as Ravi works, and locks when the month closes. It always shows how close he is to the next level, so a moving number reads as progress — not a mistake.</div></div></div>
+      <div class="screen-head"><span class="id">App · 3</span><div><h2>This month — still adding up</h2><div class="sub">Grows as Ravi works; locks when the month closes. Always shows the next level.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1128,14 +1123,14 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-firm" style="cursor:pointer"><div class="main"><div class="t">Takeover gold loan</div><div class="m">OML000448 · you convinced the customer</div></div><div class="amt">₹980</div></div>
             <div class="px-more">+ 37 more · your total is the sum of your lines</div>
           </div>
-          <div class="px-note12" style="padding:0 4px">Earlier this number came <b>about 20 days</b> after month end, calculated by hand. Now it updates the moment a loan is given.</div>
+          <div class="px-note12" style="padding:0 4px">Earlier: ~20 days after month end, by hand. Now: live.</div>
         </div>
       </div></div>
     </section>
 
     <!-- ===== APP 4 · PAST MONTH ===== -->
     <section class="screen" id="b-final">
-      <div class="screen-head"><span class="id">App · 4</span><div><h2>A closed month</h2><div class="sub">Once a month closes, its total never changes. If something is corrected later, the fix is added to the <b>next</b> month — and it is always shown, never slipped in quietly.</div></div></div>
+      <div class="screen-head"><span class="id">App · 4</span><div><h2>A closed month</h2><div class="sub">A closed month never changes. Fixes go to next month — always shown.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1168,7 +1163,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 5 · HOW IT WAS WORKED OUT ===== -->
     <section class="screen" id="b-explain">
-      <div class="screen-head"><span class="id">App · 5</span><div><h2>See the working — every rupee has a line</h2><div class="sub">Nothing is calculated on this screen — it reads straight off the money record. What Ravi sees here is exactly what the office sees.</div></div></div>
+      <div class="screen-head"><span class="id">App · 5</span><div><h2>See the working — every rupee has a line</h2><div class="sub">Read straight off the money record — what Ravi sees is what the office sees.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1188,7 +1183,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">incentive v7 · +0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
             <div class="px-more">+ 37 more lines · your total is the sum of your lines</div>
           </div>
-          <div class="px-note12" style="padding:0 4px">Nothing here can be edited. A correction is always a <b>new line you can see</b> — never a quiet change.</div>
+          <div class="px-note12" style="padding:0 4px">Corrections are always <b>new lines you can see</b> — never a quiet change.</div>
         </div>
         <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">This looks wrong →</button></div>
       </div></div>
@@ -1196,7 +1191,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 6 · REPORT A PROBLEM ===== -->
     <section class="screen" id="b-dispute">
-      <div class="screen-head"><span class="id">App · 6</span><div><h2>Tell us what looks wrong</h2><div class="sub">Your complaint goes on the record. Nothing changes until someone checks it — and whatever the answer, you will see it, with the reason.</div></div></div>
+      <div class="screen-head"><span class="id">App · 6</span><div><h2>Tell us what looks wrong</h2><div class="sub">Goes on the record. Nothing changes until someone checks it.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1231,7 +1226,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 7 · PROBLEM REPORTED ===== -->
     <section class="screen" id="b-submitted">
-      <div class="screen-head"><span class="id">App · 7</span><div><h2>Your complaint is on record</h2><div class="sub">Someone will check it. If it is accepted, the fix is added to next month's money — a closed month is never re-opened.</div></div></div>
+      <div class="screen-head"><span class="id">App · 7</span><div><h2>Your complaint is on record</h2><div class="sub">If accepted, the fix is added to next month.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1242,7 +1237,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-center">
             <div class="px-seal">✓</div>
             <h4>Reported</h4>
-            <div class="px-note12">The amount you flagged stays visible on your record. Nothing changes until someone checks it — the answer comes back with a reason.</div>
+            <div class="px-note12">Nothing changes until someone checks it. The answer comes with a reason.</div>
           </div>
           <div class="px-card">
             <div class="px-kv"><span class="k">Complaint no.</span><span class="v">DSP-2026-0338</span></div>
@@ -1259,7 +1254,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== APP 8 · MY REPORTS ===== -->
     <section class="screen" id="b-history">
-      <div class="screen-head"><span class="id">App · 8</span><div><h2>My complaints</h2><div class="sub">Every complaint gets an answer on the record. Accepted → the fix is added to next month. Not accepted → you see the reason, always.</div></div></div>
+      <div class="screen-head"><span class="id">App · 8</span><div><h2>My complaints</h2><div class="sub">Every complaint gets an answer — with the reason, always.</div></div></div>
       <div class="phone"><div class="notch"></div><div class="screenview">
         <div class="px-head">
           <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
@@ -1412,7 +1407,7 @@ function toggleActor(btn){
   applyAutofill();
 }
 function updateActorHint(){
-  document.getElementById('actor-hint').textContent = 'One incentive pays one role — if two people earn on a loan, that\'s two incentives firing.';
+  document.getElementById('actor-hint').textContent = 'One incentive pays one role.';
 }
 function rateRow(label,key,val){
   return '<div class="role-rate-row"><span class="rname">'+label+'</span>'+
@@ -1929,7 +1924,7 @@ function renderRateCard(){
     upcoming.forEach(r=>{ html+=rcRow(r,'from '+fmtDate(r.start),'blue'); });
     html+='<div class="px-note12" style="margin-top:8px">Until then, your current rate applies.</div></div>';
   }
-  html+='<div class="px-note12" style="padding:0 4px">An incentive change <b>never touches what you already earned</b> — every loan pays the rate that was live on its own date.</div>';
+  html+='<div class="px-note12" style="padding:0 4px">Changes <b>never touch what you already earned</b>.</div>';
   body.innerHTML=html;
   const fb=document.getElementById('rc-flashbanner');
   if(flash.length){ fb.style.display='flex'; fb.textContent='★ '+(flash[0].name||'Boost')+' — extra pay till '+fmtDate(flash[0].end); }
