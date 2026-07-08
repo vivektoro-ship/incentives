@@ -760,7 +760,7 @@ textarea{resize:vertical;min-height:88px}
           </div>
 <div class="fcard"><div class="fsect">The pay</div>
           <div class="field"><label>On what amount</label>
-            <select id="f-basis">
+            <select id="f-basis" onchange="basisChanged()">
               <option>the loan amount</option>
               <option>loan count this month</option>
               <option>customer count this month</option>
@@ -775,7 +775,7 @@ textarea{resize:vertical;min-height:88px}
                 <button class="on" data-m="flat" onclick="setRateMode('flat')">Flat</button>
                 <button data-m="slab" onclick="setRateMode('slab')">Slab</button>
               </div>
-              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b>%</b></span>
+              <span id="s-rate-wrap" style="display:inline-flex;align-items:center;gap:6px"><b id="unit-pre" style="display:none">₹</b><input type="number" id="s-rate" step="0.01" min="0" placeholder="0.00" style="width:110px;text-align:right"><b id="unit-suf">%</b></span>
               <span id="s-slab-word" style="display:none;font-size:13px;color:var(--muted)">set the slab table below</span>
               <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
             </div>
@@ -1331,6 +1331,14 @@ function setRuleType(rt){
   document.getElementById('s-ends').style.display = rt==='flash'?'inline-flex':'none';
   updatePreview();
 }
+function basisChanged(){
+  const b=document.getElementById('f-basis').value;
+  const pre=document.getElementById('unit-pre'), suf=document.getElementById('unit-suf');
+  if(b.includes('count')){ pre.style.display='inline'; suf.textContent='each'; setRateMode('flat'); }
+  else { pre.style.display='none'; suf.textContent='%'; }
+  if(b.includes('A2NU')||b.includes('conversions')) setRateMode('slab');
+  updatePreview();
+}
 function setRateMode(m){
   document.querySelectorAll('#rate-mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   document.getElementById('s-rate-wrap').style.display = m==='flat'?'inline':'none';
@@ -1464,7 +1472,9 @@ function payText(){
     return 'a slab rate '+on;
   }
   const v0=(document.getElementById('s-rate')||{}).value||'';
-  return v0? v0+'% '+on : 'a rate you\'ll set';
+  if(!v0) return 'a rate you\'ll set';
+  if(basis.includes('count')) return '₹'+v0+' for every '+(basis.includes('customer')?'new customer':'loan')+' this month';
+  return v0+'% '+on;
   return 'a rate per payee type — '+inputs.map(i=>ROLE_NAMES[i.dataset.role]+' '+i.value+'%').join(', ')+' '+on;
 }
 function buildSummary(){
@@ -1508,8 +1518,11 @@ function payShort(){
   const roles=selectedActors();
   if(slabOn) return roles.length>1?'Slab table, per payee':'Slab table';
   const inputs=[...document.querySelectorAll('#role-rates .role-rate')];
+  const b=document.getElementById('f-basis').value;
   const v0=(document.getElementById('s-rate')||{}).value||'';
-  return v0? v0+'% of loan' : '—';
+  if(!v0) return '—';
+  if(b.includes('count')) return '₹'+v0+' per '+(b.includes('customer')?'customer':'loan');
+  return v0+'% of loan';
 }
 function updatePreview(){
   const roles=selectedActors();
@@ -1566,7 +1579,7 @@ function validate(){
   } else {
     const v=parseFloat((document.getElementById('s-rate')||{}).value);
     if(!(v>0)) errs.push('The rate must be more than 0%');
-    else if(v>2) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
+    else if(v>2 && !document.getElementById('f-basis').value.includes('count')) warns.push('A rate above 2% is far outside the Incentive Structure — double-check it');
   }
   if(document.querySelector('#f-ruletype button.on').dataset.rt==='flash'){
     const s=document.getElementById('f-start').value, e=document.getElementById('flash-date').value;
@@ -1758,6 +1771,7 @@ function resetForm(){
   document.getElementById('f-loan').value='fresh';
   document.getElementById('f-event').value='self-source';
   document.getElementById('f-basis').selectedIndex=0;
+  basisChanged();
   document.getElementById('f-sched').selectedIndex=0;
   document.getElementById('s-rate').value='';
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked = b.dataset.val==='all');
@@ -1899,6 +1913,7 @@ function renderRateCard(){
 ['change','input'].forEach(ev=>document.getElementById('a-form').addEventListener(ev, updatePreview));
 initSlabs();
 applyAutofill();
+basisChanged();
 updatePreview();
 renderRulesTable();
 </script>
