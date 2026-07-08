@@ -240,6 +240,14 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .j-arr{color:var(--line-2);margin:0 12px;font-size:14px;flex:none}
 @media(max-width:900px){.j-arr{display:none}.journey{gap:12px}}
 
+.dt-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin-top:14px}
+.dt{padding:12px 0;border-bottom:1px solid var(--line)}
+.dt .k{font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px}
+.dt .k .desc{font-weight:400;color:var(--muted);font-size:11.5px}
+.dt .v{font-size:15px;font-weight:600;color:var(--ink);line-height:1.4}
+.dt.big .v{font-size:22px;font-weight:800;color:var(--indigo-2);letter-spacing:-.01em}
+.dt.full{grid-column:1/-1}
+@media(max-width:900px){.dt-grid{grid-template-columns:1fr}}
 .spec-list{margin-top:16px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:4px 20px}
 .sl-row{display:flex;gap:20px;padding:14px 0;border-bottom:1px solid var(--line-2);align-items:baseline}
 .sl-row .fl{flex:0 0 100px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
@@ -1488,20 +1496,26 @@ function buildSummary(){
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
   const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
   const basisShort=document.getElementById('f-basis').value.split(' (')[0].split(' — ')[0];
-  let gets=payShort()+(basisShort==='The loan amount'?'':' · on '+basisShort.toLowerCase());
-  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  const slabOn2=document.querySelector('#rate-mode button.on').dataset.m==='slab';
   const r0=parseFloat((document.getElementById('s-rate')||{}).value);
-  if(!slabOn && basisShort==='the loan amount' && r0>0){
-    gets+='<div class="fv-ex">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</div>';
+  const ps=payShort();
+  let gets = ps==='—' ? '—' : ps + (basisShort==='the loan amount' ? '' : ' · on '+basisShort);
+  if(!slabOn2 && basisShort==='the loan amount' && r0>0){
+    gets+='<div style="font-size:12.5px;font-weight:500;color:var(--muted);margin-top:4px">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</div>';
   }
-  const tiles=[
+  const cl2=cityList();
+  const rows=[
     ['Gets', gets, 'big'],
     ['Who', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
-    ['Does what', (ev?ev.textContent.split(' → ')[0]:'—')+' · '+(lo?lo.textContent.split(' (')[0]:'')+' loan', ''],
-    ['Given as', document.getElementById('f-sched').value, 'quiet']
+    ['Does what', (ev?ev.textContent:'—')+' · '+(lo?lo.textContent:'')+' loan', ''],
+    ['Given as', document.getElementById('f-sched').value, ''],
+    ['Kind of pay', EVENT_CAT[event]||'—', ''],
+    ['Type', flash?'Flash — ends '+fmtDate(document.getElementById('flash-date').value):'Normal', ''],
+    ['Extra conditions', mods? mods+' added':'None', ''],
+    ['Cities', cl2.length? cl2.join(', ') : 'All cities', ''],
+    ['Starts', fmtDate(document.getElementById('f-start').value), '']
   ];
-  const fhtml='<div class="spec-list">'+tiles.map(t=>'<div class="sl-row '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+
-    '<div class="sl-foot">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>cities <b>'+(cityList().length?cityList().join(', '):'all')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div></div>';
+  const fhtml='<div class="dt-grid">'+rows.map(t=>'<div class="dt '+t[2]+'"><div class="k">'+t[0]+'</div><div class="v">'+t[1]+'</div></div>').join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
 
