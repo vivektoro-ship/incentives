@@ -625,7 +625,7 @@ textarea{resize:vertical;min-height:88px}
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
           </div>
           <table class="rule-table">
-            <thead><tr><th>Incentive</th><th>Pays</th><th>From</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th><th></th></tr></thead>
             <tbody id="rules-body"></tbody>
           </table>
         </div>
@@ -1672,7 +1672,7 @@ function loadRule(o){
 
 /* ---- The rulebook: data-driven, category precedence, versioned publish, backtest ---- */
 const EVENT_CAT={'self-source':'sourcing','convincing':'convincing','funnel-a2nu':'funnel/A2NU','closure-bucket':'collection','net-conversion':'scope-bonus'};
-const STATUS_PILL={working:['live','live'],staged:['staged','waiting'],draft:['draft','draft'],ended:['expired','replaced']};
+const STATUS_PILL={working:['live','live'],staged:['staged','waiting for approval'],draft:['draft','draft'],ended:['expired','replaced']};
 let RULES=[
   {id:'RUL-SP-SRC',name:'SP self-source · Fresh',cat:'sourcing',ver:'v7',roles:['SP'],loan:'fresh',event:'self-source',status:'working',start:'2026-06-01',pay:'0.35% of loan · half for Low-LTV',mode:'flat',rate:0.35,sched:'Half next month + half the month after'},
   {id:'RUL-AP-CNV',name:'AP convincing · all types',cat:'convincing',ver:'v4',roles:['AP'],loan:'fresh',event:'convincing',status:'working',start:'2026-05-12',pay:'0.20% of loan',mode:'flat',rate:0.20,sched:'Half next month + half the month after'},
@@ -1696,13 +1696,13 @@ function renderRulesTable(){
     const sp=STATUS_PILL[r.status]||['draft',r.status];
     const flash=r.flash?' <span class="pill flash" style="margin-left:6px">flash · additive</span>':'';
     const label=(r.status==='draft'||r.status==='staged')?'Edit':'Update';
-    const payShortTxt=r.pay.replace(' of loan','').replace('month 1','m1').replace('months 2–6','m2–6');
-    return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+flash+'</td>'+
-      '<td class="rate-sum">'+payShortTxt+'</td>'+
-      '<td class="mono">'+(r.start?fmtDate(r.start).replace(' 2026',''):'—')+'</td>'+
+    return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
+      '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
+      '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
+      '<td class="rate-sum">'+r.pay+'</td>'+
       '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
       '<td><button class="row-edit" data-open="'+r.id+'" data-stop>'+label+'</button></td></tr>';
-  }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
 }
 function openRule(id,btn){
   const r=RULES.find(x=>x.id===id); if(!r) return;
