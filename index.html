@@ -209,17 +209,18 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .rp-status.warn{color:#8a6400;background:#fbf6ee;border-color:#d98a0033}
 .rp-actions{display:flex;flex-direction:column;gap:9px}
 @media(max-width:980px){.create-grid{grid-template-columns:1fr}.rule-preview{position:static;order:-1}}
-.spec-list{margin-top:14px}
-.sl-row{display:flex;gap:20px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.sl-row:last-child{border-bottom:none}
-.sl-row .fl{flex:0 0 108px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2)}
-.sl-row .fv{font-size:14px;font-weight:600;color:var(--ink);line-height:1.45;min-width:0}
-.sl-row.big .fv{font-size:22px;font-weight:800;color:var(--indigo-2);letter-spacing:-.01em}
-.sl-row.quiet .fv{font-size:13px;font-weight:500;color:var(--ink-2)}
-.fmeta-line{margin-top:12px;font-size:12.5px;color:var(--muted)}
-.fmeta-line b{color:var(--ink-2);font-weight:600}
-.fmeta-line .sep{margin:0 8px;color:var(--line-2)}
-@media(max-width:900px){.sl-row{gap:12px}.sl-row .fl{flex-basis:86px}}
+.spec-list{margin-top:16px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:4px 20px}
+.sl-row{display:flex;gap:20px;padding:14px 0;border-bottom:1px solid var(--line-2);align-items:baseline}
+.sl-row .fl{flex:0 0 100px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
+.sl-row .fv{font-size:15px;font-weight:600;color:var(--ink);line-height:1.45;min-width:0}
+.sl-row.big{padding:18px 0 16px}
+.sl-row.big .fv{font-size:24px;font-weight:800;color:var(--indigo-2);letter-spacing:-.015em}
+.fv-ex{font-size:12.5px;font-weight:500;color:var(--muted);margin-top:5px;letter-spacing:0}
+.sl-row.quiet .fv{font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.sl-foot{padding:12px 0 14px;font-size:12.5px;color:var(--muted)}
+.sl-foot b{color:var(--ink-2);font-weight:600}
+.sl-foot .sep{margin:0 9px;color:var(--line-2)}
+@media(max-width:900px){.sl-row{gap:12px}.sl-row .fl{flex-basis:84px}.spec-list{padding:2px 14px}}
 .vh{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
 .vh .vh-t{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px}
 .vrow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--line)}
@@ -1536,15 +1537,20 @@ function buildSummary(){
   const flash=document.querySelector('#f-ruletype button.on').dataset.rt==='flash';
   const lo=document.querySelector('#f-loan option:checked'), ev=document.querySelector('#f-event option:checked');
   const basisShort=document.getElementById('f-basis').value.split(' (')[0].split(' — ')[0];
-  const gets=payShort()+(basisShort==='The loan amount'?'':' · on '+basisShort.toLowerCase());
+  let gets=payShort()+(basisShort==='The loan amount'?'':' · on '+basisShort.toLowerCase());
+  const slabOn=document.querySelector('#rate-mode button.on').dataset.m==='slab';
+  const r0=parseFloat((document.querySelector('#role-rates .role-rate')||{}).value);
+  if(!slabOn && basisShort==='The loan amount' && r0>0){
+    gets+='<div class="fv-ex">e.g. ₹'+Math.round(500000*r0/100).toLocaleString('en-IN')+' on a ₹5,00,000 loan'+(flash?' — on top of the normal incentive':'')+'</div>';
+  }
   const tiles=[
     ['Gets', gets, 'big'],
     ['Who', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
     ['Does what', (ev?ev.textContent.split(' → ')[0]:'—')+' · '+(lo?lo.textContent.split(' (')[0]:'')+' loan', ''],
     ['Given as', document.getElementById('f-sched').value, 'quiet']
   ];
-  const fhtml='<div class="spec-list">'+tiles.map(t=>'<div class="sl-row '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+'</div>'+
-    '<div class="fmeta-line">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div>';
+  const fhtml='<div class="spec-list">'+tiles.map(t=>'<div class="sl-row '+t[2]+'"><div class="fl">'+t[0]+'</div><div class="fv">'+t[1]+'</div></div>').join('')+
+    '<div class="sl-foot">kind of pay <b>'+(EVENT_CAT[event]||'—')+'</b><span class="sep">·</span>type <b>'+(flash?'flash bonus':'normal')+'</b><span class="sep">·</span>extra conditions <b>'+(mods?mods+' added':'none')+'</b><span class="sep">·</span>starts <b>'+fmtDate(document.getElementById('f-start').value)+'</b></div></div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
 
