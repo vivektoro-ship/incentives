@@ -1169,12 +1169,10 @@ textarea{resize:vertical;min-height:88px}
               <div class="px-bnr gold" data-inc="sourcing">
                 <div class="bnr-top"><span class="bnr-tag">★ LIVE BOOST · ENDS 31 JUL</span><span class="bnr-amt">+0.10%</span></div>
                 <div class="bnr-title">July fresh-loan push</div>
-                <div class="bnr-sub">Extra on every fresh loan you bring — on top of your normal pay</div>
               </div>
               <div class="px-bnr blue" data-inc="sourcing">
                 <div class="bnr-top"><span class="bnr-tag">🎁 ALMOST THERE</span><span class="bnr-amt">₹175</span></div>
                 <div class="bnr-title">3 more fresh loans unlocks ₹175</div>
-                <div class="bnr-sub">A gate the office set — hit 5 this month and it all firms up</div>
               </div>
             </div>
 
@@ -1239,7 +1237,6 @@ textarea{resize:vertical;min-height:88px}
               <button class="px-qm" aria-label="See the working" data-goto="b-explain">?</button>
             </div>
           </div>
-          <div class="px-banner amber" id="inc-banner" style="display:none"></div>
           <div class="px-body" id="inc-body"></div>
           <div class="px-foot"><button class="px-cta2" style="margin:0" data-goto="b-dispute">Report an issue</button></div>
         </div></div>
@@ -2344,9 +2341,9 @@ const PX_CATS={
    {t:'OML000431 · Fresh',m:'28 May · 0.30% — the rate on its loan date',c:['grey','old rate · kept'],a:'₹1,290'}
   ], more:'+ 13 more loans · your total is the sum of your lines',
   hist:[
-   {d:'01 Jul 2026',t:'July push started · +0.10% on top',m:'a limited-time boost the office added for July — ends 31 Jul and comes off on its own',c:['amber','adds on top']},
-   {d:'01 Jun 2026',t:'Rate went up · 0.30% → 0.35%',m:'the office approved a new version of this incentive — loans given before 01 Jun keep 0.30%, like OML000431 above',c:['green','approved change']},
-   {d:'01 Apr 2026',t:'Rate set · 0.30%',m:'where this incentive started for Sales Partners',c:['grey','start']}
+   {d:'01 Jul 2026',t:'July push started · +0.10% on top',m:'ends 31 Jul · comes off on its own',c:['amber','adds on top']},
+   {d:'01 Jun 2026',t:'Rate went up · 0.30% → 0.35%',m:'loans before 01 Jun keep 0.30%',c:['green','approved change']},
+   {d:'01 Apr 2026',t:'Rate set · 0.30%',m:'where it started',c:['grey','start']}
   ]
  },
  funnel:{
@@ -2365,8 +2362,8 @@ const PX_CATS={
    {t:'Customer · A. Farhan',m:'11 Jul',c:['green','slab 1 · ₹100'],a:'₹100'}
   ], more:'+ 38 more this month',
   hist:[
-   {d:'01 Jun 2026',t:'Slab rates raised',m:'₹90 / ₹110 / ₹130 became ₹100 / ₹125 / ₹150 — approved at the office; June started fresh on the new rates, May was paid out on the old ones',c:['green','approved change']},
-   {d:'01 Mar 2026',t:'Slabs set · ₹90 / ₹110 / ₹130',m:'where this incentive started',c:['grey','start']}
+   {d:'01 Jun 2026',t:'Slab rates raised',m:'rates raised — June on the new ones, May on the old',c:['green','approved change']},
+   {d:'01 Mar 2026',t:'Slabs set · ₹90 / ₹110 / ₹130',m:'where it started',c:['grey','start']}
   ]
  },
  convincing:{
@@ -2379,7 +2376,7 @@ const PX_CATS={
    {t:'OML000440 · Fresh',m:'05 Jul · 0.20% of ₹3,80,000',c:['green','locked'],a:'₹760'}
   ], more:'+ 9 more loans',
   hist:[
-   {d:'12 May 2026',t:'Rate set · 0.20%',m:'no changes since — the day anything changes, it appears here and on your rate card first',c:['grey','start']}
+   {d:'12 May 2026',t:'Rate set · 0.20%',m:'no changes since',c:['grey','start']}
   ]
  }
 };
@@ -2400,15 +2397,12 @@ function renderIncDetail(){
   const c=PX_CATS[CUR_CAT]; if(!c) return;
   document.getElementById('inc-title').textContent=c.title;
   document.getElementById('inc-sub').textContent=c.sub;
-  const bn=document.getElementById('inc-banner');
-  if(c.banner){ bn.style.display='flex'; bn.textContent=c.banner; } else bn.style.display='none';
   const row=r=>'<div class="px-row"'+(r.t.startsWith('OML')?' data-goto="b-firm" style="cursor:pointer"':'')+'><div class="main"><div class="t">'+r.t+'</div><div class="m">'+r.m+'</div><span class="px-chip '+r.c[0]+'">'+r.c[1]+'</span></div><div class="amt'+(r.a&&r.a.startsWith('−')?' red':'')+'">'+r.a+'</div></div>';
   let h='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div"><div class="px-big"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:6px">'+c.note+'</div>'
    +(c.prog?'<div class="px-track"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div><div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>':'')
    +'</div>';
   if(c.pay) h+='<div class="px-card"><div class="px-label">How &amp; when you get paid</div><hr class="px-div"><div class="px-note12" style="margin:2px 0 8px">'+c.pay.how+'</div>'+c.pay.sched.map(x=>'<div class="px-row"><div class="main"><div class="t">'+x.t+'</div></div><div class="amt">'+x.a+'</div></div>').join('')+'</div>';
   if(c.ladder) h+='<div class="px-card"><div class="px-label">Your level — higher levels pay more</div><hr class="px-div"><div class="px-note12" style="margin:2px 0 14px">'+c.ladder.note+'</div>'+slabLadder(c.ladder.steps)+'</div>';
-  if(c.gatenote) h+='<div class="px-card" style="background:linear-gradient(150deg,#FFF7E8,#fff)"><div class="px-label" style="color:#B45309">Waiting to unlock</div><hr class="px-div"><div class="px-note12" style="padding:4px 0">'+c.gatenote+'</div></div>';
   h+='<div class="px-card"><div class="px-label">'+(c.ladder?'Counted this month':'Loans in this incentive · July')+'</div><hr class="px-div">'+c.rows.map(row).join('')+(c.more?'<div class="px-more">'+c.more+'</div>':'')+'</div>';
   h+='<div class="px-card"><div class="px-label">Your rate — every change, dated, with the reason</div><hr class="px-div">'+c.hist.map(x=>'<div class="px-row"><div class="main"><div class="t">'+x.t+'</div><div class="m">'+x.d+' · '+x.m+'</div><span class="px-chip '+x.c[0]+'">'+x.c[1]+'</span></div></div>').join('')+'</div>';
   h+='<div class="px-note12" style="padding:0 4px">A change never touches a loan you already earned — <b>every loan keeps the rate that was live on its own date</b>.</div>';
