@@ -860,8 +860,8 @@ textarea{resize:vertical;min-height:88px}
                 <div class="mm-t">Gates — they must meet this</div>
                 <button type="button" class="mm-i" onclick="addModPick('gate','At least |10| new customers in the month')">At least 10 new customers in the month</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','At least |5| loans in the month')">At least 5 loans in the month</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','More than |90| % of the month&#39;s customers are new')">More than 90% of the month's customers are new</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member&#39;s name')">Fraud check — loan not in a family member's name</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','More than |90| % of the month’s customers are new')">More than 90% of the month's customers are new</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Fraud check — loan not in a family member’s name')">Fraud check — loan not in a family member's name</button>
                 <div class="mm-t">Scalers — pay more or less</div>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Pay |50| % of the rate for low-value loans')">Pay less for low-value loans</button>
                 <button type="button" class="mm-i" onclick="addModPick('scale','Adjust by loan tenure')">Adjust by loan tenure</button>
@@ -900,6 +900,11 @@ textarea{resize:vertical;min-height:88px}
             <div class="bill-row money"><span class="k">Change vs today's incentive</span><span class="v" id="cost-delta">—</span></div>
             <div class="bill-row" style="display:block"><span class="k" style="font-weight:600;display:block;margin-bottom:6px">How this is worked out</span><span id="cost-working" style="display:block;font-size:12.5px;font-weight:500;color:var(--ink-2);line-height:1.6;text-align:left"></span></div>
           </div>
+        </div>
+        <div class="panel" id="earners-panel" style="display:none">
+          <h3>Who is earning this</h3>
+          <div class="p-sub">Partners paid under this incentive — live from the money record</div>
+          <div class="bill" id="earners-list"></div>
         </div>
         <div class="sticky-foot">
           <button class="btn ghost" data-goto="a-form">← Back to the form</button>
@@ -1334,7 +1339,7 @@ function show(id){
   document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active', n.dataset.goto===id));
   const tab = id==='home'?'home':(id.startsWith('a-')?'a-list':'b-home');
   document.querySelectorAll('.topbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.goto===tab));
-  if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); }
+  if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
   if(id==='a-staged'||id==='a-published') fillConfirmation();
   if(id==='b-rates') renderRateCard();
   if(id==='a-disputes') renderDisputes();
@@ -1743,9 +1748,39 @@ function renderRulesTable(){
       '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td></tr>';
   }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No rules match these filters.</td></tr>';
 }
+const EARNERS={
+  'RUL-SP-SRC':[
+    {n:'Ravi Krishnan',c:'Chennai',paid:110100,pend:31900},
+    {n:'Suresh M',c:'Madurai',paid:86400,pend:22100},
+    {n:'Priya V',c:'Coimbatore',paid:64100,pend:18400},
+    {n:'Arun D',c:'Chennai',paid:41200,pend:9800}
+  ],
+  'RUL-AP-CNV':[
+    {n:'Kavitha R',c:'Trichy',paid:38200,pend:8100},
+    {n:'Manoj S',c:'Salem',paid:29500,pend:6400}
+  ],
+  'RUL-A2NU':[
+    {n:'Deepa L',c:'Chennai',paid:52300,pend:12100},
+    {n:'Vignesh P',c:'Madurai',paid:44800,pend:10300}
+  ]
+};
+let CUR_R=null;
+function renderEarners(){
+  const panel=document.getElementById('earners-panel'); if(!panel) return;
+  const list=EARNERS[CUR_R&&CUR_R.status==='working'?CUR_R.id:null];
+  if(!list){ panel.style.display='none'; return; }
+  const inr=x=>'₹'+x.toLocaleString('en-IN');
+  let tp=0,tq=0;
+  panel.style.display='block';
+  document.getElementById('earners-list').innerHTML=list.map(e=>{
+    tp+=e.paid; tq+=e.pend;
+    return '<div class="bill-row money"><span class="k">'+e.n+' · '+e.c+'</span><span class="v"><span style="color:var(--ok)">'+inr(e.paid)+' paid</span> · <span style="color:var(--amber)">'+inr(e.pend)+' pending</span></span></div>';
+  }).join('')+'<div class="bill-row money big"><span class="k">Total · '+list.length+' partners</span><span class="v">'+inr(tp)+' paid · '+inr(tq)+' pending</span></div>';
+}
 function openRule(id,btn){
   const r=RULES.find(x=>x.id===id); if(!r) return;
   loadRule(r);
+  CUR_R=r;   // after loadRule — resetForm inside it clears CUR_R
   if(r.status==='draft'||r.status==='staged'){ show('a-form'); return; }
   if(btn){ show('a-form'); toast('Copied into a draft — the change goes live from its own start date; the old one stays on record'); }
   else show('a-review');
@@ -1857,6 +1892,7 @@ function addModPick(kind,label){
 function rmMod(btn){ btn.closest('.modrow').remove(); if(!document.querySelector('#mods .modrow')) document.getElementById('mods-empty').style.display='flex'; updatePreview(); }
 
 function resetForm(){
+  CUR_R=null;
   document.getElementById('f-name').value='';
   document.getElementById('f-start').value='2026-08-01';
   document.getElementById('f-role').value='SP';
