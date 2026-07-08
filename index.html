@@ -219,8 +219,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fsect{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);margin:6px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
 .fsect:first-child{border-top:none;padding-top:0;margin-top:0}
 .fstack{display:flex;flex-direction:column;gap:14px;min-width:0}
-.fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 10px;box-shadow:var(--shadow-card)}
-.fcard .fsect{border-top:none;padding:4px 11px;margin:0 0 16px;display:inline-block;background:var(--navy);color:#fff;border-radius:7px;font-size:9.5px}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:14px}
+.fcard .fsect{border-top:none;padding:4px 11px;margin:0;display:inline-block;align-self:flex-start;background:var(--navy);color:#fff;border-radius:7px;font-size:9.5px}
 .fcard .field:has(> select),.fcard .field:has(> input[type=text]),.fcard .field:has(> input[type=date]){background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:9px 14px 7px}
 .fcard .field:has(> select) label,.fcard .field:has(> input[type=text]) label,.fcard .field:has(> input[type=date]) label{margin-bottom:1px;font-size:9.5px;color:var(--muted-2)}
 .fcard .field > select,.fcard .field > input[type=text],.fcard .field > input[type=date]{border:none;background:transparent;padding:5px 0;font-size:15px;border-radius:0}
@@ -232,6 +232,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fld-block .inlbl{font-size:9.5px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--muted-2);display:inline-flex;gap:6px;align-items:center}
 .fld-block:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
 .fcard .field label{font-size:9.5px;min-height:15px}
+.fcard .field{margin-bottom:0}
 .fcard .tip{width:13px;height:13px;font-size:8.5px}
 .fcard .field:has(> input[type=date]){height:72px}
 .fcard .field:has(> select),.fcard .field:has(> input[type=text]){min-height:72px}
