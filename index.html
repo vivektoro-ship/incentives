@@ -766,17 +766,8 @@ textarea{resize:vertical;min-height:88px}
             <div class="field" style="flex:1"><label>Starts from</label>
               <input type="date" id="f-start" value="2026-08-01">
             </div>
-            <div class="field fld-block" style="flex:1">
-              <div style="width:100%">
-                <span class="inlbl">Ends on <span class="tip" data-tip="Choose whether this incentive stops by itself. It switches off on the end date.">?</span></span>
-                <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
-                  <div class="seg seg-sm" id="end-mode">
-                    <button class="on" data-e="none" onclick="setEndMode('none')">No end date</button>
-                    <button data-e="date" onclick="setEndMode('date')">On a date</button>
-                  </div>
-                  <input type="date" id="flash-date" style="display:none;flex:1;min-width:0;border:none;background:transparent;padding:4px 0;font-size:15px;font-weight:700">
-                </div>
-              </div>
+            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Leave empty for no end date. If set, the incentive switches off on this date.">?</span></label>
+              <input type="date" id="flash-date">
             </div>
           </div>
         </div>
@@ -1378,23 +1369,6 @@ function updateSums(){
   set('sum-D',mods?mods+' added':'None');
   set('sum-E',document.getElementById('f-sched').value);
 }
-function setEndMode(m){
-  document.querySelectorAll('#end-mode button').forEach(b=>b.classList.toggle('on',b.dataset.e===m));
-  const d=document.getElementById('flash-date');
-  d.style.display = m==='date'?'block':'none';
-  if(m==='none') d.value='';
-  updatePreview();
-}
-function endMode(){ const b=document.querySelector('#end-mode .on'); return b?b.dataset.e:'none'; }
-function setRuleType(rt){ if(document.querySelector('#f-ruletype')){document.querySelectorAll('#f-ruletype button').forEach(b=>b.classList.toggle('on',b.dataset.rt===rt));} updatePreview(); }
-function setUnitMode(u){
-  document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));
-  const bs=document.getElementById('f-basis');
-  const v=bs.value.toLowerCase();
-  if(u==='pct' && v.includes('count')) bs.value='The loan amount';           // % of a count is meaningless
-  if(u==='amt' && (v.includes('a2nu')||v.includes('conversions'))) bs.value='The loan amount';
-  basisChanged();
-}
 function syncUnitSeg(){
   const v=document.getElementById('f-basis').value.toLowerCase();
   let u=null;
@@ -1485,7 +1459,9 @@ function syncFroms(){
 function addSlab(){
   captureSlabs();
   slabState.push({from:'',to:'',pay:'',pays:{}});
-  renderSlabs(); syncFroms(); toast('Enter where the previous level ends — the next level starts automatically');
+  renderSlabs(); syncFroms();
+  const tos=document.querySelectorAll('#slab-body .s-to'); if(tos.length>1) tos[tos.length-2].focus();
+  toast('Enter where the previous level ends — the next level starts automatically');
   updatePreview();
 }
 function rmSlab(btn){
@@ -1678,7 +1654,6 @@ function validate(){
   {
     const st=document.getElementById('f-start').value, en=document.getElementById('flash-date').value;
     const isFlash=(document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash';
-    if(endMode()==='date' && !en) errs.push('Pick the end date — or choose “No end date”');
     if(en && st && en<=st) errs.push('The end date must be after the start date');
   }
   return {errs:[...new Set(errs)], warns:[...new Set(warns)]};
@@ -1717,7 +1692,6 @@ function loadRule(o){
   if(o.start) document.getElementById('f-start').value=o.start;
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked = (o.cities&&o.cities.length)? o.cities.includes(b.dataset.val) : b.dataset.val==='all');
   const _c=cityList(); document.getElementById('city-btn-label').textContent=_c.length?(_c.length>3?_c.length+' cities':_c.join(', ')):'All cities';
-  setEndMode(o.end?'date':'none');
   document.getElementById('flash-date').value=o.end||'';
   applyAutofill();
   if(o.mode) setRateMode(o.mode);
@@ -1880,7 +1854,7 @@ function resetForm(){
   document.getElementById('f-basis').selectedIndex=0;
   basisChanged();
   document.getElementById('f-sched').selectedIndex=0;
-  setEndMode('none');
+  document.getElementById('flash-date').value='';
   document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u==='pct'));
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked = b.dataset.val==='all');
   document.getElementById('city-btn-label').textContent='All cities';
