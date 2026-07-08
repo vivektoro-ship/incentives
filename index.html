@@ -641,12 +641,13 @@ textarea{resize:vertical;min-height:88px}
 .lad2-row.here{background:#FFF6E6;border-left-color:#F5A623}
 .lad2-row.here .l2-rng{color:#B45309;font-weight:700}
 .lad2-row.locked .l2-lv,.lad2-row.locked .l2-rng,.lad2-row.locked .l2-rate{color:#9AA4B2}
-.lrow{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #F0F3F8;cursor:pointer}
+.lrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #F0F3F8;cursor:pointer}
 .lrow:last-of-type{border-bottom:none}
 .lrow .lr-l{flex:1;min-width:0}
-.lrow .lr-id{font-size:13.5px;font-weight:700;color:#0B1220}
+.lrow .lr-id{font-size:14px;font-weight:700;color:#0B1220}
 .lrow .lr-sub{font-size:11.5px;font-weight:500;color:#5B6472;margin-top:2px}
-.lrow .lr-amt{font-weight:800;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lrow .px-chip{margin-top:7px}
+.lrow .lr-amt{font-weight:800;font-size:15.5px;white-space:nowrap;font-variant-numeric:tabular-nums;align-self:flex-start;margin-top:1px}
 .lrow .lr-amt.red{color:#C0392B}
 .rtl{padding-left:2px}
 .rtl-i{display:flex;gap:12px;padding:0 0 15px;position:relative}
@@ -1180,10 +1181,10 @@ textarea{resize:vertical;min-height:88px}
               <div style="flex:1"><div class="nm" style="font-size:18px">My incentives</div></div>
             </div>
             <div class="px-months" id="h-months">
-              <button class="mchip on" onclick="selMonth('jul',this)">This month</button>
-              <button class="mchip" onclick="selMonth('jun',this)">Last month</button>
-              <button class="mchip" onclick="selMonth('may',this)">May</button>
-              <button class="mchip" onclick="selMonth('apr',this)">April</button>
+              <button class="mchip on" data-mon="jul" onclick="selMonth('jul')">This month</button>
+              <button class="mchip" data-mon="jun" onclick="selMonth('jun')">Last month</button>
+              <button class="mchip" data-mon="may" onclick="selMonth('may')">May</button>
+              <button class="mchip" data-mon="apr" onclick="selMonth('apr')">April</button>
             </div>
             <div class="px-hero">
               <div class="hl" id="h-hl">Earned this month</div>
@@ -1210,17 +1211,17 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-label" id="h-cardslabel" style="padding:2px 4px 0">Your incentives · July</div>
             <div id="h-cards"></div>
 
-            <div class="px-card">
-              <div class="px-label">Past months — closed &amp; paid</div>
-              <hr class="px-div">
-              <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">June 2026</div><div class="m">62 loans · paid 05 Jul</div><span class="px-chip green">paid</span></div><div class="amt">₹58,900</div></div>
-              <div class="px-row" data-goto="b-final" style="cursor:pointer"><div class="main"><div class="t">May 2026</div><div class="m">54 loans · paid 05 Jun</div><span class="px-chip green">paid</span></div><div class="amt">₹51,200</div></div>
-            </div>
-
             <div class="px-card" data-goto="b-history" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px">
               <span style="width:36px;height:36px;border-radius:50%;background:#FFF3D6;color:#B45309;display:grid;place-items:center;font-size:15px;flex:none">⚑</span>
               <div style="flex:1"><div style="font-weight:800;font-size:13.5px">My issues</div><div style="font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px">1 checking · 1 fixed +₹3,400 · 1 answered</div></div>
               <span style="color:#94A3B8;font-size:18px">›</span>
+            </div>
+
+            <div class="px-card">
+              <div class="px-label">Past months — tap to view</div>
+              <hr class="px-div">
+              <div class="px-row" onclick="selMonth('jun')" style="cursor:pointer"><div class="main"><div class="t">June 2026</div><div class="m">62 loans · paid 05 Jul</div><span class="px-chip green">paid</span></div><div class="amt">₹58,900 ›</div></div>
+              <div class="px-row" onclick="selMonth('may')" style="cursor:pointer"><div class="main"><div class="t">May 2026</div><div class="m">54 loans · paid 05 Jun</div><span class="px-chip green">paid</span></div><div class="amt">₹51,200 ›</div></div>
             </div>
           </div>
         </div></div>
@@ -2419,12 +2420,12 @@ const MONTHS={
  ]}
 };
 let CUR_MONTH='jul';
-function selMonth(key,btn){
+function selMonth(key){
   if(!MONTHS[key]) return;
   CUR_MONTH=key;
-  document.querySelectorAll('#h-months .mchip').forEach(c=>c.classList.remove('on'));
-  if(btn) btn.classList.add('on');
+  document.querySelectorAll('#h-months .mchip').forEach(c=>c.classList.toggle('on', c.dataset.mon===key));
   renderHome();
+  const sv=document.querySelector('#b-home .screenview'); if(sv) sv.scrollTop=0;
 }
 function setTxt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 function renderHome(){
@@ -2470,7 +2471,7 @@ function renderIncDetail(){
   h+='<div class="px-card"><div class="px-label">'+(c.levels?'Counted this month':'Your loans')+'</div><hr class="px-div">';
   h+=c.rows.map(r=>{
     const tap=r.t.startsWith('OML')?' data-goto="b-firm"':'';
-    return '<div class="lrow"'+tap+'><div class="lr-l"><div class="lr-id">'+r.t+'</div><div class="lr-sub">'+r.m+'</div></div><span class="px-chip '+r.c[0]+'">'+r.c[1]+'</span><div class="lr-amt'+(r.a&&r.a.startsWith('−')?' red':'')+'">'+r.a+'</div></div>';
+    return '<div class="lrow"'+tap+'><div class="lr-l"><div class="lr-id">'+r.t+'</div><div class="lr-sub">'+r.m+'</div><span class="px-chip '+r.c[0]+'">'+r.c[1]+'</span></div><div class="lr-amt'+(r.a&&r.a.startsWith('−')?' red':'')+'">'+r.a+'</div></div>';
   }).join('');
   h+=(c.more?'<div class="px-more">'+c.more+'</div>':'')+'</div>';
   // 5 · rate history (timeline) — only when the rate has actually changed
