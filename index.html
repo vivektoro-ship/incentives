@@ -220,7 +220,12 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fsect:first-child{border-top:none;padding-top:0;margin-top:0}
 .fstack{display:flex;flex-direction:column;gap:14px;min-width:0}
 .fcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px 10px;box-shadow:var(--shadow-card)}
-.fcard .fsect{border-top:none;padding-top:0;margin:0 0 14px}
+.fcard .fsect{border-top:none;padding:4px 11px;margin:0 0 16px;display:inline-block;background:var(--navy);color:#fff;border-radius:7px;font-size:9.5px}
+.fcard .field:has(> select),.fcard .field:has(> input[type=text]),.fcard .field:has(> input[type=date]){background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:9px 14px 7px}
+.fcard .field:has(> select) label,.fcard .field:has(> input[type=text]) label,.fcard .field:has(> input[type=date]) label{margin-bottom:1px;font-size:9.5px;color:var(--muted-2)}
+.fcard .field > select,.fcard .field > input[type=text],.fcard .field > input[type=date]{border:none;background:transparent;padding:5px 0;font-size:15px;border-radius:0}
+.fcard .field > select:focus,.fcard .field > input[type=text]:focus,.fcard .field > input[type=date]:focus{box-shadow:none;outline:none}
+.fcard .field:has(> select):focus-within,.fcard .field:has(> input[type=text]):focus-within,.fcard .field:has(> input[type=date]):focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
 .msdd{position:relative}
 .msdd-btn{width:100%;text-align:left;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;background:var(--card);font-weight:700;font-size:14px;color:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;font-family:inherit}
 .msdd-btn:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
@@ -729,7 +734,7 @@ textarea{resize:vertical;min-height:88px}
       <div class="create-grid">
       <div class="fstack">
 
-        <div class="fcard"><div class="fsect">Who</div>
+        <div class="fcard"><div class="fsect">Incentive details</div>
           <div class="field"><label>Incentive name</label>
             <input type="text" id="f-name" placeholder="e.g. SP self-source · Fresh · 0.35%" maxlength="60">
           </div>
@@ -745,6 +750,14 @@ textarea{resize:vertical;min-height:88px}
               <option value="Business Partner">Business Partner</option>
               <option value="TPF">TPF</option>
             </select>
+          </div>
+          <div style="display:flex;gap:14px">
+            <div class="field" style="flex:1"><label>Starts from</label>
+              <input type="date" id="f-start" value="2026-08-01">
+            </div>
+            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
+              <input type="date" id="flash-date">
+            </div>
           </div>
         </div>
 
@@ -783,7 +796,7 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">The pay</div>
+        <div class="fcard"><div class="fsect">Set payment logic</div>
           <div class="field"><label>Pay is calculated on <span class="tip" id="basis-tip" data-tip="The partner gets a % of each loan&#39;s amount. The loan value comes from each real loan automatically — you never enter it here.">?</span></label>
             <select id="f-basis" onchange="basisChanged()">
               <option>The loan amount</option>
@@ -797,8 +810,8 @@ textarea{resize:vertical;min-height:88px}
           <div class="field"><label>How much <span class="tip" data-tip="One row = the same rate for everyone. Add rows to pay by level — e.g. loans of ₹1L–₹2L at one rate, above ₹2L at another.">?</span></label>
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
               <div class="seg seg-sm" id="unit-mode">
-                <button class="on" data-u="pct" onclick="setUnitMode('pct')">Percentage %</button>
-                <button data-u="amt" onclick="setUnitMode('amt')">Flat ₹</button>
+                <button class="on" data-u="pct" onclick="setUnitMode('pct')">Percentage (%)</button>
+                <button data-u="amt" onclick="setUnitMode('amt')">Rate (₹)</button>
               </div>
               <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
             </div>
@@ -821,17 +834,6 @@ textarea{resize:vertical;min-height:88px}
               <option>The later it closes, the less we take back</option>
               <option>Never take back</option>
             </select>
-          </div>
-        </div>
-
-        <div class="fcard"><div class="fsect">When</div>
-          <div style="display:flex;gap:14px">
-            <div class="field" style="flex:1"><label>Starts from</label>
-              <input type="date" id="f-start" value="2026-08-01">
-            </div>
-            <div class="field" style="flex:1"><label>Ends on <span class="tip" data-tip="Optional — the incentive switches off on this date.">?</span></label>
-              <input type="date" id="flash-date">
-            </div>
           </div>
         </div>
 
