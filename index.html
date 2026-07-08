@@ -740,7 +740,7 @@ textarea{resize:vertical;min-height:88px}
             <button class="btn primary" data-goto="a-form" data-fresh="1">+ Create an incentive</button>
           </div>
           <table class="rule-table">
-            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Priority</th><th>Effective</th><th>Pays</th><th>Status</th></tr></thead>
+            <thead><tr><th>Incentive</th><th>Category</th><th>Payee</th><th>Effective</th><th>Pays</th><th>Status</th></tr></thead>
             <tbody id="rules-body"></tbody>
           </table>
         </div>
@@ -770,17 +770,6 @@ textarea{resize:vertical;min-height:88px}
               <option value="Business Partner">Business Partner</option>
               <option value="TPF">TPF</option>
             </select>
-          </div>
-          <div style="display:flex;gap:14px">
-            <div class="field" style="flex:1"><label>Kind <span class="tip" data-tip="Standard competes with other incentives of the same kind — the higher priority pays. Flash adds on top of whatever wins, and must have an end date.">?</span></label>
-              <div class="seg seg-sm" id="f-ruletype">
-                <button class="on" data-rt="standard" onclick="setRuleType('standard')">Standard</button>
-                <button data-rt="flash" onclick="setRuleType('flash')">Flash — adds on top</button>
-              </div>
-            </div>
-            <div class="field" style="flex:1"><label>Priority <span class="tip" data-tip="Two live incentives of the same kind can match the same loan — both stay live, and on each loan the higher priority is the one that pays. Deterministic, never a guess.">?</span></label>
-              <input type="number" id="f-prio" value="100" min="1" step="10">
-            </div>
           </div>
           <div style="display:flex;gap:14px">
             <div class="field" style="flex:1"><label>Starts from</label>
@@ -1713,7 +1702,6 @@ function buildSummary(){
     ['Who', selectedActors().map(r=>ROLE_NAMES[r]).join(', '), ''],
     ['Does what', (ev?ev.textContent:'—')+' · '+(lo?lo.textContent:'')+' loan', ''],
     ['Conditions', condParts().join(' · ')||'None — any loan that matches', ''],
-    ['Priority', (document.querySelector('#f-ruletype button.on')||{dataset:{}}).dataset.rt==='flash' ? 'flash — adds on top' : (document.getElementById('f-prio').value||100), ''],
     ['Given as', document.getElementById('f-sched').value, ''],
     ['Kind of pay', EVENT_CAT[event]||'—', ''],
     ['Extra conditions', mods? mods+' added':'None', ''],
@@ -1835,7 +1823,7 @@ function loadRule(o){
   EDIT_LIN=o.lin||o.id;
   document.getElementById('f-name').value=o.name||'';
   document.getElementById('f-role').value=(o.roles&&o.roles[0])||'SP';
-  document.getElementById('f-prio').value=o.prio||100;
+  const _pr=document.getElementById('f-prio'); if(_pr) _pr.value=o.prio||100;
   document.getElementById('f-subtype').value=o.subtype||'any';
   document.getElementById('f-product').value=o.product||'any';
   document.getElementById('f-cust').value=o.cust||'any';
@@ -1886,11 +1874,10 @@ function renderRulesTable(){
               : (r.status==='staged'||r.status==='draft') ? ' <button class="row-edit" onclick="event.stopPropagation();openRule(\''+r.id+'\')">Edit draft</button>' : '';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
-      '<td class="mono">'+(r.flash?'additive':(r.prio||100))+'</td>'+
       '<td class="mono">'+(r.start?fmtDate(r.start):'—')+'</td>'+
       '<td class="rate-sum">'+r.pay+'</td>'+
       '<td style="white-space:nowrap"><span class="pill '+sp[0]+'">'+sp[1]+'</span>'+act+'</td></tr>';
-  }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No incentives match these filters.</td></tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No incentives match these filters.</td></tr>';
 }
 const EARNERS={
   'INC-SP-SRC':[
@@ -1945,7 +1932,7 @@ function currentRuleObj(){
     id, lin:EDIT_LIN||('LIN-'+id),
     name:(document.getElementById('f-name').value.trim()||'Untitled incentive'),
     cat:EVENT_CAT[event]||'—',
-    prio:parseInt(document.getElementById('f-prio').value)||100,
+    prio:parseInt((document.getElementById('f-prio')||{}).value)||100,
     roles:selectedActors().slice(),
     loan:document.getElementById('f-loan').value, event, status:'working',
     subtype:document.getElementById('f-subtype').value,
@@ -2050,7 +2037,7 @@ function resetForm(){
   document.getElementById('f-name').value='';
   document.getElementById('f-start').value='2026-08-01';
   document.getElementById('f-role').value='SP';
-  document.getElementById('f-prio').value=100;
+  const _pr2=document.getElementById('f-prio'); if(_pr2) _pr2.value=100;
   document.getElementById('f-loan').value='fresh';
   document.getElementById('f-subtype').value='any';
   document.getElementById('f-product').value='any';
