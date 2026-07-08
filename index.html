@@ -842,7 +842,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="bill">
             <div class="bill-row big money"><span class="k">Expected payout next month</span><span class="v" id="cost-next">₹—</span></div>
             <div class="bill-row money"><span class="k">Change vs today's incentive</span><span class="v" id="cost-delta">—</span></div>
-            <div class="bill-row"><span class="k" style="font-weight:500">How this is guessed</span><span class="v" style="font-weight:500;color:var(--muted);font-size:12.5px">assumes next month looks like the last 3 months' work</span></div>
+            <div class="bill-row" style="display:block"><span class="k" style="font-weight:600;display:block;margin-bottom:6px">How this is worked out</span><span id="cost-working" style="display:block;font-size:12.5px;font-weight:500;color:var(--ink-2);line-height:1.6;text-align:left"></span></div>
           </div>
         </div>
         <div class="sticky-foot">
@@ -1707,6 +1707,11 @@ function computeCost(){
     if(nb) nb.style.height=h(cand[c]);
     if(v) v.textContent=cand[c].toFixed(1);
   });
+  const working=document.getElementById('cost-working');
+  if(working){
+    const rest=(curTotal-BT_BASE[cat]).toFixed(1);
+    working.innerHTML='Over the last 3 months, <b>'+cat+'</b> incentives paid about <b>₹'+BT_BASE[cat].toFixed(1)+' lakh a month</b> at today\'s rate ('+curRate.toFixed(2)+'%). At your rate of <b>'+ratePct.toFixed(2)+'%</b>, the same work pays <b>₹'+cand[cat].toFixed(1)+' lakh</b>. Other kinds of pay stay at ₹'+rest+' lakh. Assumes next month has the same volume as the last 3 months\' average — real history, not a promise.';
+  }
   const d=candTotal-curTotal, sign=d>=0?'+ ':'− ';
   const dcol = Math.abs(d)<0.05 ? 'var(--muted)' : (d>0 ? 'var(--red)' : 'var(--ok)');
   setFact('cost-next','₹'+candTotal.toFixed(1)+' lakh');
