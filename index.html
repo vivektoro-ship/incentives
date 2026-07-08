@@ -872,7 +872,7 @@ textarea{resize:vertical;min-height:88px}
 
     <!-- ===== OFFICE 5 · APPROVE A RULE ===== -->
     <section class="screen" id="a-checker">
-      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve or reject</h2><div class="sub">Approve → live as a new version. Reject → needs a reason, on the record.</div></div></div>
+      <div class="screen-head"><span class="id">Office · 5</span><div><h2>Approve or reject</h2><div class="sub">Approve → it goes live. Reject → needs a reason, on the record.</div></div></div>
       <div class="console">
         <div class="panel">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="pill staged">waiting</span><span class="readonly-flag">👁 View only — what the drafter sent</span></div>
@@ -912,7 +912,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="sticky-foot">
           <button class="btn danger" id="reject-btn" onclick="toggleReject()">Reject</button>
           <div class="spacer"></div>
-          <button class="btn primary" onclick="publishRule()">Approve — it goes live as a new version</button>
+          <button class="btn primary" onclick="publishRule()">Approve — make it live</button>
         </div>
       </div>
     </section>
@@ -923,15 +923,14 @@ textarea{resize:vertical;min-height:88px}
       <div class="console">
         <div class="confirm">
           <div class="seal ok">✓</div>
-          <h3>Live — as a new version</h3>
+          <h3>It's live</h3>
           <p>Working from <span id="live-startdate">01 Aug 2026</span>. Earlier loans keep their old rate.</p>
           <div class="meta-row">
-            <span class="meta-chip"><b>version</b> <span id="live-version">v8</span></span>
             <span class="meta-chip"><b>status</b> live</span>
             <span class="meta-chip"><b>effective</b> <span id="live-starts">01 Aug 2026</span></span>
             <span class="meta-chip"><b>incentive</b> <span id="live-ruleno">RUL-2026-0714</span></span>
           </div>
-          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Replaced, not deleted</b> — the old version stays on the record. Monthly-target changes wait for next month.</div>
+          <div class="note-block" style="max-width:520px;margin:0 auto 24px;text-align:left"><b>Replaced, not deleted</b> — the old incentive stays on the record. Monthly-target changes wait for next month.</div>
           <div class="actions"><button class="btn primary" data-goto="a-list">Back to all rules</button></div>
         </div>
       </div>
@@ -1069,7 +1068,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="px-label">You earned on this loan</div>
             <hr class="px-div">
             <div class="px-big"><span class="ru">₹</span>1,750</div>
-            <div class="px-note12" style="margin-top:6px">0.35% of the ₹5,00,000 loan · under incentive v7</div>
+            <div class="px-note12" style="margin-top:6px">0.35% of the ₹5,00,000 loan</div>
           </div>
           <div class="px-card">
             <div class="px-label">When it reaches you</div>
@@ -1080,7 +1079,7 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-card">
             <div class="px-label">How it was worked out</div>
             <hr class="px-div">
-            <div class="px-kv"><span class="k">Incentive</span><span class="v">SP self-source · Fresh · v7</span></div>
+            <div class="px-kv"><span class="k">Incentive</span><span class="v">SP self-source · Fresh</span></div>
             <div class="px-kv"><span class="k">Why you earned it</span><span class="v">You found the customer</span></div>
             <div class="px-kv"><span class="k">Rate band</span><span class="v">Full rate (high-value loan)</span></div>
             <div class="px-kv"><span class="k">Paid as</span><span class="v">Half next month + half after</span></div>
@@ -1151,8 +1150,8 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-card">
             <div class="px-label">What made up this total</div>
             <hr class="px-div">
-            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Finding customers · 44 fresh loans</div><div class="m">0.35% of loan · incentive v7</div></div><div class="amt">₹41,300</div></div>
-            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Convincing customers · 12 loans</div><div class="m">0.20% of loan · incentive v4 · pays along with finding</div></div><div class="amt">₹14,200</div></div>
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Finding customers · 44 fresh loans</div><div class="m">0.35% of loan</div></div><div class="amt">₹41,300</div></div>
+            <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Convincing customers · 12 loans</div><div class="m">0.20% of loan · pays along with finding</div></div><div class="amt">₹14,200</div></div>
             <div class="px-row" data-goto="b-explain" style="cursor:pointer"><div class="main"><div class="t">Added later — complaint accepted</div><div class="m">added to next month · 06 Jul</div><span class="px-chip amber">correction · shown</span></div><div class="amt" style="color:#d98a00">+₹3,400</div></div>
             <div class="px-row"><div class="main"><div class="t" style="color:#64748B">Month closed</div><div class="m">30 Jun · dated &amp; signed · the total above = sum of every line before this one</div><span class="px-chip grey">close line · ₹0</span></div><div class="amt" style="color:#94A3B8">₹0</div></div>
           </div>
@@ -1176,11 +1175,11 @@ textarea{resize:vertical;min-height:88px}
           <div class="px-card">
             <div class="px-label">July · line by line</div>
             <hr class="px-div">
-            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000482</div><div class="m">incentive v7 · +0.35% of loan · found the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹1,750</div></div>
-            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000471</div><div class="m">incentive v7 + July bonus · +0.45% of loan</div><span class="px-chip amber">+ bonus</span></div><div class="amt">₹2,240</div></div>
-            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000448</div><div class="m">incentive v4 · +0.20% of loan · convinced the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹980</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000482</div><div class="m">+0.35% of loan · found the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹1,750</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000471</div><div class="m">+0.45% of loan · with July bonus</div><span class="px-chip amber">+ bonus</span></div><div class="amt">₹2,240</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000448</div><div class="m">+0.20% of loan · convinced the customer</div><span class="px-chip green">locked</span></div><div class="amt">₹980</div></div>
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000459</div><div class="m">−0.35% · loan closed within 60 days</div><span class="px-chip red">taken back · shown</span></div><div class="amt red">−₹1,120</div></div>
-            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">incentive v7 · +0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
+            <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000455</div><div class="m">+0.175% · half rate, low-value loan</div><span class="px-chip green">locked</span></div><div class="amt">₹1,410</div></div>
             <div class="px-more">+ 37 more lines · your total is the sum of your lines</div>
           </div>
           <div class="px-note12" style="padding:0 4px">Corrections are always <b>new lines you can see</b> — never a quiet change.</div>
@@ -1688,7 +1687,7 @@ function renderRulesTable(){
   body.innerHTML = rows.length ? rows.map(r=>{
     const sp=STATUS_PILL[r.status]||['draft',r.status];
     const flash=r.flash?' <span class="pill flash" style="margin-left:6px">flash · additive</span>':'';
-    const label=(r.status==='draft'||r.status==='staged')?'Edit':'New version';
+    const label=(r.status==='draft'||r.status==='staged')?'Edit':'Update';
     return '<tr class="rule-row" data-open="'+r.id+'"><td class="rule-name">'+r.name+'</td>'+
       '<td class="rule-cat">'+r.cat+flash+'</td><td>'+rolesText(r.roles)+'</td>'+
       '<td><span class="pill '+sp[0]+'">'+sp[1]+'</span></td>'+
@@ -1701,7 +1700,7 @@ function openRule(id,btn){
   const r=RULES.find(x=>x.id===id); if(!r) return;
   loadRule(r);
   if(r.status==='draft'||r.status==='staged'){ show('a-form'); return; }
-  if(btn){ show('a-form'); toast('Cloned into a draft — a published incentive is never edited; approving creates a new version with its own start date'); }
+  if(btn){ show('a-form'); toast('Copied into a draft — the change goes live from its own start date; the old one stays on record'); }
   else show('a-review');
 }
 function nextVersion(r){
@@ -1740,7 +1739,6 @@ function publishRule(){
   RULES.unshift(r);
   renderRulesTable();
   show('a-published');
-  setFact('live-version',r.ver);   // after show() so fillConfirmation can't overwrite it
   if(r.roles.includes(RC_ROLE)) toast('Partners\' rate cards updated — the change shows on their app as "changing soon"');
 }
 function roleCurrentRate(role){ const r=RULES.find(x=>!x.flash&&x.status==='working'&&x.roles.includes(role)&&typeof x.rate==='number'); return r?r.rate:0; }
@@ -1862,7 +1860,7 @@ function agentDraft(){
 let DISPUTES=[
   {id:'DSP-2026-0338',loan:'OML000448',by:'Ravi K · Sales Partner',filed:'03 Jul 2026',reason:'I found this customer myself — this should be 0.35%, not 0.20%',status:'open',adj:'+₹770'},
   {id:'DSP-2026-0310',loan:'OML000391',by:'Ravi K · Sales Partner',filed:'18 Jun 2026',reason:'One loan missing from my June total',status:'upheld',adj:'+₹3,400'},
-  {id:'DSP-2026-0287',loan:'OML000305',by:'Meena S · Caller',filed:'02 Jun 2026',reason:'Rate looks low on this loan',status:'rejected',why:'The accrual matched incentive v7 as of the loan date.'}
+  {id:'DSP-2026-0287',loan:'OML000305',by:'Meena S · Caller',filed:'02 Jun 2026',reason:'Rate looks low on this loan',status:'rejected',why:'The pay matched the incentive live on the loan date.'}
 ];
 function renderDisputes(){
   const el=document.getElementById('disp-list'); if(!el) return;
@@ -1910,7 +1908,7 @@ function renderRateCard(){
   });
   let html='<div class="px-card"><div class="px-label">What you earn today</div><hr class="px-div">';
   if(!live.length&&!bridge.length) html+='<div class="px-note12" style="padding:6px 0">No live incentives for your role right now.</div>';
-  live.forEach(r=>{ html+=rcRow(r,'live · '+(r.ver||''),'green'); });
+  live.forEach(r=>{ html+=rcRow(r,'live','green'); });
   bridge.forEach(b=>{ html+=rcRow(b.rule,'until '+fmtDate(b.until),'grey'); });
   html+='</div>';
   if(flash.length){
