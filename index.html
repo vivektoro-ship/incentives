@@ -896,7 +896,7 @@ textarea{resize:vertical;min-height:88px}
               </div>
             </div>
           </div>
-          <div class="field"><label>Duration <span class="tip" data-tip="How often this incentive is measured and paid out.">?</span></label>
+          <div class="field"><label>Frequency <span class="tip" data-tip="How often this incentive is measured and paid out.">?</span></label>
             <select id="f-duration" onchange="updatePreview()">
               <option>Weekly</option>
               <option selected>Monthly</option>
@@ -916,8 +916,8 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">Incentive to</div>
-          <div class="field"><label>Who earns it</label>
+        <div class="fcard"><div class="fsect">Eligibility</div>
+          <div class="field"><label>Assigned to</label>
             <div class="seg seg-sm" id="f-incto">
               <button class="on" data-t="team" onclick="setIncTo('team')">A team</button>
               <button data-t="manager" onclick="setIncTo('manager')">A manager</button>
@@ -943,7 +943,7 @@ textarea{resize:vertical;min-height:88px}
             </div>
             <div class="field fld-block">
               <div class="msdd" id="f-mgr-roles">
-                <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Roles under this manager</span><span id="mrl-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">Pick roles</span></span><span style="color:var(--muted-2)">▾</span></button>
+                <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Reporting roles</span><span id="mrl-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">Pick roles</span></span><span style="color:var(--muted-2)">▾</span></button>
                 <div class="msdd-menu"><label><input type="checkbox" class="mrl" data-val="SP" onchange="rolesChange()"> Sales Partner (SP)</label><label><input type="checkbox" class="mrl" data-val="AP" onchange="rolesChange()"> Appraisal Partner (AP)</label><label><input type="checkbox" class="mrl" data-val="Caller" onchange="rolesChange()"> Caller</label><label><input type="checkbox" class="mrl" data-val="Collection Partner" onchange="rolesChange()"> Collection Partner</label><label><input type="checkbox" class="mrl" data-val="Internal DB" onchange="rolesChange()"> Internal DB</label></div>
               </div>
             </div>
@@ -951,8 +951,8 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">Incentive for</div>
-          <div class="field"><label>What earns it</label>
+        <div class="fcard"><div class="fsect">Earning basis</div>
+          <div class="field"><label>Metric</label>
             <select id="f-metric" onchange="metricChanged()">
               <option value="loan-count">Loan count</option>
               <option value="loan-value">Loan value</option>
@@ -966,8 +966,8 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">How much to pay</div>
-          <div class="field"><label>Payment type</label>
+        <div class="fcard"><div class="fsect">Payout</div>
+          <div class="field"><label>Payout type</label>
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
               <div class="seg seg-sm" id="unit-mode">
                 <button class="on" data-u="amt" onclick="setUnitMode('amt')">Flat value (₹)</button>
@@ -975,7 +975,7 @@ textarea{resize:vertical;min-height:88px}
               </div>
               <span class="eg" id="rate-eg" style="font-size:12.5px;color:var(--muted)"></span>
             </div>
-            <div class="field" style="padding:0;border:none;background:none;min-height:0"><label style="margin-bottom:6px">How much <span class="tip" data-tip="One row = the same value for everyone. Add rows to pay by level.">?</span></label>
+            <div class="field" style="padding:0;border:none;background:none;min-height:0"><label style="margin-bottom:6px">Rate <span class="tip" data-tip="One row = the same value for everyone. Add rows to pay by level.">?</span></label>
               <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
               <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px">One row = one rate for everyone (from 1, no upper limit — only the pay is editable). <b>Add a slab</b> to pay more at higher levels — then each row&#39;s “Up to” becomes editable.</div>
               <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add slab</button>
@@ -983,7 +983,7 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
+        <div class="fcard"><div class="fsect">Conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
           <div class="field">
             <div id="mods"></div>
             <div class="note empty" id="mods-empty" style="display:none">None — everyone who matches gets the full incentive.</div>
@@ -1003,8 +1003,8 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">When they're paid</div>
-          <div class="field"><label>Payout type <span class="tip" data-tip="When the earned money reaches them.">?</span></label>
+        <div class="fcard"><div class="fsect">Payout schedule</div>
+          <div class="field"><label>Schedule <span class="tip" data-tip="When the earned money reaches them.">?</span></label>
             <select id="f-sched" onchange="updatePreview()">
               <option>Same month</option>
               <option selected>50% now + 50% next month</option>
@@ -1014,7 +1014,7 @@ textarea{resize:vertical;min-height:88px}
             </select>
           </div>
           <div class="field fld-block"><div style="width:100%">
-            <span class="inlbl">Take back <span class="tip" data-tip="If the loan closes within this many days, some or all of the pay is taken back.">?</span></span>
+            <span class="inlbl">Clawback <span class="tip" data-tip="If the loan closes within this many days, some or all of the pay is taken back.">?</span></span>
             <div style="display:flex;align-items:center;gap:9px;margin-top:6px;flex-wrap:wrap;font-size:15px;font-weight:600">
               <span style="white-space:nowrap">If the loan closes within <input type="number" id="claw-days" value="60" min="1" class="mod-n" style="width:64px"> days</span>
               <span style="display:inline-flex;align-items:center;gap:9px;white-space:nowrap">→ <select id="f-claw" onchange="updatePreview()" style="width:auto;border:none;background:transparent;padding:4px 0;font-size:15px;font-weight:700;color:var(--indigo-2)">
@@ -2701,7 +2701,7 @@ function buildSummary(){
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   const tb=document.getElementById('f-claw'), tbd=document.getElementById('claw-days');
   const mods=document.querySelectorAll('#mods .modrow').length;
-  const rows=[['Who earns it',whoText()],['What earns it',METRIC_LABEL[metricVal()]||'—'],['How much',payShort()],['City',scopeText()],['Duration',durationVal()],['Payout',schedVal()],['Take back',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Extra conditions',mods?mods+' added':'None']];
+  const rows=[['Assigned to',whoText()],['Metric',METRIC_LABEL[metricVal()]||'—'],['Payout',payShort()],['City',scopeText()],['Frequency',durationVal()],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',mods?mods+' added':'None']];
   const fhtml='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
@@ -2734,7 +2734,7 @@ function renderDetail(r){
   document.getElementById('detail-sentence').innerHTML='For <em>'+who+'</em>, pay <em>'+(r.pay||'—')+'</em> for <em>'+earns+'</em>, paid <em>'+((r.sched||'—')+'').toLowerCase()+'</em>.';
   const pill=live?'<span class="pill live">live</span>':inactive?'<span class="pill expired">inactive</span>':'<span class="pill staged">waiting</span>';
   document.getElementById('detail-statusrow').innerHTML=pill;
-  const rows=[['Who earns it',who],['What earns it',earns],['How much',r.pay||'—'],['Payout',r.sched||'—'],['Category',r.cat||'—'],['City',(r.cities&&r.cities.length)?r.cities.join(', '):'All cities'],['Duration',r.duration||'Monthly']];
+  const rows=[['Assigned to',who],['Metric',earns],['Payout',r.pay||'—'],['Schedule',r.sched||'—'],['Category',r.cat||'—'],['City',(r.cities&&r.cities.length)?r.cities.join(', '):'All cities'],['Frequency',r.duration||'Monthly']];
   document.getElementById('detail-facts').innerHTML='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   const h=document.getElementById('detail-switch-h'), sub=document.getElementById('detail-switch-sub'), act=document.getElementById('detail-switch-actions');
   if(live){ h.textContent='Active right now'; sub.textContent='Paying out now. Turn it off and it stops from today — it stays on the record.'; act.innerHTML='<button class="btn danger" onclick="setActive(false)">Make inactive</button>'; }
