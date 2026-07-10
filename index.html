@@ -711,8 +711,7 @@ textarea{resize:vertical;min-height:88px}
 <div class="topbar">
   <div class="brand"><span class="dot"></span><div>ORO INCENTIVE<small>Funnel Brain · Layer 6</small></div></div>
   <div class="tabs">
-    <button class="tab active" data-goto="home">Start here</button>
-    <button class="tab" data-goto="a-list">Admin</button>
+    <button class="tab active" data-goto="a-list">Admin</button>
     <button class="tab" data-goto="b-home">Partner</button>
   </div>
   <div class="spacer"></div>
@@ -721,8 +720,6 @@ textarea{resize:vertical;min-height:88px}
 
 <div class="layout">
   <nav class="rail">
-    <div class="grp">Start here</div>
-    <button class="navitem" data-goto="home"><span class="no">•</span> How it works</button>
 
     <div class="grp">Admin · Incentives</div>
     <button class="navitem" data-goto="a-list"><span class="no">1</span> Incentives</button>
@@ -748,35 +745,9 @@ textarea{resize:vertical;min-height:88px}
   <main class="stage">
 
     <!-- ===== START HERE ===== -->
-    <section class="screen active" id="home">
-      <div class="hero-wrap">
-        <div class="hero">
-          <div class="tagline">The Incentive Engine · Funnel Brain Layer 6 · ENG-1680</div>
-          <h1>Attribution earns the money</h1>
-          <p class="lead">The system already knows who earned every loan. This engine turns that into money — incentives the business changes itself, and a number every partner watches grow in real time.</p>
-          </div>
-
-        <div class="two-col">
-          <div class="entry" data-goto="a-list">
-            <div class="badge">Admin view</div>
-            <h3>Set the incentives</h3>
-            <p>Five blanks: who, on what, how much, conditions, when. One drafts, the system shows the cost, another approves.</p>
-            <div class="go">Open the admin view →</div>
-          </div>
-          <div class="entry" data-goto="b-home">
-            <div class="badge">Partner app view</div>
-            <h3>See your earnings, live</h3>
-            <p>Money shows up the moment a loan is given — and every rupee is explained.</p>
-            <div class="go">Open the partner app →</div>
-          </div>
-        </div>
-
-
-      </div>
-    </section>
 
     <!-- ===== OFFICE 1 · ALL RULES ===== -->
-    <section class="screen" id="a-list">
+    <section class="screen active" id="a-list">
       <div class="screen-head"><span class="id">Incentives · 1</span><div><h2>Incentives</h2><div class="sub">Everything live, waiting to start, or inactive — in one place.</div></div></div>
       <div class="atabs"><button class="atab on" data-goto="a-list">Incentives</button><button class="atab" data-goto="a-disputes">Issues reported</button><button class="atab" data-goto="a-earners">Getting incentives</button></div>
       <div class="console">
@@ -927,6 +898,24 @@ textarea{resize:vertical;min-height:88px}
               <option value="renewal">Renewal count</option>
             </select>
           </div>
+          <div class="field">
+            <label style="margin-bottom:8px">Conditions <span style="text-transform:none;font-weight:500;color:var(--muted)">· optional</span></label>
+            <div id="mods"></div>
+            <div class="note empty" id="mods-empty" style="display:none">None — everyone who matches gets the full incentive.</div>
+            <div class="msdd" id="mod-add" style="margin-top:10px;max-width:360px">
+              <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
+              <div class="msdd-menu">
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| loan count')">Minimum loan count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum loan value ₹|1,00,000|')">Minimum loan value</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| new customers')">Minimum new customers</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| appointment count')">Minimum appointment count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| conversion count')">Minimum conversion count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Passes fraud check')">Passes fraud check</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum LTV |60| %')">Minimum LTV%</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum new user |50| %')">Minimum new user%</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="fcard"><div class="fsect">How much to pay</div>
@@ -968,25 +957,6 @@ textarea{resize:vertical;min-height:88px}
           </div></div>
         </div>
 
-        <div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
-          <div class="field">
-            <div id="mods"></div>
-            <div class="note empty" id="mods-empty" style="display:none">None — everyone who matches gets the full incentive.</div>
-            <div class="msdd" id="mod-add" style="margin-top:10px;max-width:360px">
-              <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
-              <div class="msdd-menu">
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| loan count')">Minimum loan count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum loan value ₹|1,00,000|')">Minimum loan value</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| new customers')">Minimum new customers</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| appointment count')">Minimum appointment count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| conversion count')">Minimum conversion count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Passes fraud check')">Passes fraud check</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum LTV |60| %')">Minimum LTV%</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum new user |50| %')">Minimum new user%</button>
-              </div>
-            </div>
-          </div>
-        </div>
 
       </div>
 
