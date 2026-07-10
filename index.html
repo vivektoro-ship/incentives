@@ -860,7 +860,7 @@ textarea{resize:vertical;min-height:88px}
             </div>
           </div>
           <div class="field"><label>Duration <span class="tip" data-tip="How often this incentive is measured and paid out.">?</span></label>
-            <select id="f-duration" onchange="computeEndDate();updatePreview()">
+            <select id="f-duration" onchange="updatePreview()">
               <option>Weekly</option>
               <option selected>Monthly</option>
               <option>Once every 2 months</option>
@@ -871,9 +871,9 @@ textarea{resize:vertical;min-height:88px}
           </div>
           <div style="display:flex;gap:14px">
             <div class="field" style="flex:1"><label>Start date</label>
-              <input type="date" id="f-start" value="2026-08-01" onchange="computeEndDate();updatePreview()">
+              <input type="date" id="f-start" value="2026-08-01" onchange="updatePreview()">
             </div>
-            <div class="field" style="flex:1"><label>End date <span class="tip" data-tip="Auto-filled from the start date + duration. Change it if the incentive should run longer or shorter.">?</span></label>
+            <div class="field" style="flex:1"><label>End date <span class="tip" data-tip="Optional — leave empty for no end date.">?</span></label>
               <input type="date" id="f-end" onchange="updatePreview()">
             </div>
           </div>
@@ -2567,15 +2567,7 @@ function rolesChange(){
   updatePreview();
 }
 function metricChanged(){ refreshSlabs(); updatePreview(); }
-function computeEndDate(){
-  const st=document.getElementById('f-start'), en=document.getElementById('f-end'); if(!st||!en||!st.value) return;
-  const d=new Date(st.value+'T00:00:00'); const dur=durationVal();
-  const add={'Weekly':['d',7],'Monthly':['m',1],'Once every 2 months':['m',2],'Once every 3 months':['m',3],'Once every 6 months':['m',6],'Yearly':['y',1]}[dur]||['m',1];
-  if(add[0]==='d') d.setDate(d.getDate()+add[1]); else if(add[0]==='m') d.setMonth(d.getMonth()+add[1]); else d.setFullYear(d.getFullYear()+add[1]);
-  d.setDate(d.getDate()-1);
-  const pad=n=>String(n).padStart(2,'0');
-  en.value=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-}
+function computeEndDate(){}
 function renderTerritories(){
   const menu=document.getElementById('terr-menu'); if(!menu) return;
   const cities=cityList(); const terrs=[];
@@ -2728,7 +2720,7 @@ function loadRule(o){
   metricChanged();
   if(o.rate!=null){ const inp=document.querySelector('#slab-body .s-pay'); if(inp) inp.value=o.rate; }
   if(o.start){ const st=document.getElementById('f-start'); if(st) st.value=o.start; }
-  if(o.end){ const en=document.getElementById('f-end'); if(en) en.value=o.end; } else computeEndDate();
+  if(o.end){ const en=document.getElementById('f-end'); if(en) en.value=o.end; }
   if(o.takeback){ const cd=document.getElementById('claw-days'); if(cd) cd.value=o.takeback.days||60; }
   updatePreview();
 }
@@ -2751,7 +2743,7 @@ function resetForm(){
   const cd=document.getElementById('claw-days'); if(cd) cd.value=60;
   const md=document.getElementById('mods'); if(md) md.innerHTML='';
   const me=document.getElementById('mods-empty'); if(me) me.style.display='none';
-  computeEndDate();
+  const en=document.getElementById('f-end'); if(en) en.value='';
   initSlabs(); updatePreview();
 }
 function sentSet(){} function syncSentence(){} function renderRoleMode(){}
