@@ -788,20 +788,17 @@ textarea{resize:vertical;min-height:88px}
 .paytl-a{font-weight:800;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#0B1220}
 .paytl-i.done .paytl-a{color:#15803D}
 .paytl-i.next .paytl-t{color:#B45309}
-/* composition donut (Glassdoor pay-breakdown pattern) — the number reconciles into what built it */
-.px-mixwrap{display:flex;align-items:center;gap:16px}
-.px-donut{--sz:106px;width:var(--sz);height:var(--sz);border-radius:50%;flex:none;position:relative;display:grid;place-items:center}
-.px-donut::before{content:"";position:absolute;inset:16px;border-radius:50%;background:#fff}
-.px-donut .dc{position:relative;text-align:center}
-.px-donut .dv{font-size:19px;font-weight:800;color:#0B1220;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.px-donut .dv .ru{font-size:13px;color:#94A3B8;margin-right:1px}
-.px-donut .dl{font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8;margin-top:2px}
-.mix{flex:1;min-width:0;display:flex;flex-direction:column;gap:11px}
-.mix-row{display:flex;align-items:center;gap:9px}
-.mix-row .sw{width:10px;height:10px;border-radius:3px;flex:none}
-.mix-row .ml{flex:1;min-width:0;font-size:12px;font-weight:600;color:#334155;line-height:1.3}
-.mix-row .mv{font-weight:800;font-size:13px;color:#0B1220;font-variant-numeric:tabular-nums}
-.mix-row .mp{font-size:10.5px;color:#94A3B8;font-weight:700;width:32px;text-align:right}
+/* composition bar (robust at any ratio — a 3% part stays visible, unlike a donut) */
+.px-mixbar{display:flex;height:13px;border-radius:99px;overflow:hidden;gap:2px;margin-top:15px;background:#EEF1F6}
+.px-mixbar .seg{height:100%;border-radius:3px;min-width:7px}
+.mixlist{margin-top:14px}
+.mix-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid #F0F3F8}
+.mix-row:last-child{border-bottom:none}
+.mix-row:first-child{padding-top:2px}
+.mix-row .sw{width:11px;height:11px;border-radius:3px;flex:none}
+.mix-row .ml{flex:1;min-width:0;font-size:13px;font-weight:600;color:#334155;line-height:1.3}
+.mix-row .mv{font-weight:800;font-size:13.5px;color:#0B1220;font-variant-numeric:tabular-nums}
+.mix-row .mp{font-size:11px;color:#94A3B8;font-weight:700;width:36px;text-align:right}
 
 </style>
 </head>
@@ -2635,11 +2632,11 @@ function renderIncDetail(){
   // 1 · proof headline
   h+='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div">';
   if(c.mix){
-    const tot=c.mix.reduce((s,x)=>s+x.v,0); let acc=0;
-    const stops=c.mix.map(x=>{const a=acc,b=acc+x.v/tot*100; acc=b; return x.col+' '+a.toFixed(2)+'% '+b.toFixed(2)+'%';}).join(',');
-    h+='<div class="px-mixwrap"><div class="px-donut" style="background:conic-gradient('+stops+')"><div class="dc"><div class="dv"><span class="ru">₹</span>'+c.amt+'</div><div class="dl">this month</div></div></div><div class="mix">';
-    h+=c.mix.map(x=>'<div class="mix-row"><span class="sw" style="background:'+x.col+'"></span><span class="ml">'+x.label+'</span><span class="mv">'+inr(x.v)+'</span><span class="mp">'+Math.round(x.v/tot*100)+'%</span></div>').join('');
-    h+='</div></div><div class="px-note12" style="margin-top:14px">'+c.note+'</div>';
+    const tot=c.mix.reduce((s,x)=>s+x.v,0);
+    h+='<div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+c.amt+'</div>';
+    h+='<div class="px-mixbar">'+c.mix.map(x=>'<span class="seg" style="background:'+x.col+';flex:'+x.v+' '+x.v+' 0"></span>').join('')+'</div>';
+    h+='<div class="mixlist">'+c.mix.map(x=>'<div class="mix-row"><span class="sw" style="background:'+x.col+'"></span><span class="ml">'+x.label+'</span><span class="mv">'+inr(x.v)+'</span><span class="mp">'+Math.round(x.v/tot*100)+'%</span></div>').join('')+'</div>';
+    h+='<div class="px-note12" style="margin-top:13px">'+c.note+'</div>';
   } else {
     h+='<div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:5px">'+c.note+'</div>';
   }
