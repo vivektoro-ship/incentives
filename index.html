@@ -977,7 +977,7 @@ textarea{resize:vertical;min-height:88px}
             </div>
             <div class="field" style="padding:0;border:none;background:none;min-height:0"><label style="margin-bottom:6px">Rate <span class="tip" data-tip="One row = the same value for everyone. Add rows to pay by level.">?</span></label>
               <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
-              <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px">One row = one rate for everyone (from 1, no upper limit — only the pay is editable). <b>Add a slab</b> to pay more at higher levels — then each row&#39;s “Up to” becomes editable.</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px">Set the <b>From</b> and <b>Up to</b> for each level (leave the last “Up to” empty for “no limit”). <b>Add a slab</b> to pay more at higher levels.</div>
               <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add slab</button>
             </div>
           </div>
@@ -2644,15 +2644,14 @@ function renderSlabs(){
     const fType=val?'text':'number';
     const wrapO=val?'<span class="amt-wrap money"><span class="rupee">₹</span>':'';
     const wrapC=val?'</span>':'';
-    const upto=last?'<input type="text" class="s-to" value="" placeholder="No limit" disabled>':wrapO+'<input type="'+fType+'" class="s-to"'+toIn+' value="'+(row.to??'')+'" placeholder="'+(val?'2,00,000':'enter')+'">'+wrapC;
-    const fromVal=idx===0?'1':(row.from??'');
-    return '<tr class="slab-r"><td>'+wrapO+'<input type="text" class="s-from" value="'+fromVal+'" readonly tabindex="-1" placeholder="auto">'+wrapC+'</td><td>'+upto+'</td>'+cell+'<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
+    const fromIn=val?' inputmode="numeric" oninput="fmtIN(this)"':' min="0"';
+    const upto=wrapO+'<input type="'+fType+'" class="s-to"'+toIn+' value="'+(row.to??'')+'" placeholder="'+(last?'No limit':(val?'2,00,000':'enter'))+'">'+wrapC;
+    const fromVal=(row.from!=null&&row.from!=='')?row.from:(idx===0?'1':'');
+    return '<tr class="slab-r"><td>'+wrapO+'<input type="'+fType+'" class="s-from"'+fromIn+' value="'+fromVal+'" placeholder="'+(val?'1,000':'1')+'">'+wrapC+'</td><td>'+upto+'</td>'+cell+'<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
   }).join('');
 }
-function syncFroms(){
-  const rows=[...document.querySelectorAll('#slab-body .slab-r')]; const val=isValueBasis();
-  rows.forEach((r,i)=>{ const f=r.querySelector('.s-from'); if(i===0){ f.value='1'; return; } const t=numOf(rows[i-1].querySelector('.s-to').value); f.value=t?(val?(t+1).toLocaleString('en-IN'):String(t+1)):''; });
-}
+/* From is user-editable now — no auto-derive */
+function syncFroms(){}
 function setUnitMode(u){ document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u)); refreshSlabs(); updatePreview(); }
 function basisChanged(){ refreshSlabs(); updatePreview(); }
 function ratePreview(){ const el=document.getElementById('rate-eg'); if(!el) return; const r=parseFloat(firstPay()); if(isMoney()||slabCount()>1||!isValueBasis()||!(r>0)){ el.textContent=''; return; } el.textContent='≈ ₹'+Math.round(100000*r/100).toLocaleString('en-IN')+' on a ₹1,00,000 loan'; }
