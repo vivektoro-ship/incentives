@@ -653,7 +653,7 @@ textarea{resize:vertical;min-height:88px}
 .cl-rail{position:relative;width:22px;flex:none;display:flex;justify-content:center}
 .cl-rail::before{content:"";position:absolute;top:18px;bottom:-14px;width:3px;background:#E4EAF4;border-radius:2px}
 .climb-step:last-child .cl-rail::before{display:none}
-.climb-step.done .cl-rail::before,.climb-step.here .cl-rail::before{background:#22C55E}
+.climb-step.done .cl-rail::before,.climb-step.here .cl-rail::before{background:linear-gradient(180deg,#4ADE80,#16A34A)}
 .cl-node{position:relative;z-index:1;width:15px;height:15px;border-radius:50%;margin-top:6px;background:#fff;border:3px solid #C6D0E0}
 .climb-step.done .cl-node{background:#22C55E;border-color:#22C55E}
 .climb-step.here .cl-node{width:19px;height:19px;margin-top:4px;border-color:#F5A623;background:#F5A623;box-shadow:0 0 0 5px #FFF1D6}
@@ -669,10 +669,17 @@ textarea{resize:vertical;min-height:88px}
 .cl-tag.done{background:#E7F6EE;color:#15803D}
 .cl-tag.here{background:#FFF1D6;color:#B45309}
 .cl-tag.locked{background:#EEF1F4;color:#64748B}
-.cl-band{height:7px;border-radius:99px;background:#F1E6CE;overflow:hidden;margin-top:10px}
-.cl-band>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#F5A623,#EA8A00)}
-.cl-hint{font-size:12px;font-weight:700;color:#B45309;margin-top:9px;line-height:1.4}
-.cl-hint b{color:#0B1220}
+.cl-prog{margin-top:13px}
+.cl-track{position:relative;height:12px;border-radius:99px;background:#F1E6CE;margin-top:2px}
+.cl-track>i{display:block;height:100%;border-radius:99px;min-width:14px;background:linear-gradient(90deg,#FBBF24,#EA8A00);box-shadow:0 1px 5px rgba(234,138,0,.45);position:relative;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.cl-track>i::after{content:"";position:absolute;right:0;top:50%;transform:translate(50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #EA8A00;box-shadow:0 2px 6px rgba(234,138,0,.45)}
+.cl-scale{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;font-size:11.5px;font-weight:700;color:#8A7A5E}
+.cl-scale b{color:#0B1220;font-size:12.5px}
+.cl-scale .to{color:#B45309;text-align:right}
+.cl-scale .to b{color:#B45309}
+.climb-step.here .cl-node::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid #F5A623;opacity:0;animation:clpulse 2.1s ease-out infinite}
+@keyframes clpulse{0%{transform:scale(.75);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.climb-step.here .cl-node::after{animation:none}}
 .lad2{border:1px solid #E7ECF3;border-radius:12px;overflow:hidden}
 .lad2-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F3F8;border-left:3px solid transparent}
 .lad2-row:last-child{border-bottom:none}
@@ -2558,12 +2565,16 @@ function renderIncDetail(){
       h+='<div class="cl-head"><span class="cl-lv">Level '+l.lv+' '+tag+'</span><span class="cl-rate">'+l.rate+' each</span></div>';
       h+='<div class="cl-rng">'+l.rng+'</div>';
       if(st==='here'){
-        const band=(l.to||l.from)-l.from+1, done=cnt-l.from+1;
-        const pct=l.to?Math.max(6,Math.min(100,Math.round(done/band*100))):100;
-        h+='<div class="cl-band"><i style="width:'+pct+'%"></i></div>';
-        const nx=lv[i+1];
-        if(nx){ const need=nx.from-cnt; h+='<div class="cl-hint">▲ <b>'+need+' more</b> '+unit+' to reach Level '+nx.lv+' — then each pays <b>'+nx.rate+'</b></div>'; }
-        else h+='<div class="cl-hint">▲ Top level — you are on the best rate</div>';
+        const nx=lv[i+1], prevCap=l.from-1;
+        if(nx){
+          const span=nx.from-prevCap, done=cnt-prevCap, need=nx.from-cnt;
+          const pct=Math.max(5,Math.min(100,Math.round(done/span*100)));
+          h+='<div class="cl-prog"><div class="cl-track"><i style="width:'+pct+'%"></i></div>';
+          h+='<div class="cl-scale"><span><b>'+cnt+'</b> '+unit+' so far</span><span class="to"><b>'+need+' more</b> → Level '+nx.lv+' · '+nx.rate+' each</span></div></div>';
+        } else {
+          h+='<div class="cl-prog"><div class="cl-track"><i style="width:100%"></i></div>';
+          h+='<div class="cl-scale"><span><b>'+cnt+'</b> '+unit+'</span><span class="to">Top level · best rate</span></div></div>';
+        }
       }
       h+='</div></div>';
     }
