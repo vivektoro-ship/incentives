@@ -917,7 +917,7 @@ textarea{resize:vertical;min-height:88px}
         </div>
 
         <div class="fcard"><div class="fsect">Eligibility</div>
-          <div class="field"><label>Assigned to</label>
+          <div class="field"><label>Eligible to</label>
             <div class="seg seg-sm" id="f-incto">
               <button class="on" data-t="team" onclick="setIncTo('team')">A team</button>
               <button data-t="manager" onclick="setIncTo('manager')">A manager</button>
@@ -990,6 +990,10 @@ textarea{resize:vertical;min-height:88px}
             <div class="msdd" id="mod-add" style="margin-top:10px;max-width:360px">
               <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
               <div class="msdd-menu">
+                <button type="button" class="mm-i" onclick="addModPick('gate','Only new customers')">Only new customers</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Only existing customers')">Only existing customers</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Only Fresh loans')">Only Fresh loans</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Only Takeover loans')">Only Takeover loans</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| loan count')">Minimum loan count</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','Minimum loan value ₹|1,00,000|')">Minimum loan value</button>
                 <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| new customers')">Minimum new customers</button>
@@ -2605,7 +2609,14 @@ function rolesChange(){
   if(ml) ml.textContent=mr.length?mr.map(r=>ROLE_NAMES[r]||r).join(', '):'Pick roles';
   updatePreview();
 }
-function metricChanged(){ refreshSlabs(); updatePreview(); }
+function pctAllowed(){ return ['loan-value','loan-count','renewal'].includes(metricVal()); }
+function metricChanged(){
+  const pctBtn=document.querySelector('#unit-mode button[data-u=\"pct\"]');
+  const ok=pctAllowed();
+  if(pctBtn){ pctBtn.disabled=!ok; pctBtn.style.opacity=ok?'':'0.4'; pctBtn.style.cursor=ok?'':'not-allowed'; pctBtn.title=ok?'':'A % of loan value only applies to loan-based metrics'; }
+  if(!ok && !isMoney()){ setUnitMode('amt'); return; }
+  refreshSlabs(); updatePreview();
+}
 function computeEndDate(){}
 function renderTerritories(){
   const menu=document.getElementById('terr-menu'); if(!menu) return;
@@ -2644,15 +2655,19 @@ function renderSlabs(){
     const fType=val?'text':'number';
     const wrapO=val?'<span class="amt-wrap money"><span class="rupee">₹</span>':'';
     const wrapC=val?'</span>':'';
-    const fromIn=val?' inputmode="numeric" oninput="fmtIN(this)"':' min="0"';
-    const upto=wrapO+'<input type="'+fType+'" class="s-to"'+toIn+' value="'+(row.to??'')+'" placeholder="'+(last?'No limit':(val?'2,00,000':'enter'))+'">'+wrapC;
+    const fromEditable=idx===0;
+    const fromAttr=fromEditable?(val?' inputmode="numeric" oninput="fmtIN(this)"':' min="0"'):' readonly tabindex="-1"';
+    const upto=last?'<input type="text" class="s-to" value="" placeholder="No limit" disabled>':wrapO+'<input type="'+fType+'" class="s-to"'+toIn+' value="'+(row.to??'')+'" placeholder="'+(val?'2,00,000':'enter')+'">'+wrapC;
     const fromVal=(row.from!=null&&row.from!=='')?row.from:(idx===0?'1':'');
-    return '<tr class="slab-r"><td>'+wrapO+'<input type="'+fType+'" class="s-from"'+fromIn+' value="'+fromVal+'" placeholder="'+(val?'1,000':'1')+'">'+wrapC+'</td><td>'+upto+'</td>'+cell+'<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
+    return '<tr class="slab-r"><td>'+wrapO+'<input type="'+fType+'" class="s-from"'+fromAttr+' value="'+fromVal+'" placeholder="'+(val?'1,000':'1')+'">'+wrapC+'</td><td>'+upto+'</td>'+cell+'<td class="act">'+(nRows>1?'<button class="x" onclick="rmSlab(this)" title="Remove this level">✕</button>':'')+'</td></tr>';
   }).join('');
 }
 /* From is user-editable now — no auto-derive */
-function syncFroms(){}
-function setUnitMode(u){ document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u)); refreshSlabs(); updatePreview(); }
+function syncFroms(){
+  const rows=[...document.querySelectorAll('#slab-body .slab-r')]; const val=isValueBasis();
+  rows.forEach((r,i)=>{ const f=r.querySelector('.s-from'); if(i===0){ if(!f.value.trim()) f.value='1'; return; } const t=numOf(rows[i-1].querySelector('.s-to').value); f.value=t?(val?(t+1).toLocaleString('en-IN'):String(t+1)):''; });
+}
+function setUnitMode(u){ if(u==='pct'&&!pctAllowed()) u='amt'; document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u===u)); refreshSlabs(); updatePreview(); }
 function basisChanged(){ refreshSlabs(); updatePreview(); }
 function ratePreview(){ const el=document.getElementById('rate-eg'); if(!el) return; const r=parseFloat(firstPay()); if(isMoney()||slabCount()>1||!isValueBasis()||!(r>0)){ el.textContent=''; return; } el.textContent='≈ ₹'+Math.round(100000*r/100).toLocaleString('en-IN')+' on a ₹1,00,000 loan'; }
 
@@ -2700,7 +2715,7 @@ function buildSummary(){
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   const tb=document.getElementById('f-claw'), tbd=document.getElementById('claw-days');
   const mods=document.querySelectorAll('#mods .modrow').length;
-  const rows=[['Assigned to',whoText()],['Metric',METRIC_LABEL[metricVal()]||'—'],['Payout',payShort()],['City',scopeText()],['Frequency',durationVal()],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',mods?mods+' added':'None']];
+  const rows=[['Eligible to',whoText()],['Metric',METRIC_LABEL[metricVal()]||'—'],['Payout',payShort()],['City',scopeText()],['Frequency',durationVal()],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',mods?mods+' added':'None']];
   const fhtml='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
@@ -2733,7 +2748,7 @@ function renderDetail(r){
   document.getElementById('detail-sentence').innerHTML='For <em>'+who+'</em>, pay <em>'+(r.pay||'—')+'</em> for <em>'+earns+'</em>, paid <em>'+((r.sched||'—')+'').toLowerCase()+'</em>.';
   const pill=live?'<span class="pill live">live</span>':inactive?'<span class="pill expired">inactive</span>':'<span class="pill staged">waiting</span>';
   document.getElementById('detail-statusrow').innerHTML=pill;
-  const rows=[['Assigned to',who],['Metric',earns],['Payout',r.pay||'—'],['Schedule',r.sched||'—'],['Category',r.cat||'—'],['City',(r.cities&&r.cities.length)?r.cities.join(', '):'All cities'],['Frequency',r.duration||'Monthly']];
+  const rows=[['Eligible to',who],['Metric',earns],['Payout',r.pay||'—'],['Schedule',r.sched||'—'],['Category',r.cat||'—'],['City',(r.cities&&r.cities.length)?r.cities.join(', '):'All cities'],['Frequency',r.duration||'Monthly']];
   document.getElementById('detail-facts').innerHTML='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   const h=document.getElementById('detail-switch-h'), sub=document.getElementById('detail-switch-sub'), act=document.getElementById('detail-switch-actions');
   if(live){ h.textContent='Active right now'; sub.textContent='Paying out now. Turn it off and it stops from today — it stays on the record.'; act.innerHTML='<button class="btn danger" onclick="setActive(false)">Make inactive</button>'; }
@@ -2782,7 +2797,7 @@ function resetForm(){
   const md=document.getElementById('mods'); if(md) md.innerHTML='';
   const me=document.getElementById('mods-empty'); if(me) me.style.display='none';
   const en=document.getElementById('f-end'); if(en) en.value='';
-  initSlabs(); updatePreview();
+  initSlabs(); metricChanged(); updatePreview();
 }
 function sentSet(f){
   const g=id=>document.getElementById(id);
