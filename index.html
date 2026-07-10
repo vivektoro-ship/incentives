@@ -625,14 +625,14 @@ textarea{resize:vertical;min-height:88px}
 /* multi-colour incentive banners */
 .bnr-row{display:flex;flex:none;gap:10px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
 .bnr-row::-webkit-scrollbar{display:none}
-.px-bnr{flex:none;width:83%;box-sizing:border-box;scroll-snap-align:start;border-radius:16px;padding:14px 16px;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(13,26,64,.16)}
+.px-bnr{flex:none;width:79%;box-sizing:border-box;scroll-snap-align:start;border-radius:14px;padding:12px 14px;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(13,26,64,.10)}
 .px-bnr.gold{background:linear-gradient(135deg,#B45309,#F59E0B)}
 .px-bnr.blue{background:linear-gradient(135deg,#1D3A8A,#2563EB)}
 .px-bnr.green{background:linear-gradient(135deg,#15803D,#22A857)}
 .bnr-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.bnr-tag{font-size:10px;font-weight:800;letter-spacing:.1em;opacity:.92}
-.bnr-amt{font-size:15px;font-weight:800;background:rgba(255,255,255,.18);border-radius:99px;padding:5px 11px;white-space:nowrap}
-.bnr-title{font-size:16px;font-weight:800;margin-top:5px;line-height:1.15}
+.bnr-tag{font-size:9.5px;font-weight:800;letter-spacing:.08em;opacity:.92}
+.bnr-amt{font-size:13.5px;font-weight:800;background:rgba(255,255,255,.20);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.bnr-title{font-size:14.5px;font-weight:800;margin-top:6px;line-height:1.2}
 .bnr-sub{font-size:12px;font-weight:500;opacity:.9;margin-top:4px;line-height:1.45}
 /* incentive detail (fresh) — tick-mark bar, receipt, level rows, ledger, timeline */
 .tickbar{position:relative;height:8px;border-radius:99px;background:#E4EAF4;margin-top:16px}
@@ -737,6 +737,25 @@ textarea{resize:vertical;min-height:88px}
 .px-field textarea:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px #2563EB22}
 .px-attach{border:1.5px dashed #C9D5E8;border-radius:12px;background:#fff;padding:16px;text-align:center;font-size:12.5px;font-weight:600;color:#64748B;cursor:pointer}
 .px-more{text-align:center;font-size:11px;font-weight:600;color:#909090;padding:2px 0 6px}
+/* category icon tile (Base earnings pattern) + circular progress ring (Grab/Ulta) */
+.px-ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;flex:none;background:#EAF1FF;color:#1D4ED8}
+.px-ico.blue{background:#EAF1FF;color:#1D4ED8}
+.px-ico.violet{background:#EDE9FF;color:#6D45E4}
+.px-ico.teal{background:#DEF5EE;color:#0E9C7E}
+.px-ico.gold{background:#FBEFD5;color:#B45309}
+.px-ico.sm{width:34px;height:34px;border-radius:10px;font-size:15px}
+.px-cardhead{display:flex;align-items:center;gap:11px}
+.px-cardhead .px-label{margin:0}
+.px-cardhead .ch-t{flex:1;min-width:0}
+.px-ring{--p:0;--sz:60px;width:var(--sz);height:var(--sz);border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(#2563EB calc(var(--p)*1%),#E4EAF4 0)}
+.px-ring::before{content:"";position:absolute;width:calc(var(--sz) - 11px);height:calc(var(--sz) - 11px);border-radius:50%;background:#fff}
+.px-ring.gold{background:conic-gradient(#EA8A00 calc(var(--p)*1%),#F1E6CE 0)}
+.px-ring .rv{position:relative;font-weight:800;font-size:15px;color:#0B1220;font-variant-numeric:tabular-nums;line-height:1}
+.px-ring .rl{position:relative;font-size:7.5px;font-weight:800;letter-spacing:.05em;color:#94A3B8;text-transform:uppercase;margin-top:2px}
+.px-goalrow{display:flex;align-items:center;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #F0F3F8}
+.px-goalrow .gr-t{flex:1;min-width:0}
+.px-goalrow .gr-t .g1{font-size:13px;font-weight:800;color:#0B1220;line-height:1.35}
+.px-goalrow .gr-t .g2{font-size:11.5px;font-weight:500;color:#5B6472;margin-top:3px;line-height:1.4}
 
 </style>
 </head>
@@ -1355,7 +1374,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="px-banner green">✓ Locked — won't change.</div>
         <div class="px-body">
           <div class="px-card">
-            <div class="px-label">You earned on this loan</div>
+            <div class="px-cardhead"><span class="px-ico blue">🔍</span><div class="ch-t"><div class="px-label">You earned on this loan</div></div><span class="px-chip green" style="margin:0">Finding</span></div>
             <hr class="px-div">
             <div class="px-big"><span class="ru">₹</span>1,750</div>
             <div class="px-note12" style="margin-top:6px">0.35% of the ₹5,00,000 loan</div>
@@ -1432,7 +1451,7 @@ textarea{resize:vertical;min-height:88px}
         </div>
         <div class="px-body">
           <div class="px-card">
-            <div class="px-label">July · line by line</div>
+            <div class="px-cardhead"><span class="px-ico blue sm">≡</span><div class="ch-t"><div class="px-label">July · line by line</div></div><span class="px-chip grey" style="margin:0">42 lines</span></div>
             <hr class="px-div">
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000482</div><div class="m">+0.35% of loan · found the customer</div><span class="px-chip green">locked</span></div><div class="amt pos">+₹1,750</div></div>
             <div class="px-row" data-goto="b-dispute" style="cursor:pointer"><div class="main"><div class="t">OML000471</div><div class="m">+0.45% of loan · with July bonus</div><span class="px-chip amber">+ bonus</span></div><div class="amt pos">+₹2,240</div></div>
@@ -2518,6 +2537,13 @@ function selMonth(key){
   const sv=document.querySelector('#b-home .screenview'); if(sv) sv.scrollTop=0;
 }
 function setTxt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+function catIcon(c){
+  const corr=(c.chipc==='blue')||/correction|added later/i.test(c.name||'');
+  if(corr) return {g:'↺',c:'gold'};
+  if(c.inc==='funnel') return {g:'👤',c:'violet'};
+  if(c.inc==='convincing') return {g:'🤝',c:'teal'};
+  return {g:'🔍',c:'blue'};
+}
 function renderHome(){
   const m=MONTHS[CUR_MONTH]; if(!m) return;
   setTxt('h-hl',m.hl); setTxt('h-total',m.total); setTxt('h-sub',m.sub);
@@ -2530,7 +2556,8 @@ function renderHome(){
   const cards=document.getElementById('h-cards'); if(!cards) return;
   cards.innerHTML=m.cards.map(c=>{
     const chip=c.chip?'<span class="px-chip '+(c.chipc||'amber')+'" style="margin:0">'+c.chip+'</span>':'';
-    const label=chip?'<div class="px-label" style="display:flex;align-items:center;justify-content:space-between">'+c.name+' '+chip+'</div>':'<div class="px-label">'+c.name+'</div>';
+    const ic=catIcon(c);
+    const label='<div class="px-cardhead"><span class="px-ico '+ic.c+'">'+ic.g+'</span><div class="ch-t"><div class="px-label">'+c.name+'</div></div>'+chip+'</div>';
     const prog=c.prog?'<div class="px-track"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div><div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>':'';
     return '<div class="px-card" style="cursor:pointer" data-inc="'+c.inc+'">'+label+'<hr class="px-div"><div style="display:flex;align-items:center;justify-content:space-between"><div class="px-big" style="font-size:24px"><span class="ru">₹</span>'+c.val+'</div><span style="color:#94A3B8;font-size:18px">›</span></div><div class="px-note12" style="margin-top:2px">'+c.sub+'</div>'+prog+'</div>';
   }).join('');
@@ -2543,8 +2570,8 @@ function renderIncDetail(){
   // 1 · proof headline
   h+='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div"><div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:5px">'+c.note+'</div>';
   if(c.prog){
-    h+='<div class="tickbar"><div class="tb-fill" style="width:'+c.prog.pct+'%"></div>'+(c.prog.ticks||[]).map(t=>'<span class="tb-tick" style="left:'+t+'%"></span>').join('')+'</div>';
-    h+='<div class="tb-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>';
+    h+='<div class="px-goalrow"><div class="px-ring gold" style="--p:'+c.prog.pct+'"><span class="rv">'+c.prog.pct+'%</span><span class="rl">to goal</span></div>';
+    h+='<div class="gr-t"><div class="g1">'+c.prog.left+'</div><div class="g2">'+c.prog.right+'</div></div></div>';
   }
   h+='</div>';
   // 2 · payout schedule (receipt)
