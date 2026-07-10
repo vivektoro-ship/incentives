@@ -647,6 +647,32 @@ textarea{resize:vertical;min-height:88px}
 .sched .s-d{font-size:11.5px;font-weight:500;color:#5B6472;margin-top:1px}
 .sched .s-a{margin-left:auto;font-weight:800;font-size:15px;white-space:nowrap}
 .sched.paid .s-a{color:#15803D}
+.climb{display:flex;flex-direction:column}
+.climb-step{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.climb-step:last-child{padding-bottom:0}
+.cl-rail{position:relative;width:22px;flex:none;display:flex;justify-content:center}
+.cl-rail::before{content:"";position:absolute;top:18px;bottom:-14px;width:3px;background:#E4EAF4;border-radius:2px}
+.climb-step:last-child .cl-rail::before{display:none}
+.climb-step.done .cl-rail::before,.climb-step.here .cl-rail::before{background:#22C55E}
+.cl-node{position:relative;z-index:1;width:15px;height:15px;border-radius:50%;margin-top:6px;background:#fff;border:3px solid #C6D0E0}
+.climb-step.done .cl-node{background:#22C55E;border-color:#22C55E}
+.climb-step.here .cl-node{width:19px;height:19px;margin-top:4px;border-color:#F5A623;background:#F5A623;box-shadow:0 0 0 5px #FFF1D6}
+.cl-body{flex:1;border:1px solid #E7ECF3;border-radius:13px;padding:11px 13px;background:#fff}
+.climb-step.here .cl-body{border-color:#F5C877;background:#FFFBF2;box-shadow:0 6px 16px rgba(245,166,35,.13)}
+.climb-step.locked .cl-body{background:#F7F9FC;border-style:dashed}
+.cl-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cl-lv{font-size:13px;font-weight:800;color:#0B1220;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cl-rate{font-size:14px;font-weight:800;color:#0B1220;white-space:nowrap}
+.climb-step.locked .cl-lv,.climb-step.locked .cl-rate{color:#94A3B8}
+.cl-rng{font-size:11.5px;font-weight:600;color:#5B6472;margin-top:3px}
+.cl-tag{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:99px}
+.cl-tag.done{background:#E7F6EE;color:#15803D}
+.cl-tag.here{background:#FFF1D6;color:#B45309}
+.cl-tag.locked{background:#EEF1F4;color:#64748B}
+.cl-band{height:7px;border-radius:99px;background:#F1E6CE;overflow:hidden;margin-top:10px}
+.cl-band>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#F5A623,#EA8A00)}
+.cl-hint{font-size:12px;font-weight:700;color:#B45309;margin-top:9px;line-height:1.4}
+.cl-hint b{color:#0B1220}
 .lad2{border:1px solid #E7ECF3;border-radius:12px;overflow:hidden}
 .lad2-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F3F8;border-left:3px solid transparent}
 .lad2-row:last-child{border-bottom:none}
@@ -2421,12 +2447,12 @@ const PX_CATS={
  funnel:{
   title:'New customers · slab', sub:'July 2026 · 41 new customers',
   amt:'4,125', note:'Counted every time you bring a brand-new customer — the slab you\'re in decides what each one pays',
-  prog:{pct:38,ticks:[33,67],left:'<b>Level 2</b> · 41 customers',right:'19 more → Level 3 · ₹150'},
   pay:{how:'Paid in full the next month — counts settle at month close',sched:[{t:'Coming to you',d:'05 Aug 2026',a:'₹4,125',st:'coming'}]},
+  count:41, unit:'new customers',
   levels:[
-   {lv:1,rate:'₹100',rng:'customers 1–40',state:'done'},
-   {lv:2,rate:'₹125',rng:'41–60 · you are here',state:'here'},
-   {lv:3,rate:'₹150',rng:'61 and above',state:'locked'}
+   {lv:1,rate:'₹100',rng:'customers 1–40',from:1,to:40},
+   {lv:2,rate:'₹125',rng:'customers 41–60',from:41,to:60},
+   {lv:3,rate:'₹150',rng:'customer 61 and above',from:61,to:null}
   ],
   rows:[
    {t:'Customer · R. Meena',m:'today · your 41st — first at the ₹125 rate',c:['blue','slab 2 · ₹125'],a:'₹125'},
@@ -2520,11 +2546,28 @@ function renderIncDetail(){
     h+=c.pay.sched.map(x=>'<div class="sched '+(x.st||'')+'"><div><div class="s-t">'+x.t+'</div><div class="s-d">'+x.d+'</div></div><div class="s-a">'+x.a+'</div></div>').join('');
     h+='</div>';
   }
-  // 3 · level ladder (slab incentives)
+  // 3 · slab climb — the ladder drawn as a climb (driven ONLY by the configured slabs)
   if(c.levels){
-    h+='<div class="px-card"><div class="px-label">Your level</div><hr class="px-div"><div class="lad2">';
-    h+=c.levels.map(l=>'<div class="lad2-row '+l.state+'"><span class="l2-lv">Level '+l.lv+'</span><span class="l2-rng">'+l.rng+'</span><span class="l2-rate">'+l.rate+'</span></div>').join('');
-    h+='</div></div>';
+    const lv=c.levels, cnt=c.count||0, unit=c.unit||'';
+    let cur=0; lv.forEach((l,i)=>{ if(cnt>=l.from) cur=i; });
+    h+='<div class="px-card"><div class="px-label">Your climb</div><hr class="px-div"><div class="climb">';
+    for(let i=lv.length-1;i>=0;i--){
+      const l=lv[i], st=i<cur?'done':(i===cur?'here':'locked');
+      const tag=st==='done'?'<span class="cl-tag done">done</span>':(st==='here'?'<span class="cl-tag here">you are here</span>':'<span class="cl-tag locked">locked</span>');
+      h+='<div class="climb-step '+st+'"><div class="cl-rail"><span class="cl-node"></span></div><div class="cl-body">';
+      h+='<div class="cl-head"><span class="cl-lv">Level '+l.lv+' '+tag+'</span><span class="cl-rate">'+l.rate+' each</span></div>';
+      h+='<div class="cl-rng">'+l.rng+'</div>';
+      if(st==='here'){
+        const band=(l.to||l.from)-l.from+1, done=cnt-l.from+1;
+        const pct=l.to?Math.max(6,Math.min(100,Math.round(done/band*100))):100;
+        h+='<div class="cl-band"><i style="width:'+pct+'%"></i></div>';
+        const nx=lv[i+1];
+        if(nx){ const need=nx.from-cnt; h+='<div class="cl-hint">▲ <b>'+need+' more</b> '+unit+' to reach Level '+nx.lv+' — then each pays <b>'+nx.rate+'</b></div>'; }
+        else h+='<div class="cl-hint">▲ Top level — you are on the best rate</div>';
+      }
+      h+='</div></div>';
+    }
+    h+='</div><div class="px-note12" style="margin-top:12px">These are the slabs set for this incentive — the only thing scored.</div></div>';
   }
   // 4 · loans (ledger)
   h+='<div class="px-card"><div class="px-label">'+(c.levels?'Counted this month':'Your loans')+'</div><hr class="px-div">';
