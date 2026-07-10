@@ -788,6 +788,20 @@ textarea{resize:vertical;min-height:88px}
 .paytl-a{font-weight:800;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#0B1220}
 .paytl-i.done .paytl-a{color:#15803D}
 .paytl-i.next .paytl-t{color:#B45309}
+/* composition donut (Glassdoor pay-breakdown pattern) — the number reconciles into what built it */
+.px-mixwrap{display:flex;align-items:center;gap:16px}
+.px-donut{--sz:106px;width:var(--sz);height:var(--sz);border-radius:50%;flex:none;position:relative;display:grid;place-items:center}
+.px-donut::before{content:"";position:absolute;inset:16px;border-radius:50%;background:#fff}
+.px-donut .dc{position:relative;text-align:center}
+.px-donut .dv{font-size:19px;font-weight:800;color:#0B1220;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.px-donut .dv .ru{font-size:13px;color:#94A3B8;margin-right:1px}
+.px-donut .dl{font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8;margin-top:2px}
+.mix{flex:1;min-width:0;display:flex;flex-direction:column;gap:11px}
+.mix-row{display:flex;align-items:center;gap:9px}
+.mix-row .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.mix-row .ml{flex:1;min-width:0;font-size:12px;font-weight:600;color:#334155;line-height:1.3}
+.mix-row .mv{font-weight:800;font-size:13px;color:#0B1220;font-variant-numeric:tabular-nums}
+.mix-row .mp{font-size:10.5px;color:#94A3B8;font-weight:700;width:32px;text-align:right}
 
 </style>
 </head>
@@ -2482,6 +2496,7 @@ const PX_CATS={
   title:'Finding customers', sub:'July 2026 · 18 loans · still adding up',
   banner:'★ July push — +0.10% extra on every fresh loan · ends 31 Jul',
   amt:'28,400', note:'0.35% of each loan you source · Fresh &amp; Takeover gold loans',
+  mix:[{label:'Fresh · full rate',v:21300,col:'#2563EB'},{label:'Takeover · ½ rate',v:4700,col:'#0E9C7E'},{label:'July push · +0.10%',v:2400,col:'#EA8A00'}],
   prog:{pct:40,left:'<b>2 of 5</b> fresh loans this month',right:'₹175 unlocks at 5'},
   pay:{how:'Half comes next month, half the month after · 60-day take-back window',sched:[{t:'Already paid',d:'05 Jul 2026',a:'₹14,200',st:'paid'},{t:'Coming to you',d:'05 Aug 2026',a:'₹14,200',st:'coming'}],safe:{t:'Fully safe',d:'27 Aug 2026 · past take-back window'}},
   gatenote:'₹175 is waiting — <b>3 more fresh loans</b> this month and all of it is yours.',
@@ -2502,6 +2517,7 @@ const PX_CATS={
  funnel:{
   title:'New customers · slab', sub:'July 2026 · 41 new customers',
   amt:'4,125', note:'Counted every time you bring a brand-new customer — the slab you\'re in decides what each one pays',
+  mix:[{label:'Slab 1 · 40 × ₹100',v:4000,col:'#2563EB'},{label:'Slab 2 · 1 × ₹125',v:125,col:'#0E9C7E'}],
   pay:{how:'Paid in full the next month — counts settle at month close',sched:[{t:'Coming to you',d:'05 Aug 2026',a:'₹4,125',st:'coming'}]},
   count:41, unit:'new customers',
   levels:[
@@ -2617,10 +2633,19 @@ function renderIncDetail(){
   document.getElementById('inc-sub').textContent=c.sub;
   let h='';
   // 1 · proof headline
-  h+='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div"><div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:5px">'+c.note+'</div>';
+  h+='<div class="px-card"><div class="px-label">Earned this month</div><hr class="px-div">';
+  if(c.mix){
+    const tot=c.mix.reduce((s,x)=>s+x.v,0); let acc=0;
+    const stops=c.mix.map(x=>{const a=acc,b=acc+x.v/tot*100; acc=b; return x.col+' '+a.toFixed(2)+'% '+b.toFixed(2)+'%';}).join(',');
+    h+='<div class="px-mixwrap"><div class="px-donut" style="background:conic-gradient('+stops+')"><div class="dc"><div class="dv"><span class="ru">₹</span>'+c.amt+'</div><div class="dl">this month</div></div></div><div class="mix">';
+    h+=c.mix.map(x=>'<div class="mix-row"><span class="sw" style="background:'+x.col+'"></span><span class="ml">'+x.label+'</span><span class="mv">'+inr(x.v)+'</span><span class="mp">'+Math.round(x.v/tot*100)+'%</span></div>').join('');
+    h+='</div></div><div class="px-note12" style="margin-top:14px">'+c.note+'</div>';
+  } else {
+    h+='<div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+c.amt+'</div><div class="px-note12" style="margin-top:5px">'+c.note+'</div>';
+  }
   if(c.prog){
-    h+='<div class="px-goalrow"><div class="px-ring gold" style="--p:'+c.prog.pct+'"><span class="rv">'+c.prog.pct+'%</span><span class="rl">to goal</span></div>';
-    h+='<div class="gr-t"><div class="g1">'+c.prog.left+'</div><div class="g2">'+c.prog.right+'</div></div></div>';
+    h+='<div class="px-track" style="margin-top:16px"><div class="px-fill" style="width:'+c.prog.pct+'%"></div></div>';
+    h+='<div class="px-caps"><span>'+c.prog.left+'</span><span>'+c.prog.right+'</span></div>';
   }
   h+='</div>';
   // 2 · payout schedule (receipt)
