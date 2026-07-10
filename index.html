@@ -242,6 +242,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .fcard .tip{width:13px;height:13px;font-size:8.5px}
 .fcard .field:has(> input[type=date]){height:72px}
 .fcard .field:has(> select),.fcard .field:has(> input[type=text]){min-height:72px}
+#team-wrap,#manager-wrap{display:flex;flex-direction:column;gap:14px}
 /* sentence-as-rule-setter — each highlighted word is an inline control */
 .sent-card{background:linear-gradient(135deg,#EEF3FF,#FFFFFF);border-color:var(--indigo-line)}
 .sent-build{font-family:var(--font-display),Georgia,serif;font-size:24px;line-height:2.05;color:var(--ink);font-weight:700;letter-spacing:-.01em}
@@ -844,7 +845,7 @@ textarea{resize:vertical;min-height:88px}
             <div class="field" style="flex:1"><label>Start date</label>
               <input type="date" id="f-start" value="2026-08-01" onchange="updatePreview()">
             </div>
-            <div class="field" style="flex:1"><label>End date <span class="tip" data-tip="Optional — leave empty for no end date.">?</span></label>
+            <div class="field" style="flex:1"><label>Expiry date <span class="tip" data-tip="Optional — leave empty for no expiry.">?</span></label>
               <input type="date" id="f-end" onchange="updatePreview()">
             </div>
           </div>
@@ -898,24 +899,6 @@ textarea{resize:vertical;min-height:88px}
               <option value="renewal">Renewal count</option>
             </select>
           </div>
-          <div class="field">
-            <label style="margin-bottom:8px">Conditions <span style="text-transform:none;font-weight:500;color:var(--muted)">· optional</span></label>
-            <div id="mods"></div>
-            <div class="note empty" id="mods-empty" style="display:none">None — everyone who matches gets the full incentive.</div>
-            <div class="msdd" id="mod-add" style="margin-top:10px;max-width:360px">
-              <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
-              <div class="msdd-menu">
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| loan count')">Minimum loan count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum loan value ₹|1,00,000|')">Minimum loan value</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| new customers')">Minimum new customers</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| appointment count')">Minimum appointment count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| conversion count')">Minimum conversion count</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Passes fraud check')">Passes fraud check</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum LTV |60| %')">Minimum LTV%</button>
-                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum new user |50| %')">Minimum new user%</button>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="fcard"><div class="fsect">How much to pay</div>
@@ -930,6 +913,26 @@ textarea{resize:vertical;min-height:88px}
             <div class="field" style="padding:0;border:none;background:none;min-height:0"><label style="margin-bottom:6px">How much <span class="tip" data-tip="One row = the same value for everyone. Add rows to pay by level.">?</span></label>
               <div style="overflow-x:auto"><table class="slab-table" id="slab-table"><thead id="slab-head"></thead><tbody id="slab-body"></tbody></table></div>
               <button class="add-row" onclick="addSlab()" style="margin-top:10px;width:auto">+ Add slab</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fcard"><div class="fsect">Extra conditions <span style="text-transform:none;font-weight:500">· optional</span></div>
+          <div class="field">
+            <div id="mods"></div>
+            <div class="note empty" id="mods-empty" style="display:none">None — everyone who matches gets the full incentive.</div>
+            <div class="msdd" id="mod-add" style="margin-top:10px;max-width:360px">
+              <button type="button" class="msdd-btn" onclick="this.parentElement.classList.toggle('open')"><span>＋ Add a condition</span><span style="color:var(--muted-2)">▾</span></button>
+              <div class="msdd-menu">
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| loan count')">Minimum loan count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum loan value ₹|1,00,000|')">Minimum loan value</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| new customers')">Minimum new customers</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |5| appointment count')">Minimum appointment count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum |10| conversion count')">Minimum conversion count</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Passes fraud check')">Passes fraud check</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum LTV |60| %')">Minimum LTV%</button>
+                <button type="button" class="mm-i" onclick="addModPick('gate','Minimum new user |50| %')">Minimum new user%</button>
+              </div>
             </div>
           </div>
         </div>
@@ -2525,8 +2528,8 @@ function isValueBasis(){ return metricVal()==='loan-value'; }
 function setIncTo(t){
   document.querySelectorAll('#f-incto button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   const tw=document.getElementById('team-wrap'), mw=document.getElementById('manager-wrap');
-  if(tw) tw.style.display=t==='team'?'block':'none';
-  if(mw) mw.style.display=t==='manager'?'block':'none';
+  if(tw) tw.style.display=t==='team'?'flex':'none';
+  if(mw) mw.style.display=t==='manager'?'flex':'none';
   updatePreview();
 }
 function rolesChange(){
