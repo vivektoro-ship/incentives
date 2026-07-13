@@ -250,6 +250,8 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--indigo);
 .sent-pick{padding:3px 25px 3px 11px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' stroke='%232F6BFF' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 9px center}
 .sent-card .sent-num{width:92px;background:var(--indigo-soft);border:none;color:var(--indigo-2);font-family:inherit;font-size:inherit;font-weight:700;text-align:center;padding:3px 8px;border-radius:8px;cursor:text}
 .sent-card .sent-unit{font-size:inherit;font-weight:700;color:var(--indigo-2)}
+.sent-ro{padding:3px 11px !important;background-image:none !important}
+.sent-ro::after{content:"✎";font-size:.72em;margin-left:6px;opacity:.55}
 .sent-pick:hover,.sent-num:hover{filter:brightness(.97)}
 .sent-pick:focus,.sent-num:focus{outline:none;box-shadow:0 0 0 3px var(--indigo-soft)}
 .sent-unit{color:var(--indigo-2);font-weight:700}
@@ -932,16 +934,7 @@ textarea{resize:vertical;min-height:88px}
               <option value="renewal">renewal count</option>
             </select>
             in
-            <select class="sent-pick" id="s-city" onchange="sentSet('city')">
-              <option value="all">all cities</option>
-              <option value="Chennai">Chennai</option>
-              <option value="Madurai">Madurai</option>
-              <option value="Coimbatore">Coimbatore</option>
-              <option value="Trichy">Trichy</option>
-              <option value="Salem">Salem</option>
-              <option value="Hyderabad">Hyderabad</option>
-              <option value="Bengaluru">Bengaluru</option>
-            </select>,
+            <button type="button" class="sent-pick sent-ro" id="s-scope" onclick="openLocField()">all cities</button>,
             measured
             <select class="sent-pick" id="s-dur" onchange="sentSet('dur')">
               <option value="Weekly">weekly</option>
@@ -960,7 +953,7 @@ textarea{resize:vertical;min-height:88px}
               <option value="Every 6 months">every 6 months</option>
             </select><span id="s-extra" style="color:var(--muted-2);font-weight:600"></span>.
           </div>
-          <div class="agent-hint">Tap any highlighted word to set it — the form below fills in to match. Rate levels, territories and exact dates live in the form; conditions and take-back appear here once you add them.</div>
+          <div class="agent-hint">Tap any highlighted word to set it — the form below fills in to match. The scope (✎), conditions and take-back update here as you set them; rate levels and exact dates live in the form.</div>
         </div>
 
 
@@ -2784,6 +2777,7 @@ function renderTerritories(){
   else { menu.innerHTML=terrs.map(t=>'<label><input type="checkbox" class="terr" data-val="'+t+'" onchange="terrChange()"> '+t+'</label>').join(''); }
   const lbl=document.getElementById('terr-btn-label'); if(lbl) lbl.textContent='All territories';
 }
+function openLocField(){ const c=document.getElementById('f-city'); if(c){ document.querySelectorAll('.msdd.open').forEach(m=>{ if(m!==c) m.classList.remove('open'); }); c.classList.add('open'); c.scrollIntoView({behavior:'smooth',block:'center'}); } }
 function terrChange(){
   const t=terrList(); const lbl=document.getElementById('terr-btn-label');
   if(lbl) lbl.textContent=t.length?(t.length>2?t.length+' territories':t.join(', ')):'All territories';
@@ -2966,7 +2960,6 @@ function sentSet(f){
   else if(f==='rate'){ const inp=document.querySelector('#slab-body .s-pay'); if(inp) inp.value=g('s-rate').value; }
   else if(f==='unit'){ setUnitMode(g('s-unit').value); }
   else if(f==='metric'){ g('f-metric').value=g('s-metric').value; metricChanged(); }
-  else if(f==='city'){ const v=g('s-city').value; document.querySelectorAll('#f-city .cty').forEach(c=>c.checked=(v==='all'?c.dataset.val==='all':c.dataset.val===v)); const _c=cityList(); g('city-btn-label').textContent=_c.length?(_c.length>3?_c.length+' cities':_c.join(', ')):'All cities'; renderTerritories(); }
   else if(f==='dur'){ g('f-duration').value=g('s-dur').value; }
   else if(f==='sched'){ g('f-sched').value=g('s-sched').value; }
   updatePreview();
@@ -2978,7 +2971,7 @@ function syncSentence(){
   const inp=document.querySelector('#slab-body .s-pay'); if(inp&&inp.value!=='') put('s-rate',inp.value);
   put('s-unit', isMoney()?'amt':'pct');
   put('s-metric', metricVal());
-  const cl=cityList(); put('s-city', cl.length===1?cl[0]:'all');
+  const sc=g('s-scope'); if(sc) sc.textContent=scopeText();
   put('s-dur', durationVal());
   put('s-sched', schedVal());
   const bw=g('s-basisword'); if(bw) bw.textContent=isMoney()?'per':'of';
