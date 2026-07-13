@@ -919,8 +919,16 @@ textarea{resize:vertical;min-height:88px}
                 <option value="mgr:Cluster Head">a Cluster Head's team</option>
               </optgroup>
             </select>
-            <input class="sent-num" id="s-rate" type="number" step="0.01" min="0" value="0.35" oninput="sentSet('rate')"><select class="sent-pick" id="s-unit" onchange="sentSet('unit')"><option value="pct">%</option><option value="amt">₹</option></select>
             for
+            <select class="sent-pick" id="s-cat" onchange="sentSet('cat')">
+              <option value="sourcing">finding customers</option>
+              <option value="convincing">convincing customers</option>
+              <option value="funnel/A2NU">filling the funnel</option>
+              <option value="collection">collections</option>
+              <option value="scope-bonus">a scope bonus</option>
+            </select>,
+            <input class="sent-num" id="s-rate" type="number" step="0.01" min="0" value="0.35" oninput="sentSet('rate')"><select class="sent-pick" id="s-unit" onchange="sentSet('unit')"><option value="pct">%</option><option value="amt">₹</option></select>
+            <span id="s-basisword" style="color:var(--muted)">of</span>
             <select class="sent-pick" id="s-metric" onchange="sentSet('metric')">
               <option value="loan-count">loan count</option>
               <option value="loan-value">loan value</option>
@@ -958,9 +966,9 @@ textarea{resize:vertical;min-height:88px}
               <option value="Every 2 months">every 2 months</option>
               <option value="Every 3 months">every 3 months</option>
               <option value="Every 6 months">every 6 months</option>
-            </select>.
+            </select><span id="s-extra" style="color:var(--muted-2);font-weight:600"></span>.
           </div>
-          <div class="agent-hint">Tap any highlighted word to set it — the form below fills in to match. Team roles, territories, dates, take-back and conditions live in the form.</div>
+          <div class="agent-hint">Tap any highlighted word to set it — the form below fills in to match. Rate levels, territories and exact dates live in the form; conditions and take-back appear here once you add them.</div>
         </div>
 
 
@@ -1047,6 +1055,15 @@ textarea{resize:vertical;min-height:88px}
         </div>
 
         <div class="fcard"><div class="fsect">Earning basis</div>
+          <div class="field"><label>Category <span class="tip" data-tip="What work this rewards. Overlaps between live incentives are resolved within a category — one winner each.">?</span></label>
+            <select id="f-cat" onchange="catChanged()">
+              <option value="sourcing">Sourcing — finding customers</option>
+              <option value="convincing">Convincing — closing customers</option>
+              <option value="funnel/A2NU">Funnel / A2NU</option>
+              <option value="collection">Collection</option>
+              <option value="scope-bonus">Scope bonus</option>
+            </select>
+          </div>
           <div class="field"><label>Metric</label>
             <select id="f-metric" onchange="metricChanged()">
               <option value="loan-count">Loan count</option>
@@ -2736,6 +2753,14 @@ function renderRateCard(){
 const METRIC_CAT={'loan-count':'sourcing','loan-value':'sourcing','appt-count':'funnel/A2NU','a2nu':'funnel/A2NU','new-cust':'funnel/A2NU','offer':'convincing','attendance':'scope-bonus','target':'scope-bonus','renewal':'collection'};
 const METRIC_LABEL={'loan-count':'loan count','loan-value':'loan value','appt-count':'appointment count','a2nu':'A2NU %','new-cust':'new customer count','offer':'offer creation','attendance':'attendance','target':'targets','renewal':'renewal count'};
 const METRIC_UNIT={'loan-count':'loan','loan-value':'loan','appt-count':'appointment','a2nu':'point','new-cust':'new customer','offer':'offer','attendance':'day','target':'target','renewal':'renewal'};
+const CAT_PHRASE={'sourcing':'finding customers','convincing':'convincing customers','funnel/A2NU':'filling the funnel','collection':'collections','scope-bonus':'a scope bonus'};
+let CAT_TOUCHED=false;
+function catVal(){ const el=document.getElementById('f-cat'); return el?el.value:'sourcing'; }
+function catChanged(){ CAT_TOUCHED=true; updatePreview(); }
+function condPhrases(){ return [...document.querySelectorAll('#mods .modrow .mod-body')].map(b=>{ let t=b.textContent.replace(/\s+/g,' ').trim().replace(/^only\s+/i,''); return t.charAt(0).toLowerCase()+t.slice(1); }).filter(Boolean); }
+function clawPhrase(){ const tb=document.getElementById('f-claw'),tbd=document.getElementById('claw-days'); if(tb&&tb.value&&!tb.value.startsWith('never')) return tb.value+' if the loan closes within '+((tbd&&tbd.value)||60)+' days'; return ''; }
+function extraText(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when '+c.join(' and '); const cw=clawPhrase(); if(cw) s+=', '+cw; return s; }
+function extraHTML(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when <em>'+c.join('</em> and <em>')+'</em>'; const cw=clawPhrase(); if(cw) s+=', <em>'+cw+'</em>'; return s; }
 const CITY_TERR={'Chennai':['T. Nagar','Adyar','Velachery','Anna Nagar'],'Madurai':['Anna Nagar','K.K. Nagar','Simmakkal'],'Coimbatore':['R.S. Puram','Gandhipuram','Peelamedu'],'Trichy':['Srirangam','Thillai Nagar'],'Salem':['Fairlands','Hasthampatti'],'Hyderabad':['Banjara Hills','Kukatpally','Secunderabad'],'Bengaluru':['Jayanagar','Indiranagar','Whitefield']};
 
 function incToVal(){ const b=document.querySelector('#f-incto .on'); return b?b.dataset.t:'team'; }
@@ -2768,6 +2793,7 @@ function metricChanged(){
   const pctBtn=document.querySelector('#unit-mode button[data-u=\"pct\"]');
   const ok=pctAllowed();
   if(pctBtn){ pctBtn.disabled=!ok; pctBtn.style.opacity=ok?'':'0.4'; pctBtn.style.cursor=ok?'':'not-allowed'; pctBtn.title=ok?'':'A % of loan value only applies to loan-based metrics'; }
+  if(!CAT_TOUCHED){ const fc=document.getElementById('f-cat'); if(fc) fc.value=METRIC_CAT[metricVal()]||'sourcing'; }
   if(!ok && !isMoney()){ setUnitMode('amt'); return; }
   refreshSlabs(); updatePreview();
 }
@@ -2847,7 +2873,7 @@ function whoText(){
   return r.map(x=>ROLE_NAMES[x]||x).join(', ');
 }
 function scopeText(){ const cl=cityList(), tl=terrList(); let s=cl.length?cl.join(', '):'all cities'; if(tl.length) s+=' · '+tl.join(', '); return s; }
-function previewSentence(){ const m=metricVal(); return 'Pay <em>'+whoText()+'</em> in <em>'+scopeText()+'</em> <em>'+payText()+'</em> for <em>'+(METRIC_LABEL[m]||'work')+'</em>, measured <em>'+durationVal().toLowerCase()+'</em>, paid <em>'+schedVal().toLowerCase()+'</em>.'; }
+function previewSentence(){ return 'Pay <em>'+whoText()+'</em> for <em>'+(CAT_PHRASE[catVal()]||'work')+'</em>, <em>'+payText()+'</em>, in <em>'+scopeText()+'</em>, measured <em>'+durationVal().toLowerCase()+'</em>, paid <em>'+schedVal().toLowerCase()+'</em>'+extraHTML()+'.'; }
 function updatePreview(){ const sent=document.getElementById('preview-sentence'); if(sent) sent.innerHTML=previewSentence(); ratePreview(); runValidation(); if(!document.activeElement||!document.activeElement.closest('.sent-build')) syncSentence(); }
 function validate(){
   const errs=[];
@@ -2865,11 +2891,11 @@ function validate(){
   return {errs:[...new Set(errs)], warns:[]};
 }
 function buildSummary(){
-  const html='For <em>'+whoText()+'</em> in <em>'+scopeText()+'</em>, pay <em>'+payText()+'</em> for <em>'+(METRIC_LABEL[metricVal()]||'work')+'</em>, paid <em>'+schedVal().toLowerCase()+'</em>.';
+  const html='For <em>'+whoText()+'</em>, pay <em>'+payText()+'</em> for <em>'+(CAT_PHRASE[catVal()]||'work')+'</em> in <em>'+scopeText()+'</em>, paid <em>'+schedVal().toLowerCase()+'</em>'+extraHTML()+'.';
   document.querySelectorAll('#a-review .summary-sentence,#a-checker .summary-sentence').forEach(el=>el.innerHTML=html);
   const tb=document.getElementById('f-claw'), tbd=document.getElementById('claw-days');
   const mods=document.querySelectorAll('#mods .modrow').length;
-  const rows=[['Eligible to',whoText()],['Metric',METRIC_LABEL[metricVal()]||'—'],['Payout',payShort()],['City',scopeText()],['Frequency',durationVal()],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',mods?mods+' added':'None']];
+  const rows=[['Eligible to',whoText()],['Category',CAT_PHRASE[catVal()]||'—'],['Metric',METRIC_LABEL[metricVal()]||'—'],['Payout',payShort()],['City',scopeText()],['Frequency',durationVal()],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',mods?mods+' added':'None']];
   const fhtml='<div class="bill">'+rows.map(t=>'<div class="bill-row"><span class="k">'+t[0]+'</span><span class="v">'+t[1]+'</span></div>').join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
@@ -2878,7 +2904,7 @@ function currentRuleObj(){
   const firstRate=parseFloat(numOf(firstPay())||firstPay());
   const id=ruleNoFor(); const m=metricVal();
   return { id, lin:EDIT_LIN||('LIN-'+id), name:(document.getElementById('f-name').value.trim()||'Untitled incentive'),
-    cat:METRIC_CAT[m]||'sourcing', prio:100, status:'working', roles:selectedActors().slice(),
+    cat:catVal()||METRIC_CAT[m]||'sourcing', prio:100, status:'working', roles:selectedActors().slice(),
     incTo:incToVal(), mgr:mgrRole(), mgrRoles:mgrRoles(), metric:m, duration:durationVal(),
     mode, rate:isNaN(firstRate)?null:firstRate, pay:payShort(), sched:schedVal(),
     cities:cityList(), territories:terrList(),
@@ -2918,6 +2944,7 @@ function loadRule(o){
   else { if(o.mgr) document.getElementById('f-mgr').value=o.mgr; const mr=(o.mgrRoles||[]); document.querySelectorAll('#f-mgr-roles .mrl').forEach(b=>b.checked=mr.includes(b.dataset.val)); }
   rolesChange();
   if(o.metric) document.getElementById('f-metric').value=o.metric;
+  const fc=document.getElementById('f-cat'); if(fc && o.cat){ fc.value=o.cat; CAT_TOUCHED=true; }
   if(o.duration) document.getElementById('f-duration').value=o.duration;
   if(o.sched){ const sc=document.getElementById('f-sched'); if([...sc.options].some(op=>op.value===o.sched||op.text===o.sched)) sc.value=o.sched; }
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked=(o.cities&&o.cities.length)?o.cities.includes(b.dataset.val):b.dataset.val==='all');
@@ -2944,6 +2971,7 @@ function resetForm(){
   document.querySelectorAll('#f-roles .rl,#f-mgr-roles .mrl').forEach(b=>b.checked=false);
   rolesChange();
   const mt=document.getElementById('f-metric'); if(mt) mt.value='loan-count';
+  const fct=document.getElementById('f-cat'); if(fct) fct.value='sourcing'; CAT_TOUCHED=false;
   document.querySelectorAll('#unit-mode button').forEach(b=>b.classList.toggle('on',b.dataset.u==='amt'));
   const sc=document.getElementById('f-sched'); if(sc) sc.value='50% now + 50% next month';
   const cl=document.getElementById('f-claw'); if(cl) cl.selectedIndex=0;
@@ -2961,6 +2989,7 @@ function sentSet(f){
   }
   else if(f==='rate'){ const inp=document.querySelector('#slab-body .s-pay'); if(inp) inp.value=g('s-rate').value; }
   else if(f==='unit'){ setUnitMode(g('s-unit').value); }
+  else if(f==='cat'){ CAT_TOUCHED=true; g('f-cat').value=g('s-cat').value; }
   else if(f==='metric'){ g('f-metric').value=g('s-metric').value; metricChanged(); }
   else if(f==='city'){ const v=g('s-city').value; document.querySelectorAll('#f-city .cty').forEach(c=>c.checked=(v==='all'?c.dataset.val==='all':c.dataset.val===v)); const _c=cityList(); g('city-btn-label').textContent=_c.length?(_c.length>3?_c.length+' cities':_c.join(', ')):'All cities'; renderTerritories(); }
   else if(f==='dur'){ g('f-duration').value=g('s-dur').value; }
@@ -2971,12 +3000,15 @@ function syncSentence(){
   const g=id=>document.getElementById(id); if(!g('s-role')) return;
   const ae=document.activeElement, put=(id,v)=>{ const el=g(id); if(el&&el!==ae) el.value=v; };
   put('s-role', incToVal()==='manager' ? 'mgr:'+mgrRole() : (teamRoles()[0]||'SP'));
+  put('s-cat', catVal());
   const inp=document.querySelector('#slab-body .s-pay'); if(inp&&inp.value!=='') put('s-rate',inp.value);
   put('s-unit', isMoney()?'amt':'pct');
   put('s-metric', metricVal());
   const cl=cityList(); put('s-city', cl.length===1?cl[0]:'all');
   put('s-dur', durationVal());
   put('s-sched', schedVal());
+  const bw=g('s-basisword'); if(bw) bw.textContent=isMoney()?'per':'of';
+  const ex=g('s-extra'); if(ex) ex.textContent=extraText();
 }
 function renderRoleMode(){}
 /* ================================================================================= */
