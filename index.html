@@ -837,7 +837,8 @@ textarea{resize:vertical;min-height:88px}
     <button class="navitem" data-goto="b-explain"><span class="no">4</span> See the working</button>
     <button class="navitem" data-goto="b-dispute"><span class="no">5</span> Report an issue</button>
     <button class="navitem" data-goto="b-history"><span class="no">6</span> My issues</button>
-    
+    <button class="navitem" data-goto="b-team"><span class="no">M</span> Manager view</button>
+
   </nav>
 
   <main class="stage">
@@ -1398,6 +1399,27 @@ textarea{resize:vertical;min-height:88px}
       </div>
     </section>
 
+    <!-- ===== APP · MANAGER (SCOPE) INCENTIVE ===== -->
+    <section class="screen" id="b-team">
+      <div class="screen-head"><span class="id">App · Manager</span><div><h2>Manager view — team incentive</h2><div class="sub">A City Lead earns on the team's combined total, settled at month close — not per loan. So it leads with the team total and who built it.</div></div></div>
+      <div class="phone-stage">
+        <div class="phone"><div class="notch"></div><div class="screenview">
+          <div class="px-head">
+            <div class="statusbar"><span>9:41</span><span>5G ▪ 100%</span></div>
+            <div class="px-topline">
+              <button class="px-back" data-goto="b-home">‹</button>
+              <div style="flex:1"><div class="px-id">Team sourcing bonus</div><div class="px-sub">Anitha R · City Lead · Chennai South</div></div>
+              <button class="px-qm" aria-label="How it works" onclick="toast('Scope incentive — paid on the team total, settled when the month closes. Every partner’s work rolls up here.')">?</button>
+            </div>
+          </div>
+          <div class="px-body" id="team-body"></div>
+        </div></div>
+        <div class="note-block" style="max-width:320px;margin-top:0">
+          <b>Why this differs.</b> A manager isn't paid per loan — they earn on the <b>whole team's total</b>, which only settles when the month closes. So the screen leads with the team number and <b>who contributed it</b>, not a personal loan ledger.
+        </div>
+      </div>
+    </section>
+
     <!-- ===== APP 2 · CONFIRMED LOAN ===== -->
     <section class="screen" id="b-firm">
       <div class="screen-head"><span class="id">App · 2</span><div><h2>Loan details</h2><div class="sub">Fixed when the loan was given. Paid to you in two parts.</div></div></div>
@@ -1593,6 +1615,7 @@ function show(id){
   if(id==='a-review'||id==='a-checker'){ buildSummary(); computeCost(); renderEarners(); }
   if(id==='a-published' && !DETAIL_R){ const r=RULES.find(x=>x.status==='working'); if(r){ renderDetail(r); } }
   if(id==='b-inc') renderIncDetail();
+  if(id==='b-team') renderTeam();
   if(id==='b-history') renderMyIssues();
   if(id==='b-home') renderHome();
   if(id==='a-disputes') renderDisputes();
@@ -2693,6 +2716,43 @@ function renderIncDetail(){
     h+='</div><div class="px-note12" style="margin-top:12px">Every loan keeps the rate that was live on its own date.</div></div>';
   }
   document.getElementById('inc-body').innerHTML=h;
+}
+const TEAM={
+  amt:'31,500',
+  note:'0.10% of every loan your team sourced in July — you’re paid on the team total, not per loan',
+  glance:'5 partners · 63 fresh loans · ₹3.15 Cr sourced',
+  members:[
+    {n:'Ravi K',loans:18,v:9000,col:'#2563EB'},
+    {n:'Priya S',loans:14,v:7200,col:'#0E9C7E'},
+    {n:'Karthik M',loans:12,v:5500,col:'#EA8A00'},
+    {n:'Deepa N',loans:11,v:4800,col:'#6D45E4'},
+    {n:'2 more partners',loans:8,v:5000,col:'#94A3B8'}
+  ],
+  pay:[
+    {t:'Locks at month close',d:'31 Jul 2026 · team total settles',cls:'next',a:''},
+    {t:'Paid to you',d:'05 Aug 2026',cls:'',a:'₹31,500'}
+  ]
+};
+function renderTeam(){
+  const el=document.getElementById('team-body'); if(!el) return;
+  const t=TEAM, tot=t.members.reduce((s,m)=>s+m.v,0); let h='';
+  // 1 · team total
+  h+='<div class="px-card"><div class="px-label">Team earned this month</div><hr class="px-div">';
+  h+='<div class="px-big" style="font-size:34px"><span class="ru">₹</span>'+t.amt+'</div>';
+  h+='<div class="px-note12" style="margin-top:5px">'+t.note+'</div>';
+  h+='<div class="px-goalrow"><div class="gr-t"><div class="g1">'+t.glance+'</div><div class="g2">Settles when July closes — a scope incentive, not per loan</div></div></div>';
+  h+='</div>';
+  // 2 · who earned it
+  h+='<div class="px-card"><div class="px-label">Who earned it · your team</div><hr class="px-div">';
+  h+='<div class="px-mixbar">'+t.members.map(m=>'<span class="seg" style="background:'+m.col+';flex:'+m.v+' '+m.v+' 0"></span>').join('')+'</div>';
+  h+='<div class="mixlist">'+t.members.map(m=>'<div class="mix-row"><span class="sw" style="background:'+m.col+'"></span><span class="ml">'+m.n+' · '+m.loans+' loans</span><span class="mv">'+inr(m.v)+'</span><span class="mp">'+Math.round(m.v/tot*100)+'%</span></div>').join('')+'</div>';
+  h+='<div class="px-note12" style="margin-top:13px">Every partner’s sourced loans roll up into your bonus — the same lines each of them sees.</div>';
+  h+='</div>';
+  // 3 · payout timeline (scope: settle at close)
+  h+='<div class="px-card"><div class="px-label">Payout timeline</div><hr class="px-div"><div class="px-note12" style="margin-bottom:15px">Scope incentive — the team total settles at month close, then pays. No per-loan take-back.</div><div class="paytl">';
+  h+=t.pay.map(s=>'<div class="paytl-i '+s.cls+'"><span class="paytl-node">'+(s.a?'':'')+'</span><div class="paytl-b"><div><div class="paytl-t">'+s.t+'</div><div class="paytl-d">'+s.d+'</div></div><div class="paytl-a">'+(s.a||'')+'</div></div></div>').join('');
+  h+='</div></div>';
+  el.innerHTML=h;
 }
 function renderRateCard(){
   const body=document.getElementById('rc-body'); if(!body) return;
