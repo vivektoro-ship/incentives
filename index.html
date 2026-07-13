@@ -961,8 +961,8 @@ textarea{resize:vertical;min-height:88px}
           <div class="field"><label>Incentive name</label>
             <input type="text" id="f-name" placeholder="Incentive 1" maxlength="60">
           </div>
-          <div style="display:flex;gap:14px">
-            <div class="field fld-block" style="flex:1">
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="field fld-block" style="flex:1;min-width:160px">
               <div class="msdd" id="f-city">
                 <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">City</span><span id="city-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">All cities</span></span><span style="color:var(--muted-2)">▾</span></button>
                 <div class="msdd-menu">
@@ -977,9 +977,15 @@ textarea{resize:vertical;min-height:88px}
                 </div>
               </div>
             </div>
-            <div class="field fld-block" style="flex:1">
+            <div class="field fld-block" style="flex:1;min-width:160px">
+              <div class="msdd" id="f-cluster">
+                <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Cluster <span class="tip" data-tip="Groups of territories within the selected cities. Leave empty for all clusters.">?</span></span><span id="cluster-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">All clusters</span></span><span style="color:var(--muted-2)">▾</span></button>
+                <div class="msdd-menu" id="cluster-menu"></div>
+              </div>
+            </div>
+            <div class="field fld-block" style="flex:1;min-width:160px">
               <div class="msdd" id="f-terr">
-                <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Territories <span class="tip" data-tip="Areas within the selected cities. Pick All cities to cover everywhere.">?</span></span><span id="terr-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">All territories</span></span><span style="color:var(--muted-2)">▾</span></button>
+                <button type="button" class="msdd-btn msdd-flat" onclick="this.parentElement.classList.toggle('open')"><span style="text-align:left"><span class="inlbl">Territories <span class="tip" data-tip="Areas within the selected clusters. Leave empty for all.">?</span></span><span id="terr-btn-label" style="display:block;font-size:15px;font-weight:700;margin-top:3px">All territories</span></span><span style="color:var(--muted-2)">▾</span></button>
                 <div class="msdd-menu" id="terr-menu"></div>
               </div>
             </div>
@@ -2733,7 +2739,18 @@ function condPhrases(){ return [...document.querySelectorAll('#mods .modrow .mod
 function clawPhrase(){ const tb=document.getElementById('f-claw'),tbd=document.getElementById('claw-days'); if(tb&&tb.value&&!tb.value.startsWith('never')) return tb.value+' if the loan closes within '+((tbd&&tbd.value)||60)+' days'; return ''; }
 function extraText(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when '+c.join(' and '); const cw=clawPhrase(); if(cw) s+=', '+cw; return s; }
 function extraHTML(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when <em>'+c.join('</em> and <em>')+'</em>'; const cw=clawPhrase(); if(cw) s+=', <em>'+cw+'</em>'; return s; }
-const CITY_TERR={'Chennai':['T. Nagar','Adyar','Velachery','Anna Nagar'],'Madurai':['Anna Nagar','K.K. Nagar','Simmakkal'],'Coimbatore':['R.S. Puram','Gandhipuram','Peelamedu'],'Trichy':['Srirangam','Thillai Nagar'],'Salem':['Fairlands','Hasthampatti'],'Hyderabad':['Banjara Hills','Kukatpally','Secunderabad'],'Bengaluru':['Jayanagar','Indiranagar','Whitefield']};
+/* geography: City → Cluster → Territory (area). Cluster groupings are illustrative — swap for the real registry. */
+const CITY_CLUSTER={
+ 'Chennai':{'Chennai South':['T. Nagar','Adyar','Velachery'],'Chennai North':['Anna Nagar']},
+ 'Madurai':{'Madurai Central':['Anna Nagar','K.K. Nagar','Simmakkal']},
+ 'Coimbatore':{'Coimbatore Metro':['R.S. Puram','Gandhipuram','Peelamedu']},
+ 'Trichy':{'Trichy Central':['Srirangam','Thillai Nagar']},
+ 'Salem':{'Salem Central':['Fairlands','Hasthampatti']},
+ 'Hyderabad':{'Hyderabad West':['Banjara Hills','Kukatpally'],'Hyderabad East':['Secunderabad']},
+ 'Bengaluru':{'Bengaluru South':['Jayanagar'],'Bengaluru East':['Indiranagar','Whitefield']}
+};
+function clustersForCities(cities){ const out=[]; cities.forEach(c=>Object.keys(CITY_CLUSTER[c]||{}).forEach(cl=>{ if(!out.includes(cl)) out.push(cl); })); return out; }
+function areasFor(cities,clusters){ const out=[]; cities.forEach(c=>{ const cm=CITY_CLUSTER[c]||{}; Object.keys(cm).forEach(cl=>{ if(!clusters.length||clusters.includes(cl)) cm[cl].forEach(a=>{ if(!out.includes(a)) out.push(a); }); }); }); return out; }
 
 function incToVal(){ const b=document.querySelector('#f-incto .on'); return b?b.dataset.t:'team'; }
 function teamRoles(){ return [...document.querySelectorAll('#f-roles .rl:checked')].map(b=>b.dataset.val); }
@@ -2743,6 +2760,7 @@ function metricVal(){ const el=document.getElementById('f-metric'); return el?el
 function schedVal(){ const el=document.getElementById('f-sched'); return el?el.value:'Same month'; }
 function durationVal(){ const el=document.getElementById('f-duration'); return el?el.value:'Monthly'; }
 function terrList(){ return [...document.querySelectorAll('#f-terr .terr:checked')].map(b=>b.dataset.val); }
+function clusterList(){ return [...document.querySelectorAll('#f-cluster .clus:checked')].map(b=>b.dataset.val); }
 function selectedActors(){ if(incToVal()==='manager'){ const m=mgrRole(); return m?[m]:['City Lead']; } const r=teamRoles(); return r.length?r:['SP']; }
 function isValueBasis(){ return metricVal()==='loan-value'; }
 
@@ -2769,10 +2787,16 @@ function metricChanged(){
   refreshSlabs(); updatePreview();
 }
 function computeEndDate(){}
+function renderClusters(){
+  const menu=document.getElementById('cluster-menu'); if(!menu) return;
+  const cities=cityList(); const cls=clustersForCities(cities);
+  if(!cities.length){ menu.innerHTML='<label style="opacity:.55"><input type="checkbox" disabled> Pick a city first — or leave as all clusters</label>'; }
+  else { menu.innerHTML=cls.map(c=>'<label><input type="checkbox" class="clus" data-val="'+c+'" onchange="clusterChange()"> '+c+'</label>').join(''); }
+  const lbl=document.getElementById('cluster-btn-label'); if(lbl) lbl.textContent='All clusters';
+}
 function renderTerritories(){
   const menu=document.getElementById('terr-menu'); if(!menu) return;
-  const cities=cityList(); const terrs=[];
-  cities.forEach(c=>(CITY_TERR[c]||[]).forEach(t=>{ if(!terrs.includes(t)) terrs.push(t); }));
+  const cities=cityList(); const terrs=areasFor(cities,clusterList());
   if(!cities.length){ menu.innerHTML='<label style="opacity:.55"><input type="checkbox" disabled> Pick a city first — or leave as all territories</label>'; }
   else { menu.innerHTML=terrs.map(t=>'<label><input type="checkbox" class="terr" data-val="'+t+'" onchange="terrChange()"> '+t+'</label>').join(''); }
   const lbl=document.getElementById('terr-btn-label'); if(lbl) lbl.textContent='All territories';
@@ -2783,13 +2807,18 @@ function terrChange(){
   if(lbl) lbl.textContent=t.length?(t.length>2?t.length+' territories':t.join(', ')):'All territories';
   updatePreview();
 }
+function clusterChange(){
+  const c=clusterList(); const lbl=document.getElementById('cluster-btn-label');
+  if(lbl) lbl.textContent=c.length?(c.length>2?c.length+' clusters':c.join(', ')):'All clusters';
+  renderTerritories(); updatePreview();
+}
 function cityChange(box){
   const boxes=[...document.querySelectorAll('#f-city .cty')]; const all=boxes.find(b=>b.dataset.val==='all');
   if(box.dataset.val==='all'){ boxes.forEach(b=>b.checked=b===all); }
   else { all.checked=false; if(!cityList().length) all.checked=true; }
   const cl=cityList();
   document.getElementById('city-btn-label').textContent=cl.length?(cl.length>3?cl.length+' cities':cl.join(', ')):'All cities';
-  renderTerritories(); updatePreview();
+  renderClusters(); renderTerritories(); updatePreview();
 }
 
 function renderSlabs(){
@@ -2844,7 +2873,7 @@ function whoText(){
   const r=teamRoles(); if(!r.length) return 'a team'; if(r.length===1) return ROLE_PLURAL[r[0]]||r[0];
   return r.map(x=>ROLE_NAMES[x]||x).join(', ');
 }
-function scopeText(){ const cl=cityList(), tl=terrList(); let s=cl.length?cl.join(', '):'all cities'; if(tl.length) s+=' · '+tl.join(', '); return s; }
+function scopeText(){ const cl=cityList(), kl=clusterList(), tl=terrList(); let s=cl.length?cl.join(', '):'all cities'; if(kl.length) s+=' · '+kl.join(', '); if(tl.length) s+=' · '+tl.join(', '); return s; }
 function previewSentence(){ return 'Pay <em>'+whoText()+'</em> <em>'+payText()+'</em>, in <em>'+scopeText()+'</em>, measured <em>'+durationVal().toLowerCase()+'</em>, paid <em>'+schedVal().toLowerCase()+'</em>'+extraHTML()+'.'; }
 function updatePreview(){ const sent=document.getElementById('preview-sentence'); if(sent) sent.innerHTML=previewSentence(); ratePreview(); runValidation(); if(!document.activeElement||!document.activeElement.closest('.sent-build')) syncSentence(); }
 function validate(){
@@ -2879,7 +2908,7 @@ function currentRuleObj(){
     cat:METRIC_CAT[m]||'sourcing', prio:100, status:'working', roles:selectedActors().slice(),
     incTo:incToVal(), mgr:mgrRole(), mgrRoles:mgrRoles(), metric:m, duration:durationVal(),
     mode, rate:isNaN(firstRate)?null:firstRate, pay:payShort(), sched:schedVal(),
-    cities:cityList(), territories:terrList(),
+    cities:cityList(), clusters:clusterList(), territories:terrList(),
     takeback:{days:parseInt((document.getElementById('claw-days')||{}).value)||60, action:(document.getElementById('f-claw')||{}).value||'never take back'},
     start:(document.getElementById('f-start')||{}).value||'2026-08-01', end:(document.getElementById('f-end')||{}).value||'' };
 }
@@ -2920,7 +2949,10 @@ function loadRule(o){
   if(o.sched){ const sc=document.getElementById('f-sched'); if([...sc.options].some(op=>op.value===o.sched||op.text===o.sched)) sc.value=o.sched; }
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked=(o.cities&&o.cities.length)?o.cities.includes(b.dataset.val):b.dataset.val==='all');
   const cl=cityList(); document.getElementById('city-btn-label').textContent=cl.length?(cl.length>3?cl.length+' cities':cl.join(', ')):'All cities';
+  renderClusters();
+  if(o.clusters&&o.clusters.length){ document.querySelectorAll('#f-cluster .clus').forEach(b=>b.checked=o.clusters.includes(b.dataset.val)); clusterChange(); }
   renderTerritories();
+  if(o.territories&&o.territories.length){ document.querySelectorAll('#f-terr .terr').forEach(b=>b.checked=o.territories.includes(b.dataset.val)); terrChange(); }
   if(o.mode!=='slab' && o.rate!=null){ setUnitMode(o.metric==='loan-value'?'pct':'amt'); }
   metricChanged();
   if(o.rate!=null){ const inp=document.querySelector('#slab-body .s-pay'); if(inp) inp.value=o.rate; }
@@ -2936,7 +2968,7 @@ function resetForm(){
   const st=document.getElementById('f-start'); if(st) st.value='2026-08-01';
   document.querySelectorAll('#f-city .cty').forEach(b=>b.checked=b.dataset.val==='all');
   const cbl=document.getElementById('city-btn-label'); if(cbl) cbl.textContent='All cities';
-  renderTerritories();
+  renderClusters(); renderTerritories();
   const dur=document.getElementById('f-duration'); if(dur) dur.value='Monthly';
   setIncTo('team');
   document.querySelectorAll('#f-roles .rl,#f-mgr-roles .mrl').forEach(b=>b.checked=false);
@@ -2990,6 +3022,7 @@ basisChanged();
 updatePreview();
 syncSentence();
 renderRulesTable();
+renderClusters();
 renderTerritories();
 </script>
 </body>
