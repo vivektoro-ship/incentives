@@ -991,7 +991,7 @@ textarea{resize:vertical;min-height:88px}
               </div>
             </div>
           </div>
-          <div class="field"><label>Frequency <span class="tip" data-tip="How often this incentive is measured and paid out.">?</span></label>
+          <div class="field"><label>Calculation Frequency <span class="tip" data-tip="How often this incentive is measured and paid out.">?</span></label>
             <select id="f-duration" onchange="updatePreview()">
               <option>Weekly</option>
               <option selected>Monthly</option>
@@ -1014,8 +1014,8 @@ textarea{resize:vertical;min-height:88px}
         <div class="fcard"><div class="fsect">Eligibility</div>
           <div class="field"><label>Eligible to</label>
             <div class="seg seg-sm" id="f-incto">
-              <button class="on" data-t="team" onclick="setIncTo('team')">A team</button>
-              <button data-t="manager" onclick="setIncTo('manager')">A manager</button>
+              <button class="on" data-t="team" onclick="setIncTo('team')">Individual</button>
+              <button data-t="manager" onclick="setIncTo('manager')">Manager</button>
             </div>
           </div>
           <div id="team-wrap">
@@ -1028,7 +1028,7 @@ textarea{resize:vertical;min-height:88px}
             <div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:-4px">Each person earns on their own performance.</div>
           </div>
           <div id="manager-wrap" style="display:none">
-            <div class="field"><label>Manager role</label>
+            <div class="field"><label>Role</label>
               <select id="f-mgr" onchange="updatePreview()">
                 <option value="City Lead">City Lead</option>
                 <option value="Digital Manager">Digital Manager</option>
@@ -1102,8 +1102,8 @@ textarea{resize:vertical;min-height:88px}
           </div>
         </div>
 
-        <div class="fcard"><div class="fsect">When they're paid</div>
-          <div class="field"><label>Schedule <span class="tip" data-tip="When the earned money reaches them.">?</span></label>
+        <div class="fcard"><div class="fsect">Payment Logic</div>
+          <div class="field"><label>Payout <span class="tip" data-tip="When the earned money reaches them.">?</span></label>
             <select id="f-sched" onchange="updatePreview()">
               <option>Same month</option>
               <option selected>50% now + 50% next month</option>
@@ -1112,17 +1112,18 @@ textarea{resize:vertical;min-height:88px}
               <option>Every 6 months</option>
             </select>
           </div>
-          <div class="field fld-block"><div style="width:100%">
-            <span class="inlbl">Clawback <span class="tip" data-tip="If the loan closes within this many days, some or all of the pay is taken back.">?</span></span>
-            <div style="display:flex;align-items:center;gap:9px;margin-top:6px;flex-wrap:wrap;font-size:15px;font-weight:600">
-              <span style="white-space:nowrap">If the loan closes within <input type="number" id="claw-days" value="60" min="1" class="mod-n" style="width:64px"> days</span>
-              <span style="display:inline-flex;align-items:center;gap:9px;white-space:nowrap">→ <select id="f-claw" onchange="updatePreview()" style="width:auto;border:none;background:transparent;padding:4px 0;font-size:15px;font-weight:700;color:var(--indigo-2)">
-                <option>never take back</option>
-                <option>take back the full pay</option>
-                <option>take back 50% of the pay</option>
-              </select></span>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="field" style="flex:1;min-width:170px"><label>If the loan closes within <span class="tip" data-tip="If the loan closes within this many days, some or all of the pay is taken back.">?</span></label>
+              <div style="display:flex;align-items:center;gap:8px"><input type="number" id="claw-days" value="60" min="1" class="mod-n" style="width:80px" onchange="updatePreview()"><span style="font-size:15px;font-weight:600;color:var(--ink-2)">Days</span></div>
             </div>
-          </div></div>
+            <div class="field" style="flex:1;min-width:170px"><label>Clawback decision</label>
+              <select id="f-claw" onchange="updatePreview()">
+                <option>Never take back</option>
+                <option>Take back the full pay</option>
+                <option>Take back 50% of the pay</option>
+              </select>
+            </div>
+          </div>
         </div>
 
 
@@ -1165,7 +1166,7 @@ textarea{resize:vertical;min-height:88px}
         <div class="sticky-foot">
           <button class="btn ghost" data-goto="a-form">← Back to the form</button>
           <div class="spacer"></div>
-          <button class="btn primary" data-goto="a-checker">Send for approval</button>
+          <button class="btn primary" data-goto="a-checker">Submit for checker approval</button>
         </div>
       </div>
     </section>
@@ -2796,7 +2797,7 @@ const METRIC_CAT={'loan-count':'sourcing','loan-value':'sourcing','appt-count':'
 const METRIC_LABEL={'loan-count':'loan count','loan-value':'loan value','appt-count':'appointment count','a2nu':'A2NU %','new-cust':'new customer count','offer':'offer creation','attendance':'attendance','target':'targets','renewal':'renewal count'};
 const METRIC_UNIT={'loan-count':'loan','loan-value':'loan','appt-count':'appointment','a2nu':'point','new-cust':'new customer','offer':'offer','attendance':'day','target':'target','renewal':'renewal'};
 function condPhrases(){ return [...document.querySelectorAll('#mods .modrow .mod-body')].map(b=>{ let t=b.textContent.replace(/\s+/g,' ').trim().replace(/^only\s+/i,''); return t.charAt(0).toLowerCase()+t.slice(1); }).filter(Boolean); }
-function clawPhrase(){ const tb=document.getElementById('f-claw'),tbd=document.getElementById('claw-days'); if(tb&&tb.value&&!tb.value.startsWith('never')) return tb.value+' if the loan closes within '+((tbd&&tbd.value)||60)+' days'; return ''; }
+function clawPhrase(){ const tb=document.getElementById('f-claw'),tbd=document.getElementById('claw-days'); if(tb&&tb.value&&!tb.value.toLowerCase().startsWith('never')) return tb.value.toLowerCase()+' if the loan closes within '+((tbd&&tbd.value)||60)+' days'; return ''; }
 function extraText(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when '+c.join(' and '); const cw=clawPhrase(); if(cw) s+=', '+cw; return s; }
 function extraHTML(){ let s=''; const c=condPhrases(); if(c.length) s+=', only when <em>'+c.join('</em> and <em>')+'</em>'; const cw=clawPhrase(); if(cw) s+=', <em>'+cw+'</em>'; return s; }
 /* geography: City → Cluster → Territory (area). Cluster groupings are illustrative — swap for the real registry. */
@@ -2967,7 +2968,7 @@ function buildSummary(){
       rows.push(['  Level '+(i+1)+' · '+band, isMoney()?('₹'+pay+' each'):(pay+'% of loan value')]);
     });
   }
-  rows.push(['Scope',scopeText()],['Frequency',durationVal()],['Starts',startV],['Expires',endV],['Schedule',schedVal()],['Clawback',(tb&&tb.value.startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',condV]);
+  rows.push(['Scope',scopeText()],['Frequency',durationVal()],['Starts',startV],['Expires',endV],['Schedule',schedVal()],['Clawback',(tb&&tb.value.toLowerCase().startsWith('never'))?'Never':((tb?tb.value:'')+' · within '+((tbd&&tbd.value)||60)+' days')],['Conditions',condV]);
   const fhtml='<div class="bill">'+rows.map(t=>{ const sub=t[0].startsWith('  '); return '<div class="bill-row"'+(sub?' style="padding-left:14px"':'')+'><span class="k"'+(sub?' style="font-weight:500;color:var(--muted)"':'')+'>'+t[0].trim()+'</span><span class="v">'+t[1]+'</span></div>'; }).join('')+'</div>';
   ['rv-facts','ck-facts'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=fhtml; });
 }
